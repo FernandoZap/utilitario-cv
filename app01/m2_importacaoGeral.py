@@ -99,7 +99,7 @@ def importacaoGeral(file_zip,id_municipio):
             funcoes_banco.gravar_funcao(set_funcao,id_municipio)
             funcoes_banco.gravar_vinculo(set_vinculo,id_municipio)
             funcoes_banco.gravar_lotacao(set_lotacao,id_municipio)
-            #funcoes_banco.gravar_proventos(proventos,id_municipio)
+            funcoes_banco.gravar_proventos(proventos,id_municipio)
     zip.close()
 
 def fcod_departamentoSetor(l_departamento,id_municipio,tipo):
