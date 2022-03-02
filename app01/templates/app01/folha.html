@@ -1,0 +1,18 @@
+
+
+
+<ul>
+{% for ff in folha %}
+
+
+<li>
+
+Departamento:{{ ff.departamento__departamento }} 
+ - Setor:{{ ff.setor__setor }} - Funcionario: {{ ff.funcionario__nome }} - id: {{ ff.funcionario__id_funcionario }} -- Funcao: {{ ff.funcao__funcao }} - Lotacao: {{ ff.lotacao__lotacao }} - Vinculo: {{ ff.vinculo__vinculo }} - Valor: {{ ff.valor__sum }}
+
+
+</li>
+
+
+{% endfor %}
+

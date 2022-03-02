@@ -1,0 +1,238 @@
+{% extends 'base2.html' %}
+{% load app_extras %}
+{% load humanize %}
+
+{% block content %}
+<br/>
+
+<div class="container">
+<p align="center">{{ titulo }}</p>
+
+    
+   <form  action="{% url 'app01:somaProventosDescontos' %}" method="post">
+    {%csrf_token%}
+
+   {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+   
+<div class="row">   
+
+<div class="form-group">
+      
+    
+    <div class="col">
+    <label for="id_municipio" class="col-form-label">Município</label>
+    <select name="municipio"  id="id_municipio" class="form-control">
+      <option value=""></option>
+      {% for municipio in municipios %}
+        <option value="{{ municipio.id_municipio }}">{{ municipio.municipio }}</option>
+      {% endfor %}
+    </select>   
+    </div>
+
+
+    <div class="col">
+    <label for="id_ano" class="col-form-label">Ano</label>
+    <select name="ano"  id="id_ano" class="form-control">
+      <option value=""></option>
+      <option value="2021" selected >2021</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+    </select>   
+
+    <label for="id_mes" class="col-form-label">Mes</label>
+    <select name="mes"  id="id_mes" class="form-control">
+      <option value=""></option>
+      <option value="01">Janeiro</option>
+      <option value="02">Fevereiro</option>
+      <option value="03">Marco</option>
+      <option value="04">Abril</option>
+      <option value="05">Maio</option>
+      <option value="06">JUnho</option>
+      <option value="07">Julho</option>
+      <option value="08">Agosto</option>
+      <option value="09">Setembro</option>
+      <option value="10">Outubro</option>
+      <option value="11">Novembro</option>
+      <option value="12">Dezembro</option>
+    </select>   
+
+    </div>
+    
+</div>    
+</div>  
+  
+  <br><br>
+
+
+    <p><span style="display:none">
+    <input type="submit" id="submit" value="Entrar 2" >
+    </span></p>
+
+
+    <p>
+    <button class="btn btn-success" id="bt_submit" onclick="fnSubmit();" >Executar</button>
+    </p>
+    <div id="msgDiv" style="display:none">Processo iniciado...</div>
+
+
+
+<script>
+function fnSubmit(){
+  document.getElementById("bt_submit").disabled=true;
+  document.getElementById("msgDiv").style.display = "block";
+  document.getElementById("submit").click();
+
+}
+</script>
+<style>
+
+
+#msgDiv {
+  width: 550px;
+  height: 150px;
+  background-color: lightblue;
+  font-size: 24px;
+}
+.departamento {
+  font-weight: 300;
+  color: blue;
+}
+
+.alignRigth {
+  text-align: right;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+
+.tabela {
+  width: 1250px;
+}
+
+.totais {
+  font-size: 20px;
+  color: #0000CD;
+}
+
+.destaque {
+  font-weight: 300;
+  text-align: center;
+}
+
+.tabelaSoma {
+  width: 400px;
+}
+
+.titulo {
+  width: 600px;
+  color: blue;
+  font-size: 20px;
+}
+
+.largura {
+  width: 80px;
+  text-align: right;
+}
+
+.direita {
+  text-align: right;
+}
+
+
+.largura2 {
+  width: 100px;
+  text-align: left;
+}
+
+
+
+</style>
+
+   </form>
+
+
+
+   <p class="titulo">
+    {{ aviso }}
+   </p>
+   <hr>
+
+   {% if lista_vantagens %}
+
+   <table>
+   <tr>
+    <tr><td colspan="3">Vantagens</td></tr>
+    <th>Código</th><th>Descricao</th><th class="alignCenter">Soma</th>
+
+   </tr>
+
+
+   {% for ll in lista_vantagens %}
+
+   <tr>
+    <td>{{ ll.codigo }}</td>
+    <td>{{ ll.descricao }}</td>
+    <td class="alignRigth">{{ ll.soma }}</td>
+   </tr>
+
+
+   {% endfor %}
+
+ </table>
+
+   {% endif %}
+
+
+   <hr>
+
+
+   {% if lista_descontos %}
+
+   <table>
+   <tr>
+    <tr><td colspan="3">Descontos</td></tr>
+    <th>Código</th><th>Descricao</th><th class="alignCenter">Soma</th>
+
+   </tr>
+
+
+   {% for ll in lista_descontos %}
+
+   <tr>
+    <td>{{ ll.codigo }}</td>
+    <td>{{ ll.descricao }}</td>
+    <td class="alignRigth">{{ ll.soma }}</td>
+   </tr>
+
+
+   {% endfor %}
+
+ </table>
+
+
+    <hr>
+    <p class="totais">Total Vantagens: {{ soma_v }}</p>
+    <p class="totais">Total Descontos: {{ soma_d }}</p>
+    <p class="totais">Valor Líquido: {{ resultado }} ========= Número de funcionários; {{ quantidade_de_funcionario }} </p>
+   {% endif %}
+
+   <hr><hr><hr>
+
+
+
+
+
+
+
+</div>
+{% endblock %}
+   

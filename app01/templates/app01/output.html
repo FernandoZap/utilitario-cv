@@ -1,0 +1,14 @@
+{% load app_extras %}
+<ul>
+{% for d in data %}
+
+<li>{{ d.tipo }} - {{ d.valor }}</li>
+
+{% endfor %}
+</ul>
+
+<hr>
+
+<h3>{% total_folha %}</h3>
+<hr>
+<h3>{% total_folha_mes 76 202111 "V" %}</h3>

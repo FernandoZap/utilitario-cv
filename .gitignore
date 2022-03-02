@@ -1,0 +1,12 @@
+.pyc
+.venv38
+.env
+__pycache__/
+*.db
+staticfiles
+db.sqlite3
+dados_folha.csv
+folha_novembro.csv
+folha_novembro1.csv
+dicas_sobre_migrations
+ajustes-nos-models
