@@ -345,10 +345,8 @@ def importacaoFolha(request):
                 FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
                 ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
                 retorno=m2_importacaoFolha.importacaoFolha(file_zip,id_municipio,anomes)
-                if retorno==1:
-                    mensagem='Processo Concluido com Sucesso'
-                else:
-                    mensagem='Processo Encerrado sem Sucesso'
+                mensagem='Processo Concluido com Sucesso'
+            return HttpResponseRedirect(reverse('app01:importacaoFolha'))
 
             #mensagem='Processo Concluido'
         else:
