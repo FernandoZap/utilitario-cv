@@ -336,6 +336,7 @@ def importacaoFolha(request):
 
         if leituraZip.validaPDF(file_zip,string_pesquisa,referencia)==1:
             #Folha.objects.filter(id_municipio=id_municipio,anomes=anomes).delete()
+            mensagem='Processo Concluido'
             if modelo==31:
                 leituraZip.importacaoGeral_modelo1(file_zip,id_municipio,anomes)
                 leituraZip.importacaoProventos_modelo1(file_zip,id_municipio,anomes)
@@ -343,8 +344,13 @@ def importacaoFolha(request):
             if modelo==2:
                 FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
                 ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
-                m2_importacaoFolha.importacaoFolha(file_zip,id_municipio,anomes)
-            mensagem='Processo Concluido'
+                retorno=m2_importacaoFolha.importacaoFolha(file_zip,id_municipio,anomes)
+                if retorno==1:
+                    mensagem='Processo Concluido com Sucesso'
+                else:
+                    mensagem='Processo Encerrado sem Sucesso'
+
+            #mensagem='Processo Concluido'
         else:
             mensagem='Arquivo Zip não foi localizado!'
             

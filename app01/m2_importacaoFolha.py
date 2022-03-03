@@ -141,6 +141,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
         #print (lista_provdesc)
         #print ('----------------------')
         zip.close()
+        return 1
 
 def fcod_departamentoSetor(l_departamento,id_municipio,tipo):
     string_1=re.sub(r'SEC.:','$$',l_departamento)
