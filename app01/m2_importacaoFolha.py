@@ -23,9 +23,10 @@ def importacaoFolha(file_zip,id_municipio,anomes):
         retorno=0
         contador=0
         for filename in zip.namelist():
-            file = zip.open(filename)
+            file = zip.open(filename,'rb')
 
             pdf_reader = p2.PdfFileReader(file)
+
 
             n = pdf_reader.numPages
             text=''
