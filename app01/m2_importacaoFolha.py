@@ -49,6 +49,10 @@ def importacaoFolha(file_zip,id_municipio,anomes):
                 for ll in range(0,len(linha)):
                     if re.search(r'RESUMO DO SETOR',linha[ll]):
                         continue
+                    if re.search(r'RESUMO DA SECRETARIA',linha[ll]):
+                        continue
+                    if re.search(r'RESUMO GERAL',linha[ll]):
+                        continue
                     inicio_de_pagina+=1
                     lista_provdesc=[]
 
