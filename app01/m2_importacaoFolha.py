@@ -38,7 +38,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
             lista_2=[]
 
             lista_final=[]
-            for i in range(0,n):
+            for i in range(0,n-2):
                 # creating a page object
                 pageObj = pdf_reader.getPage(i)
                 # extracting text from page
@@ -79,7 +79,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
 
 
                     else:                        
-                        if ll>0 and ll<n-2:
+                        if ll>0:
                             cod_matricula=fcod_matricula(linha[ll])
                             funcionario=fcod_funcionario((linha[ll])[0:90])
                             cod_funcionario=funcionario[0:5]
