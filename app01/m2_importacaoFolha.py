@@ -3,6 +3,7 @@ import zipfile
 import re
 from . import funcoes_banco
 import PyPDF2 as p2
+from django.http import HttpResponse
 
 
 def importacaoFolha(file_zip,id_municipio,anomes):
@@ -147,7 +148,10 @@ def importacaoFolha(file_zip,id_municipio,anomes):
         #print (lista_provdesc)
         #print ('----------------------')
         zip.close()
-        return 1
+    response = HttpResponse()
+    response.write("<p>Here's the text of the web page.</p>")
+
+
 
 def fcod_departamentoSetor(l_departamento,id_municipio,tipo):
     string_1=re.sub(r'SEC.:','$$',l_departamento)
