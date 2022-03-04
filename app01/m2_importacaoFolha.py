@@ -148,6 +148,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
         #print (lista_provdesc)
         #print ('----------------------')
         zip.close()
+        return None
 
 
 

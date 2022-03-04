@@ -58,14 +58,16 @@ def gravar_proventos(lista,id_municipio):
 
 	for id in range(len(lista)):
 			codigo=(lista[id])[0:4]
+			codigo=codigo.rstrip()
 			nome=(lista[id])[4:]
-			obj = ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo).first()
-			if obj is None:	
-				if codigo in ['0051','0052','0053','0123','0130','0147','0166']:
-					tipo='DESCONTO'
-				else:
-					tipo='VANTAGEM'
-				ProvDesc.objects.create(id_municipio=id_municipio,tipo=tipo,codigo=codigo,descricao=nome)
+			if len(codigo)==4:
+				obj = ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo).first()
+				if obj is None:	
+					if codigo in ['0051','0052','0053','0123','0130','0147','0166']:
+						tipo='DESCONTO'
+					else:
+						tipo='VANTAGEM'
+					ProvDesc.objects.create(id_municipio=id_municipio,tipo=tipo,codigo=codigo,descricao=nome)
 	return None				
 
 def gravar_funcao(lista_set,id_municipio):
