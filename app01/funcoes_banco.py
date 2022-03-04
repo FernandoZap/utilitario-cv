@@ -150,6 +150,7 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 			provdesc=provdesc,
 			valor=valor_v)
 		prov.save()
+	return None
 
 
 
