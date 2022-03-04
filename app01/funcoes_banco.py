@@ -107,7 +107,7 @@ def gravar_lotacao(lista_set,id_municipio):
 				Lotacao.objects.create(id_municipio=id_municipio,codigo=codigo,lotacao=nome)
 	return None				
 
-
+'''
 def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,cod_matricula,cod_funcao,cod_lotacao,cod_vinculo,lista_provdesc):
 	funcionario=searchFuncionario(id_municipio,cod_funcionario)
 	setor=searchSetor(cod_depto,cod_setor)
@@ -115,17 +115,6 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 	lotacao=searchLotacao(id_municipio,cod_lotacao)
 	vinculo=searchVinculo(id_municipio,cod_vinculo)
 
-	'''
-	FolhaMes.objects.create(
-		anomes=anomes,
-		funcionario=funcionario,
-		id_municipio=id_municipio,
-		setor=setor,
-		funcao=funcao,
-		lotacao=lotacao,
-		vinculo=vinculo
-		)
-	'''
 
 	flmes = FolhaMes(anomes=anomes,funcionario=funcionario,id_municipio=id_municipio,setor=setor,funcao=funcao,lotacao=lotacao,vinculo=vinculo)
 	flmes.save()
@@ -154,6 +143,66 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 	ProventosMes.objects.bulk_create(proventos)
 	return None
 
+'''
+
+'''
+'cod_depto':cod_depto,
+'cod_setor':cod_setor,
+'cod_matricula':cod_matricula,
+'cod_funcionario':cod_funcionario,
+'cod_funcao':cod_funcao,
+'cod_vinculo':cod_vinculo,
+'cod_lotacao':cod_lotacao
+'proventos':lista_provdesc,
+'id_municipio':id_municipio,
+'anomes':anomes
+'''
+
+def gravar_folhaMensal(lista_final):
+	proventos = []
+	for item in (range(len(lista_final))):
+		cod_depto=lista_final[item]['cod_depto']
+		cod_setor=lista_final[item]['cod_setor']
+		cod_funcionario=lista_final[item]['cod_funcionario']
+		cod_funcao=lista_final[item]['cod_funcao']
+		cod_vinculo=lista_final[item]['cod_vinculo']
+		cod_lotacao=lista_final[item]['cod_lotacao']
+		id_municipio=lista_final[item]['id_municipio']
+		anomes=lista_final[item]['anomes']
+		lista_provdesc = lista_final[item]['proventos']
+
+		funcionario=searchFuncionario(id_municipio,cod_funcionario)
+		setor=searchSetor(cod_depto,cod_setor)
+		funcao=searchFuncao(id_municipio,cod_funcao)
+		lotacao=searchLotacao(id_municipio,cod_lotacao)
+		vinculo=searchVinculo(id_municipio,cod_vinculo)
+
+
+
+		flmes = FolhaMes(anomes=anomes,funcionario=funcionario,id_municipio=id_municipio,setor=setor,funcao=funcao,lotacao=lotacao,vinculo=vinculo)
+		flmes.save()
+
+		for k in range(len(lista_provdesc)):
+			codigo_provdesc=lista_provdesc[k]['codigo']
+			valor_provdesc=lista_provdesc[k]['valor']
+			valor_p = valor_provdesc.replace('.','')
+			valor_p = valor_p.replace(',','.')
+			valor_v = float(valor_p)
+
+			provdesc=ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo_provdesc).first()
+
+
+			provento = ProventosMes(
+				anomes=anomes,
+				id_municipio=id_municipio,
+				folhames=flmes,
+				provdesc=provdesc,
+				valor=valor_v)
+
+			proventos.append(provento)
+
+	ProventosMes.objects.bulk_create(proventos)
+	return None
 
 
 
