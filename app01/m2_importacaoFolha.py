@@ -40,6 +40,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
             lista_2=[]
 
             lista_final=[]
+            lista_provdesc=[]
             for i in range(0,n-2):
                 # creating a page object
                 pageObj = pdf_reader.getPage(i)
@@ -57,6 +58,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
                         continue
                     inicio_de_pagina+=1
                     lista_provdesc=[]
+                    
 
 
                     if not re.search(r'[\d]{4}[A-Z\s]{3,10}',(linha[ll])[0:11]):
@@ -119,14 +121,9 @@ def importacaoFolha(file_zip,id_municipio,anomes):
                                     }
                                 )
 
-                retorno = funcoes_banco.gravar_folhaMensal(lista_final)
-                lista_provdesc=[]
-                lista_final=[]
-            break
-        #print (lista_provdesc)
-        #print ('----------------------')
+        retorno = funcoes_banco.gravar_folhaMensal(lista_final)
         file.close()
-        return None
+    return None
 
 
 
