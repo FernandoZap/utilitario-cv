@@ -130,9 +130,7 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 	flmes = FolhaMes(anomes=anomes,funcionario=funcionario,id_municipio=id_municipio,setor=setor,funcao=funcao,lotacao=lotacao,vinculo=vinculo)
 	flmes.save()
 
-	#obj = FolhaMes.objects.filter(anomes=anomes,funcionario=funcionario).first()
-
-
+	proventos = []
 
 	for k in range(len(lista_provdesc)):
 		codigo_provdesc=lista_provdesc[k]['codigo']
@@ -143,13 +141,17 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 
 		provdesc=ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo_provdesc).first()
 
-		prov = ProventosMes(
+
+		provento = ProventosMes(
 			anomes=anomes,
 			id_municipio=id_municipio,
 			folhames=flmes,
 			provdesc=provdesc,
 			valor=valor_v)
-		prov.save()
+
+		proventos.append(provento)
+
+	ProventosMes.objects.bulk.create(proventos)
 	return None
 
 
