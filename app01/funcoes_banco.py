@@ -151,7 +151,7 @@ def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,c
 
 		proventos.append(provento)
 
-	ProventosMes.objects.bulk.create(proventos)
+	ProventosMes.objects.bulk_create(proventos)
 	return None
 
 
