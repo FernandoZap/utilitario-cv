@@ -148,8 +148,6 @@ def importacaoFolha(file_zip,id_municipio,anomes):
         #print (lista_provdesc)
         #print ('----------------------')
         zip.close()
-    response = HttpResponse()
-    response.write("<p>Here's the text of the web page.</p>")
 
 
 
