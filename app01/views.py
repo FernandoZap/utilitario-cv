@@ -255,10 +255,6 @@ def importacaoGeral(request):
 
 
         if leituraZip.validaPDF(file_zip,string_pesquisa,referencia)==1:
-            if modelo==31:
-                leituraZip.importacaoGeral_modelo1(file_zip,id_municipio,anomes)
-                leituraZip.importacaoProventos_modelo1(file_zip,id_municipio,anomes)
-                leituraZip.importacaoFuncionario_modelo1(file_zip,id_municipio,anomes)
             if modelo==2:
                 m2_importacaoGeral.importacaoGeral(file_zip,id_municipio)
                 #leituraZip.importacaoProventos_modelo2(file_zip,id_municipio,anomes)
@@ -334,10 +330,6 @@ def importacaoFolha(request):
 
         if leituraZip.validaPDF(file_zip,string_pesquisa,referencia)==1:
             #Folha.objects.filter(id_municipio=id_municipio,anomes=anomes).delete()
-            if modelo==31:
-                leituraZip.importacaoGeral_modelo1(file_zip,id_municipio,anomes)
-                leituraZip.importacaoProventos_modelo1(file_zip,id_municipio,anomes)
-                leituraZip.importacaoFuncionario_modelo1(file_zip,id_municipio,anomes)
             if modelo==2:
                 FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
                 ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()

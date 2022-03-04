@@ -3,7 +3,6 @@ import zipfile
 import re
 from . import funcoes_banco
 import PyPDF2 as p2
-from django.http import HttpResponse
 
 
 def importacaoFolha(file_zip,id_municipio,anomes):
@@ -147,7 +146,7 @@ def importacaoFolha(file_zip,id_municipio,anomes):
             break
         #print (lista_provdesc)
         #print ('----------------------')
-        zip.close()
+        file.close()
         return None
 
 
