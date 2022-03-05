@@ -331,8 +331,12 @@ def importacaoFolha(request):
         if leituraZip.validaPDF(file_zip,string_pesquisa,referencia)==1:
             #Folha.objects.filter(id_municipio=id_municipio,anomes=anomes).delete()
             if modelo==2:
-                FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
-                ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
+                obj=FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
+                if obj is not None:
+                    FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
+                obj=ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
+                if obj is not None:
+                    ProventosMes.objects.filter(anomes=anomes,id_municipio=id_municipio).delete()
                 retorno=m2_importacaoFolha.importacaoFolha(file_zip,id_municipio,anomes)
                 mensagem='Processo Concluido com Sucesso'
             return HttpResponseRedirect(reverse('app01:importacaoFolha'))
