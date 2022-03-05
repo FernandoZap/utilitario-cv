@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import (ListView)
 from django.http import HttpResponse,HttpResponseRedirect
-from . import leituraZip,funcoes_gerais,m2_importacaoGeral,m2_importacaoFolha,choices
+from . import leituraZip,funcoes_gerais,m2_importacaoGeral,m2_importacaoFolha,choices,importarPlanilha
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Municipio,Departamento,Setor,ProvDesc,ProventosMes,FolhaMes
@@ -668,7 +668,7 @@ def somaProventosDescontos(request):
         cc = FolhaMes.objects.filter(id_municipio=id_municipio,anomes=anomes).count()
         quantidade_de_funcionario=str(cc)
 
-        ff = ProventosMes.objects.select_related('folhames__funcionario').filter(id_provento=5)
+        ##ff = ProventosMes.objects.select_related('folhames__funcionario').filter(id_provento=5)
         #print ('///////////////////')
 
 
@@ -734,3 +734,39 @@ def formatMilhar(valor):
     return vd
 
 
+
+@login_required
+def importacaoFolhaExcel(request):
+    #------------------------------------------------------------------------------
+    # esta rotina para ler o arquivo .zip da folha de pagamento de cada municipio
+    # e gravar no banco os departamentos/setores/funcionarios/cargos/vinculos,
+    #  proventos e descontos.
+    #-----------------------------------------------------------------------------
+    titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
+    
+    mensagem=''
+    municipios=Municipio.objects.all().order_by('municipio')
+    if (request.method == "POST" and request.FILES['filename']):
+
+        current_user = request.user.iduser
+        planilha=request.FILES['filename']
+        id_municipio=int(request.POST['municipio'])
+        ano=request.POST['ano']
+        mes=request.POST['mes']
+        anomes=int(ano+mes)
+
+
+        modelo = funcoes_gerais.modelos(str(id_municipio))
+        string_pesquisa = funcoes_gerais.strings_pesquisa(str(id_municipio))
+
+        retorno = importarPlanilha.importarExcel(planilha,id_municipio,anomes,current_user)
+        return HttpResponseRedirect(reverse('app01:importacaoFolhaExcel'))
+
+
+    return render(request, 'app01/importacaoFolhaExcel.html',
+            {
+                'titulo': titulo_html,
+                'mensagem':mensagem,
+                'municipios':municipios
+            }
+          )

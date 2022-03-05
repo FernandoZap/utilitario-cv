@@ -467,3 +467,22 @@ class ProventosMes(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+
+class Pagamento(models.Model):
+    id_pagamento = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField(null=True)
+    anomes = models.IntegerField()
+    codigo = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50)
+    valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    class Meta:
+        db_table = 'pagamentos'
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
