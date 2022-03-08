@@ -16,6 +16,7 @@ import openpyxl
 import re
 from django.core.files import File
 import zipfile
+from django.db import connection
 
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 
@@ -299,6 +300,9 @@ def importacaoFolha(request):
         ano=request.POST['ano']
         mes=request.POST['mes']
         anomes=int(ano+mes)
+
+
+
 
         '''
         obj = Folha.objects.filter(id_municipio=id_municipio,anomes=anomes).first()
@@ -738,50 +742,26 @@ def formatMilhar(valor):
 
 
 @login_required
-def importacaoFolhaExcel(request):
-    #------------------------------------------------------------------------------
-    # esta rotina para ler o arquivo .zip da folha de pagamento de cada municipio
-    # e gravar no banco os departamentos/setores/funcionarios/cargos/vinculos,
-    #  proventos e descontos.
-    #-----------------------------------------------------------------------------
-    titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
-    
-    mensagem=''
-    municipios=Municipio.objects.all().order_by('municipio')
-    if (request.method == "POST" and request.FILES['filename']):
-
-        current_user = request.user.iduser
-        planilha=request.FILES['filename']
-        id_municipio=int(request.POST['municipio'])
-        ano=request.POST['ano']
-        mes=request.POST['mes']
-        anomes=int(ano+mes)
-
-
-        modelo = funcoes_gerais.modelos(str(id_municipio))
-        string_pesquisa = funcoes_gerais.strings_pesquisa(str(id_municipio))
-
-        retorno = importarPlanilha.importarExcel(planilha,id_municipio,anomes,current_user)
-        return HttpResponseRedirect(reverse('app01:importacaoFolhaExcel'))
-
-
-    return render(request, 'app01/importacaoFolhaExcel.html',
-            {
-                'titulo': titulo_html,
-                'mensagem':mensagem,
-                'municipios':municipios
-            }
-          )
-
-
-
-@login_required
 def listFolhaResumo(request):
 
     opcao=''
     query1=None
     query2=None
+    titulo=''
     cursor = connection.cursor()
+    id_municipio=86
+    anomes='202111'
+    municipio='Caridade'
+    referencia='202111'
+    rs=0
+    lista1=[]
+    lista2=[]
+
+    total_v=0
+    total_d=0
+    total_r=0
+
+    municipios = Municipio.objects.all().order_by('municipio')
     if (request.method == "POST"):
         id_municipio=request.POST['municipio']
         ano=request.POST['ano']
@@ -794,27 +774,86 @@ def listFolhaResumo(request):
 
         titulo = 'Totais da Folha'
 
-        query="SELECT d.departamento,s.setor,SUM(v.vantagem) AS vantagens,SUM(v.desconto) AS descontos\
+        quantidade_de_funcionario=FolhaMes.objects.filter(anomes=anomes,id_municipio=id_municipio).count()
+
+
+        cursor.execute("SELECT d.departamento,SUM(v.vantagem) AS vantagens,SUM(v.desconto) AS descontos\
         FROM v001_valoresPorSetor v LEFT JOIN departamento d ON d.id_departamento=v.id_departamento\
         LEFT JOIN setor s ON v.id_setor=s.id_setor\
-        WHERE v.id_municipio="+str(id_municipio)+"  AND v.anomes="+str(anomes)+\
-        " GROUP BY d.departamento,s.setor ORDER BY d.departamento,s.setor"
+        WHERE v.id_municipio=%s  AND v.anomes=%s\
+        GROUP BY d.departamento ORDER BY d.departamento",[id_municipio,anomes])
 
-        cursor.execute(query)    
+        query0 = dictfetchall(cursor)
+
+        for q in query0:
+            resultado=q['vantagens']-q['descontos']
+            total_v+=q['vantagens']
+            total_d+=q['descontos']
+            total_r+=resultado
+
+
+            lista1.append(
+                {
+                    'departamento':q['departamento'],
+                    'vantagens':q['vantagens'],
+                    'descontos':q['descontos'],
+                    'resultado':resultado,
+                }
+                )
+
+#'''''''''''''''''''''''''''''''''''''''
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT d.departamento,s.setor,SUM(v.vantagem) AS vantagens,SUM(v.desconto) AS descontos\
+        FROM v001_valoresPorSetor v LEFT JOIN departamento d ON d.id_departamento=v.id_departamento\
+        LEFT JOIN setor s ON v.id_setor=s.id_setor\
+        WHERE v.id_municipio=%s  AND v.anomes=%s\
+        GROUP BY d.departamento,s.setor ORDER BY d.departamento,s.setor",[id_municipio,anomes])
+
         query1 = dictfetchall(cursor)
-        municipios = Municipio.objects.all().order_by('municipio')
+
+        for q in query1:
+            departamento=q['departamento']
+
+            for k1 in lista1:
+                if k1['departamento']==departamento:
+                    v_dep=k1['vantagens']
+                    d_dep=k1['descontos']
+                    r_dep=k1['resultado']
+
+
+            resultado=q['vantagens']-q['descontos']
+            lista2.append(
+                {
+                    'departamento':q['departamento'],
+                    'setor':q['setor'],
+                    'vantagens':q['vantagens'],
+                    'descontos':q['descontos'],
+                    'resultado':resultado,
+                    'v_dep':v_dep,
+                    'd_dep':d_dep,
+                    'r_dep':r_dep
+
+                }
+                )
+
+
+        del cursor
 
 
     return render(request, 'app01/listFolhaResumo1.html',
             {
                 'titulo': titulo,
-                'resumo_depsetor':query1,
-                'resumo_provento':query2,
+                'resumo_depsetor':lista2,
                 'municipios':municipios,
                 'id_municipio':id_municipio,
                 'anomes':anomes,
                 'municipio':municipio,
                 'referencia':referencia,
-                'qtde_funcionario':r5
+                'qtde_funcionario':quantidade_de_funcionario,
+                'total_v':total_v,
+                'total_d':total_d,
+                'total_r':total_r,
+
             }
           )

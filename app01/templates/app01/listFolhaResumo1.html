@@ -134,6 +134,7 @@ function fnSubmit(){
 
 
 
+
    <p class="titulo">
     {{ aviso }}
    </p>
@@ -145,24 +146,24 @@ function fnSubmit(){
    
    <table><tr><th>Departamento/Setor</th><th>Vantagens</th><th>Descontos</th><th>Resultado</th></tr>
 
-   {% for res in resumo_depsetor %}
+   {% for resumo in resumo_depsetor %}
 
-   {% ifchanged res.departamento %}
+   {% ifchanged resumo.departamento %}
 
   <tr class="departamento">
-    <td>{{ res.departamento }}</td>
-    <td class="alignRigth" >{{ res.vantagens_depto  }}</td>
-    <td class="alignRigth" >{{ res.descontos_depto  }}</td>
-    <td class="alignRigth" >{{ res.resultado_depto  }}</td>
+    <td>{{ resumo.departamento }}</td>
+    <td class="alignRigth" >{{ resumo.v_dep  }}</td>
+    <td class="alignRigth" >{{ resumo.d_dep  }}</td>
+    <td class="alignRigth" >{{ resumo.r_dep  }}</td>
   </tr>
 
    {% endifchanged %}
 
   <tr>
-    <td>{{ res.setor }}</td>
-    <td class="alignRigth" >{{ res.vantagens_setor  }}</td>
-    <td class="alignRigth" >{{ res.descontos_setor  }}</td>
-    <td class="alignRigth" >{{ res.resultado_setor  }}</td>
+    <td>{{ resumo.setor }}</td>
+    <td class="alignRigth" >{{ resumo.vantagens  }}</td>
+    <td class="alignRigth" >{{ resumo.descontos  }}</td>
+    <td class="alignRigth" >{{ resumo.resultado  }}</td>
   </tr>
 
    {% endfor %} 
@@ -171,20 +172,15 @@ function fnSubmit(){
  
 
  <hr>
- <ul>
-<li>
-  Total Vantagens: {{ total_vantagens }}
-</li>
-<li>
-  Total Decontos: {{ total_descontos }}
-</li>
-
-<li>
-  Resultado: {{ resultado }} ===========  Número de funcionários; {{ quantidade_de_funcionario }}
-</li>
 
 
-</ul>
+    <hr>
+    <p class="totais">Total Vantagens: {{ total_v }}</p>
+    <p class="totais">Total Descontos: {{ total_d }}</p>
+    <p class="totais">Valor Líquido: {{ total_r }} ========= Número de funcionários; {{ qtde_funcionario }} </p>
+
+   <hr><hr><hr>
+
 
    {% endif %}
 
@@ -194,9 +190,6 @@ function fnSubmit(){
    <h1>{{ mensagem }}</h1>
 
    {%   endif  %}
-
-
-
 
    <hr>
 </div>

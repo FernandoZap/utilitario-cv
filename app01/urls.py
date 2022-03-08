@@ -16,5 +16,5 @@ urlpatterns = [
     path('importacaoFolha', v1.importacaoFolha, name='importacaoFolha'),
     path('listFolha', v1.listFolha, name='listFolha'),
     path('listFolha2', v1.listFolha2, name='listFolha2'),
-    path('importacaoFolhaExcel', v1.importacaoFolhaExcel, name='importacaoFolhaExcel'),
+    #path('importacaoFolhaExcel', v1.importacaoFolhaExcel, name='importacaoFolhaExcel'),
 ]
