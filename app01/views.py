@@ -749,7 +749,7 @@ def listFolhaResumo(request):
     query2=None
     titulo=''
     cursor = connection.cursor()
-    id_municipio=86
+    id_municipio=0
     anomes='202111'
     municipio='Caridade'
     referencia='202111'
@@ -760,6 +760,7 @@ def listFolhaResumo(request):
     total_v=0
     total_d=0
     total_r=0
+    quantidade_de_funcionario=0
 
     municipios = Municipio.objects.all().order_by('municipio')
     if (request.method == "POST"):
