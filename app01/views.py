@@ -524,7 +524,7 @@ def gravarCSVFolha(request):
     )
 
 
-
+'''
 @login_required
 def listFolhaResumo(request):
 
@@ -634,6 +634,8 @@ def listFolhaResumo(request):
                 'quantidade_de_funcionario':quantidade_de_funcionario
             }
           )
+
+'''          
 
 @login_required
 def somaProventosDescontos(request):
@@ -768,5 +770,51 @@ def importacaoFolhaExcel(request):
                 'titulo': titulo_html,
                 'mensagem':mensagem,
                 'municipios':municipios
+            }
+          )
+
+
+
+@login_required
+def listFolhaResumo(request):
+
+    opcao=''
+    query1=None
+    query2=None
+    cursor = connection.cursor()
+    if (request.method == "POST"):
+        id_municipio=request.POST['municipio']
+        ano=request.POST['ano']
+        mes=request.POST['mes']
+        obj=Municipio.objects.get(id_municipio=id_municipio)
+        municipio=obj.municipio
+
+        anomes = int(ano+mes)
+        referencia = mes+"/"+ano
+
+        titulo = 'Totais da Folha'
+
+        query="SELECT d.departamento,s.setor,SUM(v.vantagem) AS vantagens,SUM(v.desconto) AS descontos\
+        FROM v001_valoresPorSetor v LEFT JOIN departamento d ON d.id_departamento=v.id_departamento\
+        LEFT JOIN setor s ON v.id_setor=s.id_setor\
+        WHERE v.id_municipio="+str(id_municipio)+"  AND v.anomes="+str(anomes)+\
+        " GROUP BY d.departamento,s.setor ORDER BY d.departamento,s.setor"
+
+        cursor.execute(query)    
+        query1 = dictfetchall(cursor)
+        municipios = Municipio.objects.all().order_by('municipio')
+
+
+    return render(request, 'app01/listFolhaResumo1.html',
+            {
+                'titulo': titulo,
+                'resumo_depsetor':query1,
+                'resumo_provento':query2,
+                'municipios':municipios,
+                'id_municipio':id_municipio,
+                'anomes':anomes,
+                'municipio':municipio,
+                'referencia':referencia,
+                'qtde_funcionario':r5
             }
           )
