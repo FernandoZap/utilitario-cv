@@ -826,8 +826,8 @@ def listFolhaResumo(request):
             resultado=q['vantagens']-q['descontos']
             lista2.append(
                 {
-                    'departamento':q['departamento'],
-                    'setor':q['setor'],
+                    'departamento':q['departamento'][0:38],
+                    'setor':q['setor'][0:38],
                     'vantagens':formatMilhar(q['vantagens']),
                     'descontos':formatMilhar(q['descontos']),
                     'resultado':formatMilhar(resultado),
