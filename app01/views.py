@@ -818,9 +818,9 @@ def listFolhaResumo(request):
 
             for k1 in lista1:
                 if k1['departamento']==departamento:
-                    v_dep=k1['vantagens']
-                    d_dep=k1['descontos']
-                    r_dep=k1['resultado']
+                    v_dep=formatMilhar(k1['vantagens'])
+                    d_dep=formatMilhar(k1['descontos'])
+                    r_dep=formatMilhar(k1['resultado'])
 
 
             resultado=q['vantagens']-q['descontos']
@@ -852,9 +852,9 @@ def listFolhaResumo(request):
                 'municipio':municipio,
                 'referencia':referencia,
                 'qtde_funcionario':quantidade_de_funcionario,
-                'total_v':total_v,
-                'total_d':total_d,
-                'total_r':total_r,
+                'total_v':formatMilhar(total_v),
+                'total_d':formatMilhar(total_d),
+                'total_r':formatMilhar(total_r)
 
             }
           )
