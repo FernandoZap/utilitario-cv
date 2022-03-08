@@ -828,9 +828,9 @@ def listFolhaResumo(request):
                 {
                     'departamento':q['departamento'],
                     'setor':q['setor'],
-                    'vantagens':q['vantagens'],
-                    'descontos':q['descontos'],
-                    'resultado':resultado,
+                    'vantagens':formatMilhar(q['vantagens']),
+                    'descontos':formatMilhar(q['descontos']),
+                    'resultado':formatMilhar(resultado),
                     'v_dep':v_dep,
                     'd_dep':d_dep,
                     'r_dep':r_dep
