@@ -116,6 +116,13 @@ function fnSubmit(){
   text-align: center;
 }
 
+.descricao {
+  font-weight: 300;
+  text-align: center;
+  width: 300px;
+}
+
+
 .tabelaSoma {
   width: 400px;
 }
@@ -144,14 +151,14 @@ function fnSubmit(){
    {% if resumo_depsetor %}
 
    
-   <table><tr><th>Departamento/Setor</th><th>Vantagens (R$)</th><th>Descontos (R$)</th><th>Resultado (R$)</th></tr>
+   <table><tr><th class="descricao">Departamento/Setor</th><th>Vantagens (R$)</th><th>Descontos (R$)</th><th>Resultado (R$)</th></tr>
 
    {% for resumo in resumo_depsetor %}
 
    {% ifchanged resumo.departamento %}
 
   <tr class="departamento">
-    <td>{{ resumo.departamento }}</td>
+    <td class="descricao">{{ resumo.departamento }}</td>
     <td class="alignRigth" >{{ resumo.v_dep  }}</td>
     <td class="alignRigth" >{{ resumo.d_dep  }}</td>
     <td class="alignRigth" >{{ resumo.r_dep  }}</td>
@@ -160,7 +167,7 @@ function fnSubmit(){
    {% endifchanged %}
 
   <tr>
-    <td>{{ resumo.setor }}</td>
+    <td class="descricao">{{ resumo.setor }}</td>
     <td class="alignRigth" >{{ resumo.vantagens  }}</td>
     <td class="alignRigth" >{{ resumo.descontos  }}</td>
     <td class="alignRigth" >{{ resumo.resultado  }}</td>
