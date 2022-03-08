@@ -141,7 +141,7 @@ def cabecalhoFolha(id_municipio):
     lista.append('Funcao')
     lista.append('Vinculo')
     lista.append('Dias')
-    objs=ProvDesc.objects.filter(id_municipio=id_municipio,tipo='VANTAGEM').order_by('ordenacao1')
+    objs=ProvDesc.objects.filter(id_municipio=id_municipio,tipo='VANTAGEM').order_by('descricao')
     for obj in objs:
         lista.append(obj.descricao)
     lista.append('Soma')
