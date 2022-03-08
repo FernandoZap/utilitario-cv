@@ -107,56 +107,7 @@ def gravar_lotacao(lista_set,id_municipio):
 				Lotacao.objects.create(id_municipio=id_municipio,codigo=codigo,lotacao=nome)
 	return None				
 
-'''
-def gravar_folhaMensal(id_municipio,anomes,cod_depto,cod_setor,cod_funcionario,cod_matricula,cod_funcao,cod_lotacao,cod_vinculo,lista_provdesc):
-	funcionario=searchFuncionario(id_municipio,cod_funcionario)
-	setor=searchSetor(cod_depto,cod_setor)
-	funcao=searchFuncao(id_municipio,cod_funcao)
-	lotacao=searchLotacao(id_municipio,cod_lotacao)
-	vinculo=searchVinculo(id_municipio,cod_vinculo)
 
-
-	flmes = FolhaMes(anomes=anomes,funcionario=funcionario,id_municipio=id_municipio,setor=setor,funcao=funcao,lotacao=lotacao,vinculo=vinculo)
-	flmes.save()
-
-	proventos = []
-
-	for k in range(len(lista_provdesc)):
-		codigo_provdesc=lista_provdesc[k]['codigo']
-		valor_provdesc=lista_provdesc[k]['valor']
-		valor_p = valor_provdesc.replace('.','')
-		valor_p = valor_p.replace(',','.')
-		valor_v = float(valor_p)
-
-		provdesc=ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo_provdesc).first()
-
-
-		provento = ProventosMes(
-			anomes=anomes,
-			id_municipio=id_municipio,
-			folhames=flmes,
-			provdesc=provdesc,
-			valor=valor_v)
-
-		proventos.append(provento)
-
-	ProventosMes.objects.bulk_create(proventos)
-	return None
-
-'''
-
-'''
-'cod_depto':cod_depto,
-'cod_setor':cod_setor,
-'cod_matricula':cod_matricula,
-'cod_funcionario':cod_funcionario,
-'cod_funcao':cod_funcao,
-'cod_vinculo':cod_vinculo,
-'cod_lotacao':cod_lotacao
-'proventos':lista_provdesc,
-'id_municipio':id_municipio,
-'anomes':anomes
-'''
 
 def gravar_folhaMensal(lista_final):
 	proventos = []
@@ -172,10 +123,22 @@ def gravar_folhaMensal(lista_final):
 		lista_provdesc = lista_final[item]['proventos']
 
 		funcionario=searchFuncionario(id_municipio,cod_funcionario)
+		if funcionario is None:
+			return None
 		setor=searchSetor(cod_depto,cod_setor)
 		funcao=searchFuncao(id_municipio,cod_funcao)
 		lotacao=searchLotacao(id_municipio,cod_lotacao)
 		vinculo=searchVinculo(id_municipio,cod_vinculo)
+		if setor is None:
+			return None
+		if funcao is None:
+			return None
+		if lotacao is None:
+			return None
+		if vinculo is None:
+			return None
+
+
 
 
 
@@ -190,6 +153,8 @@ def gravar_folhaMensal(lista_final):
 			valor_v = float(valor_p)
 
 			provdesc=ProvDesc.objects.filter(id_municipio=id_municipio,codigo=codigo_provdesc).first()
+			if provdesc is None:
+				return None
 
 
 			provento = ProventosMes(
