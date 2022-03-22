@@ -650,7 +650,7 @@ def importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
 
 
 
-def importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
+def importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
 
     lote = str(datetime.datetime.now().today())[0:19]
@@ -707,7 +707,7 @@ def importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
     objetos=[]
     feventos=[]
     lista_incluidos=[]
-    while row<sheet.max_row+1 and row<6000:
+    while row<sheet.max_row+1 and row<=nrow:
         
         cod_servidor = sheet['A' + str(row)].value # DC 
         cpf = sheet['O' + str(row)].value # DC 

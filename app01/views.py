@@ -77,6 +77,8 @@ def importacaoFolhaExcel(request):
         mes=request.POST['mes']
         tabela=request.POST['tabela']
         anomes=int(ano+mes)
+        nlinhas=int(request.POST['nlinhas'])
+
 
 
         #modelo = funcoes_gerais.modelos(str(id_municipio))
@@ -90,7 +92,7 @@ def importacaoFolhaExcel(request):
         elif tabela=='Servidor':            
             retorno = importarPlanilha.importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
         elif tabela=='Folha':            
-            retorno = importarPlanilha.importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
+            retorno = importarPlanilha.importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
             if retorno!='':
                 return HttpResponseRedirect(reverse('app01:planilhaErrada'))
 
