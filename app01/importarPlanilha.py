@@ -300,7 +300,7 @@ def importarFuncoes(planilha,id_municipio,anomes,current_user):
 
 '''
 
-
+'''
 def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
 
     wb = openpyxl.load_workbook(planilha)
@@ -383,7 +383,7 @@ def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
     Evento.objects.bulk_create(objetos)
     return None
 
-
+'''
 
 def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
 
@@ -424,7 +424,7 @@ def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municip
     lista_eventos=listagens.listagemEventos(id_municipio)
 
 
-    while row<sheet.max_row+1 and row<6000:
+    while row<sheet.max_row+1 and row<250:
 
         secretaria = sheet['W' + str(row)].value # DC 
         setor = sheet['X' + str(row)].value # DC 
