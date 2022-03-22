@@ -300,9 +300,8 @@ def importarFuncoes(planilha,id_municipio,anomes,current_user):
 
 '''
 
-'''
 
-def importarEventos(planilha,id_municipio,anomes,current_user,mes_ref):
+def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
 
     lote = str(datetime.datetime.now().today())[0:19]
 
@@ -331,6 +330,43 @@ def importarEventos(planilha,id_municipio,anomes,current_user,mes_ref):
 
         evento = sheet['E' + str(row)].value # DC 
 
+        mes_referencia = sheet['D' + str(row)].value # Código da pasta
+        municipio_ref = sheet['AH' + str(row)].value # Código da pasta
+        data_referencia = sheet['B' + str(row)].value # Código da pasta
+        cod_evento = sheet['AV' + str(row)].value # Código da pasta
+
+
+        if mes_referencia is None:
+            row+=1
+            continue
+        if municipio_ref is None:
+            row+=1
+            continue
+
+        if mes_referencia=='' or municipio_ref=='':
+            row+=1
+            continue
+
+        data_ref=str(data_referencia)            
+
+        if row==2:
+            if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
+                #print ('anomes 1: '+str(anomes))
+                #print ('data_ref: '+data_ref[0:4]+data_ref[5:7])
+                #print ('Erro: ano e mes não confere com a planilha informada.')
+                return 'Erro: ano e mes não confere com a planilha informada.'
+            if municipio_ref.upper()!=municipio.upper():
+                #print ('municipio: '+municipio)
+                #print ('Erro: nome da prefeitura não confere com planilha informada.')
+                return 'Erro: nome da prefeitura não confere com planilha informada.'
+
+        if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
+            row+=1    
+            continue
+
+
+
+
         row+=1
 
         if evento is not None:
@@ -341,6 +377,7 @@ def importarEventos(planilha,id_municipio,anomes,current_user,mes_ref):
                         objeto = Evento(
                             id_municipio=id_municipio,
                             evento=evento,
+                            codigo=cod_evento,
                             tipo='V'
                             )
                         lista.append(evento)
@@ -351,7 +388,6 @@ def importarEventos(planilha,id_municipio,anomes,current_user,mes_ref):
     Evento.objects.bulk_create(objetos)
     return None
 
-'''
 
 
 def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
