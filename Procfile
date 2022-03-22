@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn  utilitario.wsgi --log-file -
+web: gunicorn  utilitario.wsgi --timeout 300 --log-file -
