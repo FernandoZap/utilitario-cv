@@ -34,7 +34,7 @@ def importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_r
 
     lista_incluidos=[]
     lista_cpf=[]
-    while row<sheet.max_row+1 and row<6000:
+    while row<sheet.max_row+1 and row<700:
         
 
         cod_servidor = sheet['A' + str(row)].value # DC 
