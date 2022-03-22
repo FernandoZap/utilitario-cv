@@ -4,31 +4,7 @@ from django.db import models
 from . import choices
 
 
-
-class Departamento(models.Model):  
-    id_departamento = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField()
-    codigo = models.CharField(max_length=50,default='')  
-    departamento = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.departamento
-
-    class Meta:
-            db_table = "departamento"  
-
-    class Meta:
-        db_table = 'departamento'
-        constraints = [
-            models.UniqueConstraint(fields=['departamento', 'id_municipio'], name='unique departamento departamento')
-        ]
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
-
+#SET FOREIGN_KEY_CHECKS = 0;
 
 class Municipio(models.Model):  
     id_municipio = models.AutoField(primary_key=True)
@@ -40,30 +16,67 @@ class Municipio(models.Model):
         return self.municipio
 
     class Meta:
-            db_table = "municipio"        
+            db_table = "municipios"        
 
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-class Setor(models.Model):  
-    id_setor = models.AutoField(primary_key=True)
-    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, null=True)
-    id_municipio = models.IntegerField(default=0)
-    setor = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=100)
+class Vinculo(models.Model):  
+    id_vinculo = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField()
+    vinculo = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.setor
+        return self.vinculo
 
     class Meta:
-            db_table = "setor"        
-
-    class Meta:
-        db_table = 'setor'
+        db_table = 'vinculos'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'departamento','codigo'], name='unique setor setor')
+            models.UniqueConstraint(fields=['id_municipio', 'vinculo'], name='unique_vinculo')
+        ]
+
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+class LogErro(models.Model):  
+    id_logerro = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField()
+    anomes = models.IntegerField(default=0)
+    numero_linha = models.IntegerField(null=True)
+    codigo = models.CharField(max_length=100, null=True)
+    observacao = models.CharField(max_length=255, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)    
+
+    def __str__(self):
+        return self.codigo
+
+    class Meta:
+        db_table = 'logerro'
+
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+
+class Funcao(models.Model):  
+    id_funcao = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField()
+    funcao = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.funcao
+
+    class Meta:
+        db_table = 'funcoes'
+        constraints = [
+            models.UniqueConstraint(fields=['id_municipio', 'funcao'], name='unique_funcao')
         ]
 
     @classmethod
@@ -72,24 +85,22 @@ class Setor(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-class Funcionario(models.Model):  
-    id_funcionario = models.AutoField(primary_key=True)
+class Servidor(models.Model):  
+    id_servidor = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField()
     nome = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=20)
-    matricula = models.CharField(max_length=20,default='')
+    cod_servidor = models.CharField(max_length=20)
+    cpf = models.CharField(max_length=20,default='')
     data_admissao = models.DateField(null=True)
-    carga_horaria = models.IntegerField(default=0)
-    jornada = models.IntegerField(default=0)
     ativo = models.IntegerField(default=1)
 
     def __str__(self):
         return self.nome
 
     class Meta:
-        db_table = 'funcionario'
+        db_table = 'servidores'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'codigo'], name='funcionario unique codigo')
+            models.UniqueConstraint(fields=['id_municipio', 'cod_servidor'], name='servidor_unique')
         ]
         indexes = [
             models.Index(fields=['id_municipio'])
@@ -100,23 +111,19 @@ class Funcionario(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
-
-class Cargo(models.Model):  
-    id_cargo = models.AutoField(primary_key=True)
+class Secretaria(models.Model):  
+    id_secretaria = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField()
-    cargo = models.CharField(max_length=100)
-    ativo = models.IntegerField(default=1)
+    secretaria = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.cargo
+        return self.Secretaria
 
     class Meta:
-        db_table = 'cargo'
+        db_table = "secretarias"  
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'cargo'], name='unique cargo')
+            models.UniqueConstraint(fields=['id_municipio','secretaria'], name='unique_secretaria')
         ]
-
 
     @classmethod
     def truncate(cls):
@@ -124,34 +131,46 @@ class Cargo(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-class Vinculo(models.Model):  
-    id_vinculo = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField()
-    vinculo = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10, null=True)
-    ativo = models.IntegerField(default=1)
+
+class Folha(models.Model):
+    id_folha = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField(null=True)
+    anomes = models.IntegerField()
+    cod_servidor = models.CharField(max_length=6, null=True)
+    cpf = models.CharField(max_length=11, null=True)
+    id_secretaria = models.IntegerField(null=True)
+    id_setor = models.IntegerField(null=True)
+    id_funcao = models.IntegerField(null=True)
+    id_vinculo = models.IntegerField(null=True)
+    previdencia = models.CharField(max_length=6, null=True)
+    cl_orcamentaria = models.CharField(max_length=6, null=True)
+    carga_horaria = models.IntegerField(null=True)
+    dias = models.CharField(max_length=30, null=True)
+    id_evento = models.IntegerField(null=True)
+    tipo = models.CharField(max_length=1, null=True)
+    valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.vinculo
+        return self.cod_servidor
 
     class Meta:
-        db_table = 'vinculo'
-        constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'codigo'], name='unique_vinculo_codigo')
+        db_table = 'folhas'
+        indexes = [
+            models.Index(fields=['id_municipio','anomes'])
         ]
-
 
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-    
 
-class ProvDesc(models.Model):  
+
+class Evento(models.Model):  
     PROVDESC_CHOICES = [
         ('',''),
-        ('VANTAGEM','VANTAGEM'),
-        ('DESCONTO','DESCONTO'),
+        ('V','VANTAGEM'),
+        ('D','DESCONTO'),
     ]
 
     ID_MUNICIPIOS_CHOICES = [
@@ -338,61 +357,38 @@ class ProvDesc(models.Model):
         (25,'Viçosa do Ceará'),
     ]
 
-    id_provdesc = models.AutoField(primary_key=True)
+    id_evento = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(choices=ID_MUNICIPIOS_CHOICES,default='')
-    tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='')
-    codigo = models.CharField(max_length=5) 
-    descricao = models.CharField(max_length=40)
-    ordenacao1 = models.IntegerField(default=0)
+    tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
+    codigo = models.IntegerField(default=0)
+    evento = models.CharField(max_length=50)
+    cl_orcamentaria = models.CharField(max_length=6, null=True)
+    ordenacao = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.descricao
+        return self.evento
 
     class Meta:
-        db_table = 'provdesc'
+        db_table = 'eventos'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'codigo'], name='provdesc unique codigo')
+            models.UniqueConstraint(fields=['id_municipio', 'evento'], name='evento_unique')
         ]
 
 
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
-class LogErro(models.Model):  
-    id_logerro = models.AutoField(primary_key=True)
+class Setor(models.Model):  
+    id_setor = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField()
-    codigo = models.CharField(max_length=100)
-    observacao = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)    
+    secretaria = models.ForeignKey(Secretaria,on_delete=models.CASCADE)
+    setor = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.codigo
+        return self.setor
+
 
     class Meta:
-        db_table = 'logerro'
-
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
-
-class Funcao(models.Model):  
-    id_funcao = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField()
-    funcao = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.funcao
-
-    class Meta:
-        db_table = 'funcao'
+        db_table = 'setores'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'codigo'], name='unique_funcao_codigo')
+            models.UniqueConstraint(fields=['id_municipio','secretaria', 'setor' ], name='unique_setor')
         ]
 
     @classmethod
@@ -401,43 +397,30 @@ class Funcao(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-class Lotacao(models.Model):  
-    id_lotacao = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField()
-    lotacao = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.lotacao
-
-    class Meta:
-        db_table = 'lotacao'
-        constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'codigo'], name='unique_lotacao_codigo')
-        ]
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-class FolhaMes(models.Model):
+class Folhames(models.Model):
     id_folha = models.AutoField(primary_key=True)
-    id_municipio=models.IntegerField(null=True)
+    id_municipio = models.IntegerField(null=True)
     anomes = models.IntegerField()
-    funcionario = models.ForeignKey(Funcionario, on_delete=models.CASCADE,null=True)
-    setor = models.ForeignKey(Setor, on_delete=models.CASCADE, null=True)
-    funcao = models.ForeignKey(Funcao, on_delete=models.CASCADE, null=True)
-    lotacao = models.ForeignKey(Lotacao, on_delete=models.CASCADE, null=True)
-    vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE, null=True)
+    cod_servidor = models.CharField(max_length=6, null=True)
+    cpf = models.CharField(max_length=11, null=True)
+    id_secretaria = models.IntegerField(null=True)
+    id_setor = models.IntegerField(null=True)
+    id_funcao = models.IntegerField(null=True)
+    id_vinculo = models.IntegerField(null=True)
+    previdencia = models.CharField(max_length=6, null=True)
+    carga_horaria = models.IntegerField(null=True)
+    dias = models.CharField(max_length=30, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.cod_servidor
 
     class Meta:
         db_table = 'folhames'
-        constraints = [
-            models.UniqueConstraint(fields=['anomes', 'funcionario'], name='unique_folhames')
+        indexes = [
+            models.Index(fields=['id_municipio','anomes'])
         ]
 
     @classmethod
@@ -446,41 +429,26 @@ class FolhaMes(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-
-class ProventosMes(models.Model):
-    id_provento = models.AutoField(primary_key=True)
+class Folhaevento(models.Model):
+    id_folhaevento = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)
     anomes = models.IntegerField()
-    folhames = models.ForeignKey(FolhaMes, on_delete=models.CASCADE,null=True)
-    provdesc = models.ForeignKey(ProvDesc, on_delete=models.CASCADE,null=True)
+    cod_servidor = models.CharField(max_length=6, null=True)
+    previdencia = models.CharField(max_length=6, null=True)
+    cl_orcamentaria = models.CharField(max_length=6, null=True)
+    id_evento = models.IntegerField(null=True)
+    tipo = models.CharField(max_length=1, null=True)
     valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.cod_servidor
 
     class Meta:
-        db_table = 'proventosmes'
-        constraints = [
-            models.UniqueConstraint(fields=['anomes', 'folhames', 'provdesc'], name='unique_proventosmes')
+        db_table = 'folhaeventos'
+        indexes = [
+            models.Index(fields=['id_municipio','anomes'])
         ]
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
-
-class Pagamento(models.Model):
-    id_pagamento = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField(null=True)
-    anomes = models.IntegerField()
-    codigo = models.CharField(max_length=50)
-    nome = models.CharField(max_length=50)
-    valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-    class Meta:
-        db_table = 'pagamentos'
 
     @classmethod
     def truncate(cls):

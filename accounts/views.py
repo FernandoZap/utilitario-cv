@@ -5,7 +5,6 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from .forms import RegisterForm
 from .models import User
 from django.contrib.auth import login
 

@@ -1,0 +1,111 @@
+update eventos set tipo='D' where id_evento in (3,36,6,24,26,1,25,34);
+
+
+drop view v001_valores;
+CREATE VIEW v001_valores AS  
+
+
+SELECT 
+f.id_municipio,f.anomes,sv.cod_servidor,sv.nome,s.id_secretaria,s.secretaria,st.id_setor,st.setor,
+e.evento,e.tipo,
+CASE WHEN f.tipo='V' THEN f.valor ELSE 0 END AS vantagens,
+CASE WHEN f.tipo='D' THEN f.valor ELSE 0 END AS descontos,
+f.valor
+FROM folhas f inner join secretarias s on s.id_secretaria=f.id_secretaria
+inner join setores st on st.id_setor=f.id_setor
+inner join servidores sv on sv.cod_servidor=f.cod_servidor and sv.id_municipio=f.id_municipio
+inner join eventos e on e.id_evento=f.id_evento; 
+
+
+
+create view v002_valoresSecretaria
+as
+select f.id_secretaria,s.secretaria,f.id_municipio,f.anomes,
+case when f.tipo='V' then f.valor else 0 end as vantagem,
+case when f.tipo='D' then f.valor else 0 end as desconto
+
+
+CREATE VIEW v002_valoresSetor 
+AS 
+select f.id_municipio AS id_municipio,f.anomes AS anomes,
+s.id_secretaria AS id_secretaria,s.secretaria AS secretaria,
+st.id_setor AS id_setor,st.setor AS setor,
+(case when (f.tipo = 'V') then f.valor else 0 end) AS vantagens,
+(case when (f.tipo = 'D') then f.valor else 0 end) AS descontos
+from folhas f join secretarias s on s.id_secretaria = f.id_secretaria
+    join setores st on st.id_setor = f.id_setor and st.secretaria_id=f.id_secretaria;
+
+
+delimiter $$
+CREATE FUNCTION f001_quantidadeServidoresMes (anomes int,id_municipio int)
+ RETURNS int
+ READS SQL DATA 
+ BEGIN
+ declare p_quantidade int;
+
+       SELECT COUNT(*) INTO p_quantidade FROM folhames f WHERE
+        f.anomes=anomes AND f.id_municipio=id_municipio;
+
+       return p_quantidade;
+END $$
+delimiter ;
+
+
+Create view v005_folhaEventos
+as
+select f.anomes,f.id_municipio,e.evento,e.tipo,f.valor 
+from folhas f,eventos e where f.id_evento=e.id_evento and f.anomes=202111 and f.id_municipio=86 order by e.evento,e.tipo desc;
+
+
+
+
+SELECT sv.nome,sv.data_admissao,fl.cod_servidor,sec.secretaria,sto.setor,fn.funcao,vc.vinculo
+count(*)
+from servidores sv inner join folhas fl on fl.cod_servidor=sv.cod_servidor
+inner join secretarias sec on sec.id_secretaria=fl.id_secretaria 
+inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria
+inner join funcoes fn on fn.id_funcao=fl.id_funcao
+inner join vinculos vc on vc.id_vinculo=fl.id_vinculo
+group by sv.nome,sv.data_admissao,fl.cod_servidor,sec.secretaria,sto.setor,fn.funcao,vc.vinculo;
+
+
+
+create view v001_valoresmes
+as
+select fm.anomes,fm.id_municipio,fm.id_secretaria,fm.id_setor,fe.tipo,fe.id_evento,
+case when fe.tipo='V' THEN fe.valor else 0 end as vantagens,
+case when fe.tipo='D' THEN fe.valor else 0 end as descontos
+from folhames fm,folhaeventos fe
+where fm.cod_servidor=fe.cod_servidor
+and fm.id_municipio=fe.id_municipio
+and fm.anomes=fe.anomes;
+
+
+select s.id_secretaria,s.secretaria,sum(vantagens) as vantagens, sum(descontos) as descontos
+from v001_valoresmes v,secretarias s
+where v.id_secretaria=s.id_secretaria
+and v.id_municipio=%s
+and v.anomes=%s
+group by s.id_secretaria,s.secretaria
+
+
+select s.id_secretaria,s.secretaria,st.setor,sum(vantagens) as vantagens, sum(descontos) as descontos
+from v001_valoresmes v,secretarias s,setores st
+where v.id_secretaria=s.id_secretaria
+and s.id_secretaria=st.secretaria_id
+and st.id_setor=v.id_setor
+and v.id_municipio=%s
+and v.anomes=%s
+group by s.id_secretaria,s.secretaria,st.setor order by s.secretaria,st.setor;
+
+
+
+
+
+
+
+
+
+
+
+

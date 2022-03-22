@@ -9,7 +9,7 @@
 <p align="center">{{ titulo }}</p>
 
     
-   <form  action="{% url 'app01:listFolhaResumo' %}" method="post">
+   <form  action="{% url 'app01:listSomaEventos' %}" method="post">
     {%csrf_token%}
 
    {% if messages %}
@@ -120,6 +120,7 @@ function fnSubmit(){
   font-weight: 300;
   text-align: left;
   width: 450px;
+  background-color: #EEE9E9;
 }
 
 
@@ -147,32 +148,15 @@ function fnSubmit(){
    </p>
    <hr>
 
-
-   {% if resumo_depsetor %}
-
+   {% if eventos %}
    
-   <table><tr><th class="descricao">Secretaria/Setor</th><th>Vantagens (R$)</th><th>Descontos (R$)</th><th>Resultado (R$)</th></tr>
-
-   {% for resumo in resumo_depsetor %}
-
-   {% ifchanged resumo.secretaria %}
-
-  <tr class="departamento">
-    <td class="descricao">{{ resumo.secretaria }}</td>
-    <td class="alignRigth" >{{ resumo.v_dep  }}</td>
-    <td class="alignRigth" >{{ resumo.d_dep  }}</td>
-    <td class="alignRigth" >{{ resumo.r_dep  }}</td>
-  </tr>
-
-   {% endifchanged %}
+   <table><tr class="descricao"><th>Evento</th><th>Valor (R$)</th></tr>
+   {% for evento in eventos %}
 
   <tr>
-    <td class="descricao">{{ resumo.setor }}</td>
-    <td class="alignRigth" >{{ resumo.vantagens  }}</td>
-    <td class="alignRigth" >{{ resumo.descontos  }}</td>
-    <td class="alignRigth" >{{ resumo.resultado  }}</td>
+    <td class="alignRigth" >{{ evento.evento  }} {{ evento.tipo  }}</td>
+    <td class="alignRigth" >{{ evento.valor  }}</td>
   </tr>
-
    {% endfor %} 
 
  </table>
@@ -184,7 +168,7 @@ function fnSubmit(){
     <hr>
     <p class="totais">Total Vantagens: {{ total_v }}</p>
     <p class="totais">Total Descontos: {{ total_d }}</p>
-    <p class="totais">Valor Líquido: {{ total_r }} ========= Número de funcionários; {{ qtde_funcionario }} </p>
+    <p class="totais">Valor Líquido: {{ total_r }} ========= Número de funcionários; {{ qT }} </p>
 
    <hr><hr><hr>
 

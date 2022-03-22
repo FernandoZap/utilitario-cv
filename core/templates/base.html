@@ -23,10 +23,8 @@
 
 <li><a href="#" class="arrow">1 Gerar Excel</a>
 <ul>
-<li><a href="{% url 'app01:importacaoGeral' %}">1.1 Atualizar Dados</a></li>
-<li><a href="{% url 'app01:importacaoFolha' %}">1.2 Importar Folha de Pagamento</a></li>
-<li><a href="{% url 'app01:gravarCSVFolha' %}">1.3 Imprimir Folha em Excel</a></li>
-<li><a href="#">1.4 Importacao Folha em Excel</a></li>
+<li><a href="{% url 'app01:imprimirCSVFolha' %}">1.3 Imprimir Folha em Excel</a></li>
+<li><a href="{% url 'app01:importacaoFolhaExcel' %}">1.4 Importacao Folha em Excel</a></li>
 
             </ul>
         </li>
@@ -34,9 +32,8 @@
         <li><a href="#" class="arrow">2 Diversos</a>
 
             <ul>
-            <li><a href="{% url 'app01:deptoList' %}">2.1 Listar Departamentos</a></li>
-            <li><a href="{% url 'app01:listFolhaResumo' %}">2.2 Listar Soma da Folha</a></li>            
-            <li><a href="{% url 'app01:somaProventosDescontos' %}">2.2 Listar Soma dos Proventos</a></li>
+            <li><a href="{% url 'app01:listSomaEventos' %}">2.2 Lista Soma por Eventos</a></li>            
+            <li><a href="{% url 'app01:listFolhaResumo' %}">2.3 Lista Soma por Setores</a></li>
             </ul>
         </li>
 

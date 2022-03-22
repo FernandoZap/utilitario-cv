@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'core',
-    'accounts',
+    'accounts.apps.AccountsConfig',
     'app01',
 ]
 
