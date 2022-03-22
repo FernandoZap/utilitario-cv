@@ -435,3 +435,14 @@ inner join vinculos vc on vc.id_vinculo=fl.id_vinculo
 where fl.anomes=202111 and fl.id_municipio=86
 order by fl.cod_servidor;
 '''
+
+
+
+
+'''
+select ev.id_evento,ev.evento,ifnull(fm.valor,0) as valor
+from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and
+fm.anomes=202111 and fm.id_municipio=86 and fm.cod_servidor=%s
+where ev.tipo='V' and ev.id_municipio=86 order by ev.evento
+'''
+
