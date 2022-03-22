@@ -393,7 +393,7 @@ def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municip
     lista_eventos=listagens.listagemEventos(id_municipio)
 
 
-    while row<sheet.max_row+1 and row<6500:
+    while row<sheet.max_row+1 and row<50:
 
         secretaria = sheet['W' + str(row)].value # DC 
         setor = sheet['X' + str(row)].value # DC 
