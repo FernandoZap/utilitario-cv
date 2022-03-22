@@ -109,3 +109,13 @@ group by s.id_secretaria,s.secretaria,st.setor order by s.secretaria,st.setor;
 
 
 
+CREATE OR REPLACE FUNCTION f001_quantidadeServidoresMes (p_anomes int,p_id_municipio int)
+RETURNS integer AS $total$
+declare
+    total integer;
+BEGIN
+   SELECT count(*) into total FROM folhames WHERE anomes=p_anomes and id_municipio=p_id_municipio;
+   RETURN total;
+END;
+$total$ LANGUAGE plpgsql;
+
