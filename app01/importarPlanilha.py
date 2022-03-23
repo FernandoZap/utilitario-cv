@@ -387,9 +387,6 @@ def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
 
 def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
-    lote = str(datetime.datetime.now().today())[0:19]
-    idop = current_user
-
 
     wb = openpyxl.load_workbook(planilha)
     sheets = wb.sheetnames
@@ -551,11 +548,6 @@ def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municip
 
 def importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
-
     wb = openpyxl.load_workbook(planilha)
     sheets = wb.sheetnames
 
@@ -651,12 +643,6 @@ def importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,
 
 
 def importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
-
-
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
 
     wb = openpyxl.load_workbook(planilha)
     sheets = wb.sheetnames
