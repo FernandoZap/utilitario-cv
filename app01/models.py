@@ -456,7 +456,6 @@ class Folhaevento(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
     codigo = models.IntegerField()
@@ -470,7 +469,6 @@ class Planilha(models.Model):
     setor = models.CharField(max_length=100)
     tipo_admissao = models.CharField(max_length=100)
     previdencia = models.CharField(max_length=100, null=True)
-    vinculo = models.CharField(max_length=100)
     funcao = models.CharField(max_length=100)
     lotacao = models.CharField(max_length=100)
     entidade = models.CharField(max_length=100)
@@ -496,4 +494,3 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
