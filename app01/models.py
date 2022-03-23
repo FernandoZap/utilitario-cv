@@ -5,6 +5,7 @@ from . import choices
 
 
 #SET FOREIGN_KEY_CHECKS = 0;
+#sudo /opt/pentaho/client-tools/data-integration/spoon.sh
 
 class Municipio(models.Model):  
     id_municipio = models.AutoField(primary_key=True)
@@ -457,7 +458,7 @@ class Folhaevento(models.Model):
 
 
 
-
+'''
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
     codigo = models.IntegerField(null=True)
@@ -482,7 +483,6 @@ class Planilha(models.Model):
     classificacao = models.CharField(max_length=15, null=True)
     cargo = models.CharField(max_length=50, null=True)
     cod_evento = models.IntegerField(null=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.codigo
@@ -498,4 +498,4 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
