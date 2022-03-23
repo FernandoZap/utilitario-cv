@@ -468,7 +468,7 @@ class Planilha(models.Model):
     secretaria = models.CharField(max_length=100)
     setor = models.CharField(max_length=100)
     tipo_admissao = models.CharField(max_length=100)
-    data_admissao = models.DateField()
+    data_admissao = models.DateField(null=True,default=None)
     previdencia = models.CharField(max_length=100, null=True)
     funcao = models.CharField(max_length=100)
     lotacao = models.CharField(max_length=100)
