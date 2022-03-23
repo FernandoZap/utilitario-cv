@@ -77,7 +77,12 @@ def importacaoFolhaExcel(request):
         mes=request.POST['mes']
         tabela=request.POST['tabela']
         anomes=int(ano+mes)
-        nlinhas=int(request.POST['nlinhas'])
+        nlinhas=request.POST['nlinhas']
+        if nlinhas=='':
+            nlinhas=6000
+        else:
+            nlinhas=int(nlinhas)
+
 
 
 
@@ -86,11 +91,11 @@ def importacaoFolhaExcel(request):
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
         if tabela=='SecFuncVincEventos':
-            retorno = importarPlanilha.importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
+            retorno = importarPlanilha.importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
         elif tabela=='Setor':            
-            retorno = importarPlanilha.importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
+            retorno = importarPlanilha.importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
         elif tabela=='Servidor':            
-            retorno = importarPlanilha.importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
+            retorno = importarPlanilha.importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
         elif tabela=='Folha':            
             retorno = importarPlanilha.importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
             if retorno!='':
@@ -444,5 +449,19 @@ select ev.id_evento,ev.evento,ifnull(fm.valor,0) as valor
 from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and
 fm.anomes=202111 and fm.id_municipio=86 and fm.cod_servidor=%s
 where ev.tipo='V' and ev.id_municipio=86 order by ev.evento
+'''
+'''
+
+
+CREATE VIEW v001_valoresmes AS 
+select fm.anomes AS anomes,fm.id_municipio AS id_municipio,fm.
+id_secretaria AS id_secretaria,fm.id_setor AS id_setor,fe.tipo AS tipo,
+fe.id_evento AS id_evento,
+(case when (fe.tipo = 'V') then fe.valor else 0 end) AS vantagens,
+(case when (fe.tipo = 'D') then fe.valor else 0 end) AS descontos 
+from folhames fm inner join folhaeventos fe 
+on fm.cod_servidor = fe.cod_servidor 
+    and fm.id_municipio = fe.id_municipio 
+    and fm.anomes = fe.anomes;
 '''
 

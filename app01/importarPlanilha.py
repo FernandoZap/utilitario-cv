@@ -9,7 +9,7 @@ from . import listagens
 
 
 
-def importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
+def importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
     lote = str(datetime.datetime.now().today())[0:19]
 
@@ -34,7 +34,7 @@ def importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_r
 
     lista_incluidos=[]
     lista_cpf=[]
-    while row<sheet.max_row+1 and row<700:
+    while row<sheet.max_row+1 and row<nrow:
         
 
         cod_servidor = sheet['A' + str(row)].value # DC 
@@ -101,7 +101,7 @@ def importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_r
     return ''
 
 
-def importarSecretarias(planilha,id_municipio,anomes,current_user,mes_ref):
+def importarSecretarias(planilha,id_municipio,anomes,current_user,mes_ref,nrow):
 
     lote = str(datetime.datetime.now().today())[0:19]
 
@@ -385,7 +385,7 @@ def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref)
 
 '''
 
-def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
+def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
     lote = str(datetime.datetime.now().today())[0:19]
     idop = current_user
@@ -549,7 +549,7 @@ def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municip
 
 
 
-def importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
+def importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nrow):
 
     lote = str(datetime.datetime.now().today())[0:19]
 
