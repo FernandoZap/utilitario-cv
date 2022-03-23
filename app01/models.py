@@ -458,7 +458,6 @@ class Folhaevento(models.Model):
 
 
 
-'''
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
     codigo = models.IntegerField(null=True)
@@ -498,4 +497,3 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
