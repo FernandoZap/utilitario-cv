@@ -846,3 +846,132 @@ def importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nr
     Folhames.objects.bulk_create(objetos)
     Folhaevento.objects.bulk_create(feventos)
     return ''
+
+
+
+def importarSecFuncVincEventos2(id_municipio,anomes,municipio):
+
+    row=2
+    erro=0
+    qtde_itens=0
+    retorno = True
+
+    row=2
+    erro=0
+    carga_secretaria=[]
+    carga_funcao=[]
+    carga_vinculo=[]
+    carga_evento=[]
+
+
+    ls_secretaria=[]
+    ls_funcao=[]
+    ls_vinculo=[]
+    ls_evento=[]
+
+    codigo_folha=int(str(anomes)[4:6])
+
+
+    lista_secretarias=listagens.listagemSecretarias(id_municipio)
+    lista_funcoes=listagens.listagemFuncoes(id_municipio)
+    lista_vinculos=listagens.listagemVinculos(id_municipio)
+    lista_eventos=listagens.listagemEventos(id_municipio)
+
+
+
+    queryP = Planilha.objects.values(
+        'codigo',
+        'secretaria',
+        'setor',
+        'funcao',
+        'evento',
+        'cod_evento',
+        'tipo',
+        'tipo_admissao'
+        ).filter(entidade=municipio,codigo_folha=codigo_folha)
+
+    for qp in range(len(queryP)):
+
+        print (queryP[qp]['secretaria'])
+        print (queryP[qp]['setor'])
+        print (queryP[qp]['funcao'])
+        print (queryP[qp]['tipo_admissao'])
+        print (queryP[qp]['evento'])
+        print ('--------------------')
+
+
+        if queryP[qp]['tipo']=='4':
+            tipo_evento='D'
+        elif queryP[qp]['tipo'] in ['1','2','3']:
+            tipo_evento='V'
+        else:
+            tipo_evento='V'            
+
+
+        cod_evento=queryP[qp]['cod_evento']
+        evento=queryP[qp]['evento']
+        secretaria=queryP[qp]['secretaria']
+        funcao=queryP[qp]['funcao']
+        vinculo=queryP[qp]['tipo_admissao']
+        
+        if secretaria is not None:
+            secretaria=secretaria.strip()
+            if len(secretaria)>2:
+                if secretaria not in lista_secretarias:
+                    if secretaria not in ls_secretaria:
+                        obj_secretaria = Secretaria(
+                            id_municipio=id_municipio,
+                            secretaria=secretaria
+                            )
+                        ls_secretaria.append(secretaria)
+                        carga_secretaria.append(obj_secretaria)
+
+        
+        if funcao is not None:
+            funcao=funcao.strip()
+            if len(funcao)>2:
+                if funcao not in lista_funcoes:
+                    if funcao not in ls_funcao:
+                        obj_funcao = Funcao(
+                            id_municipio=id_municipio,
+                            funcao=funcao
+                            )
+                        ls_funcao.append(funcao)
+                        carga_funcao.append(obj_funcao)
+
+        
+        if vinculo is not None:
+            vinculo=vinculo.strip()
+            if len(vinculo)>2:
+                if vinculo not in lista_vinculos:
+                    if vinculo not in ls_vinculo:
+                        obj_vinculo = Vinculo(
+                            id_municipio=id_municipio,
+                            vinculo=vinculo
+                            )
+                        ls_vinculo.append(vinculo)
+                        carga_vinculo.append(obj_vinculo)
+
+        if evento is not None:
+            evento=evento.strip()
+            if len(evento)>2:
+                if evento not in lista_eventos:
+                    if evento not in ls_evento:
+                        obj_evento = Evento(
+                            id_municipio=id_municipio,
+                            evento=evento,
+                            codigo=cod_evento,
+                            tipo = tipo_evento
+                            )
+                        ls_evento.append(evento)
+                        carga_evento.append(obj_evento)
+
+    '''
+    Secretaria.objects.bulk_create(carga_secretaria)
+    Funcao.objects.bulk_create(carga_funcao)
+    Vinculo.objects.bulk_create(carga_vinculo)
+    Evento.objects.bulk_create(carga_evento)
+    '''
+
+    return None
+

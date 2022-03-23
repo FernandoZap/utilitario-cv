@@ -91,7 +91,8 @@ def importacaoFolhaExcel(request):
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
         if tabela=='SecFuncVincEventos':
-            retorno = importarPlanilha.importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            #retorno = importarPlanilha.importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            retorno = importarPlanilha.importarSecFuncVincEventos2(id_municipio,anomes,municipio)
         elif tabela=='Setor':            
             retorno = importarPlanilha.importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
         elif tabela=='Servidor':            

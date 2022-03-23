@@ -456,35 +456,34 @@ class Folhaevento(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
-
+'''
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
-    codigo = models.IntegerField(null=True)
+    codigo = models.IntegerField()
     data_ref = models.DateField()
-    codigo_folha = models.IntegerField(null=True)
-    folha = models.CharField(max_length=100, null=True)
+    codigo_folha = models.IntegerField()
+    folha = models.CharField(max_length=100)
     nome_servidor = models.CharField(max_length=100, null=True)
     carga_horaria = models.IntegerField(null=True)
     cpf = models.CharField(max_length=15, null=True)
-    secretaria = models.CharField(max_length=100, null=True)
-    setor = models.CharField(max_length=100, null=True)
-    tipo_admissao = models.CharField(max_length=100, null=True)
+    secretaria = models.CharField(max_length=100)
+    setor = models.CharField(max_length=100)
+    tipo_admissao = models.CharField(max_length=100)
     previdencia = models.CharField(max_length=100, null=True)
-    vinculo = models.CharField(max_length=100, null=True)
-    funcao = models.CharField(max_length=100, null=True)
-    lotacao = models.CharField(max_length=100, null=True)
-    entidade = models.CharField(max_length=100, null=True)
-    tipo = models.IntegerField(null=True)
-    evento = models.CharField(max_length=100, null=True)
-    ref_evento = models.CharField(max_length=20, null=True)
-    valor_evento = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    classificacao = models.CharField(max_length=15, null=True)
+    vinculo = models.CharField(max_length=100)
+    funcao = models.CharField(max_length=100)
+    lotacao = models.CharField(max_length=100)
+    entidade = models.CharField(max_length=100)
+    tipo = models.IntegerField()
+    evento = models.CharField(max_length=100)
+    ref_evento = models.CharField(max_length=20)
+    valor_evento = models.DecimalField(max_digits=9, decimal_places=2)
+    classificacao = models.CharField(max_length=15)
     cargo = models.CharField(max_length=50, null=True)
     cod_evento = models.IntegerField(null=True)
 
     def __str__(self):
-        return self.codigo
+        return self.nome_servidor
 
     class Meta:
         db_table = 'planilhas'
@@ -497,3 +496,4 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
+'''
