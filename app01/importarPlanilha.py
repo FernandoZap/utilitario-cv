@@ -694,9 +694,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
 
-        '''            
         if cod_servidor not in lista_incluidos:
-            if str(cod_servidor)+'-'+str(anomes) not in listagem_folhames:
+            if str(cod_servidor)+'-'+str(i_anomes) not in listagem_folhames:
                 objeto = Folhames(
                     anomes=i_anomes,
                     id_municipio=i_id_municipio,
@@ -713,9 +712,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
                 objetos.append(objeto)
                 lista_incluidos.append(cod_servidor)
-        '''                
         
-    #Folhames.objects.bulk_create(objetos)
+    Folhames.objects.bulk_create(objetos)
     Folhaevento.objects.bulk_create(feventos)
     return ''
 
