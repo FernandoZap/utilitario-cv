@@ -346,11 +346,10 @@ def imprimirCSVFolha(request):
         lista=[]
 
 
-        '''
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is None:
             municipios=Municipio.objects.all().order_by('municipio')
-            return render(request, 'app01/imprimirCSVFolha.html',
+            return render(request, 'app01/planilhaErrada.html',
                     {
                         'titulo': 'Impressao do Excel',
                         'municipios':municipios,
@@ -359,7 +358,6 @@ def imprimirCSVFolha(request):
                     }
                 )
 
-        '''
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
         if (1==1):
