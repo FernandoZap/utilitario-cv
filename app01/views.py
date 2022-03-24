@@ -68,10 +68,9 @@ def importacaoFolhaExcel(request):
     
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
-    if (request.method == "POST" and request.FILES['filename']):
+    if (request.method == "POST"):
 
         current_user = 0  #request.user.iduser
-        planilha=request.FILES['filename']
         id_municipio=int(request.POST['municipio'])
         ano=request.POST['ano']
         mes=request.POST['mes']
@@ -79,13 +78,11 @@ def importacaoFolhaExcel(request):
         anomes=int(ano+mes)
 
 
-
-
         #modelo = funcoes_gerais.modelos(str(id_municipio))
         municipio = funcoes_gerais.strings_pesquisa(str(id_municipio))
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos':
+        if tabela=='xSecFuncVincEventos':
             #retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
             retorno = importarPlanilha.importarSecFuncVincEventos2(id_municipio,anomes,municipio)
         elif tabela=='Setor':            
