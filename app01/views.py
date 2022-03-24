@@ -82,7 +82,7 @@ def importacaoFolhaExcel(request):
         municipio = funcoes_gerais.strings_pesquisa(str(id_municipio))
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='xSecFuncVincEventos':
+        if tabela=='SecFuncVincEventos':
             #retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
             retorno = importarPlanilha.importarSecFuncVincEventos2(id_municipio,anomes,municipio)
         elif tabela=='Setor':            
