@@ -8,7 +8,7 @@
 <p align="center">{{ titulo }}</p>
 
     
-   <form enctype="multipart/form-data" action="{% url 'app01:importacaoFolhaExcel' %}" method="post">
+   <form action="{% url 'app01:importacaoFolhaExcel' %}" method="post">
     {%csrf_token%}
 
    {% if messages %}
@@ -83,18 +83,6 @@
 
 
     </div>
-
-<div class="row">
-<div class="form-group">  
-  <div class="col">
-  
-    <div class="fileUpload btn btn-outline-secondary ">
-    <label for="upload" class="col-form-label">Arquivo</label>
-      <input type="file" id="filename" class="upload" name="filename" required />
-    </div>
-  </div>
-  </div>
-</div>  
 
     <br>
     <h2><span class="mensagem">{{ mensagem }}</span></h2>
