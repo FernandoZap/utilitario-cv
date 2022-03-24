@@ -77,11 +77,6 @@ def importacaoFolhaExcel(request):
         mes=request.POST['mes']
         tabela=request.POST['tabela']
         anomes=int(ano+mes)
-        nlinhas=request.POST['nlinhas']
-        if nlinhas=='':
-            nlinhas=6000
-        else:
-            nlinhas=int(nlinhas)
 
 
 
@@ -91,14 +86,14 @@ def importacaoFolhaExcel(request):
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
         if tabela=='SecFuncVincEventos':
-            #retorno = importarPlanilha.importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            #retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
             retorno = importarPlanilha.importarSecFuncVincEventos2(id_municipio,anomes,municipio)
         elif tabela=='Setor':            
-            retorno = importarPlanilha.importarSetores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            retorno = importarPlanilha.importarSetores(id_municipio,anomes,municipio)
         elif tabela=='Servidor':            
-            retorno = importarPlanilha.importarServidores(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            retorno = importarPlanilha.importarServidores(id_municipio,anomes,municipio)
         elif tabela=='Folha':            
-            retorno = importarPlanilha.importarFolha(planilha,id_municipio,anomes,current_user,municipio,mes_ref,nlinhas)
+            retorno = importarPlanilha.importarFolha(id_municipio,anomes,municipio)
             if retorno!='':
                 return HttpResponseRedirect(reverse('app01:planilhaErrada'))
 
