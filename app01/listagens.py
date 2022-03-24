@@ -55,7 +55,7 @@ def listagemFolhames(id_municipio,anomes):
     lista=[]
     folhames = Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes)
     for folha in folhames:
-        lista.append(str(servidor.cod_servidor)+'-'+str(anomes))
+        lista.append(str(folha.cod_servidor)+'-'+str(anomes))
     return lista
 
 
