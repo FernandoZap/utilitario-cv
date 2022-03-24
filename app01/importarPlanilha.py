@@ -595,9 +595,19 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
     queryP = Planilha.objects.values(
         'codigo',
-        'nome_servidor',
-        'data_admissao',
-        'cpf'
+        'cpf',
+        'secretaria',
+        'setor',
+        'funcao',
+        'tipo_admissao',
+        'previdencia',
+        'carga_horaria',
+        'ref_evento',
+        'classificacao',
+        'evento',
+        'cod_evento',
+        'tipo',
+        'valor_evento'
         ).filter(entidade=i_municipio,codigo_folha=codigo_folha)
 
     for qp in range(len(queryP)):
@@ -612,7 +622,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         evento = queryP[qp]['evento']
         cod_evento = queryP[qp]['cod_evento']
         tipo = queryP[qp]['tipo']
-        valor = queryP[qp]['valor']
+        valor = queryP[qp]['valor_evento']
         carga_horaria = queryP[qp]['carga_horaria']
         dias = queryP[qp]['ref_evento']
 
