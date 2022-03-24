@@ -455,7 +455,9 @@ class Folhaevento(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-'''
+
+
+
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
     codigo = models.IntegerField(null=True)
@@ -467,13 +469,13 @@ class Planilha(models.Model):
     cpf = models.CharField(max_length=15, null=True)
     secretaria = models.CharField(max_length=100,null=True)
     setor = models.CharField(max_length=100,null=True)
-    tipo_admissao = models.CharField(max_length=100)
+    tipo_admissao = models.CharField(max_length=100,null=True)
     data_admissao = models.DateField(null=True,default=None)
     previdencia = models.CharField(max_length=100, null=True)
     funcao = models.CharField(max_length=100,null=True)
     entidade = models.CharField(max_length=100,null=True)
     tipo = models.IntegerField(null=True)
-    evento = models.CharField(max_length=100,null=Tue)
+    evento = models.CharField(max_length=100,null=True)
     ref_evento = models.CharField(max_length=20,null=True)
     valor_evento = models.DecimalField(max_digits=9, decimal_places=2,null=True)
     classificacao = models.CharField(max_length=15, null=True)
@@ -493,5 +495,4 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''            
 
