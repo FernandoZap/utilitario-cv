@@ -714,13 +714,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
 def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
 
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
 
-    row=2
-    erro=0
     carga_secretaria=[]
     carga_funcao=[]
     carga_vinculo=[]
@@ -830,7 +824,7 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
                             evento=evento,
                             codigo=cod_evento,
                             tipo = tipo_evento,
-                            classificacao = classificacao
+                            cl_orcamentaria = classificacao
                             )
                         ls_evento.append(evento)
                         carga_evento.append(obj_evento)
