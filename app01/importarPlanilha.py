@@ -613,6 +613,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
     for qp in range(len(queryP)):
 
         cod_servidor = queryP[qp]['codigo']
+        cpf = queryP[qp]['cpf']
         secretaria = queryP[qp]['secretaria']
         setor = queryP[qp]['setor']
         funcao = queryP[qp]['funcao']
@@ -657,9 +658,6 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             id_evento=0
             tipo=''
 
-
-        if nome_servidor is None:
-            nome_servidor=''
 
         if cpf is None:
             cpf=''
