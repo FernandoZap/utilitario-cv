@@ -678,7 +678,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             previdencia='N'
         else:
             previndencia=''
-
+        '''
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
                     id_municipio = i_id_municipio,
@@ -693,6 +693,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
+        '''
         '''
         if cod_servidor not in lista_incluidos:
             if str(cod_servidor)+'-'+str(i_anomes) not in listagem_folhames:
