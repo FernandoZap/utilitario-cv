@@ -614,13 +614,13 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
         cod_servidor = queryP[qp]['codigo']
         cpf = queryP[qp]['cpf']
-    '''
         secretaria = queryP[qp]['secretaria']
         setor = queryP[qp]['setor']
         funcao = queryP[qp]['funcao']
         vinculo = queryP[qp]['tipo_admissao']
         previdencia = queryP[qp]['previdencia']
         cl_orcamentaria = queryP[qp]['classificacao']
+    '''
         evento = queryP[qp]['evento']
         cod_evento = queryP[qp]['cod_evento']
         tipo = queryP[qp]['tipo']
