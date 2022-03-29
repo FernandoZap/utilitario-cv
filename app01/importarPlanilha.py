@@ -620,14 +620,13 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         vinculo = queryP[qp]['tipo_admissao']
         previdencia = queryP[qp]['previdencia']
         cl_orcamentaria = queryP[qp]['classificacao']
-    '''
         evento = queryP[qp]['evento']
         cod_evento = queryP[qp]['cod_evento']
         tipo = queryP[qp]['tipo']
         valor = queryP[qp]['valor_evento']
         carga_horaria = queryP[qp]['carga_horaria']
         dias = queryP[qp]['ref_evento']
-
+    '''
         secretaria=secretaria.strip()
         setor=setor.strip()    
 
