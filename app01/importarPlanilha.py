@@ -713,8 +713,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
                 objetos.append(objeto)
                 lista_incluidos.append(cod_servidor)
         
-    Folhames.objects.bulk_create(objetos)
-    Folhaevento.objects.bulk_create(feventos)
+    #Folhames.objects.bulk_create(objetos)
+    #Folhaevento.objects.bulk_create(feventos)
     return ''
 
 
