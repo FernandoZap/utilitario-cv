@@ -666,8 +666,21 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             valor=0
 
 
-        if id_secretaria==0 or id_setor==0 or id_funcao==0 or id_vinculo==0 or id_evento==0:
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,0)
+        if id_secretaria==0:
+            observacao='cod_servidor: '+str(cod_servidor)+' - secretaria'
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
+        if id_setor==0:
+            observacao='cod_servidor: '+str(cod_servidor)+' - setor'
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
+        if id_vinculo==0:
+            observacao='cod_servidor: '+str(cod_servidor)+' - vinculo'
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
+        if id_funcao==0:
+            observacao='cod_servidor: '+str(cod_servidor)+' - funcao'
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
+        if id_evento==0:
+            observacao='cod_servidor: '+str(cod_servidor)+' - evento'
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
 
         '''
         if previdencia=='PREVIDÊNCIA MUNICIPAL':
