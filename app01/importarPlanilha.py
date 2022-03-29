@@ -592,7 +592,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
 
     codigo_folha=int(str(i_anomes)[4:6])
-
+    '''
     queryP = Planilha.objects.values(
         'codigo',
         'cpf',
@@ -630,7 +630,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         secretaria=secretaria.strip()
         setor=setor.strip()    
 
-        '''
+        
         if secretaria in lista_secretarias:
             id_secretaria = dict_secretarias[secretaria]
         else:
@@ -657,7 +657,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         else:
             id_evento=0
             tipo=''
-        '''
+        
 
         if cpf is None:
             cpf=''
@@ -678,7 +678,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             previdencia='N'
         else:
             previndencia=''
-        '''
+        
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
                     id_municipio = i_id_municipio,
@@ -693,8 +693,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
-        '''
-        '''
+        
+        
         if cod_servidor not in lista_incluidos:
             if str(cod_servidor)+'-'+str(i_anomes) not in listagem_folhames:
                 objeto = Folhames(
