@@ -630,7 +630,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         secretaria=secretaria.strip()
         setor=setor.strip()    
 
-    
+        '''
         if secretaria in lista_secretarias:
             id_secretaria = dict_secretarias[secretaria]
         else:
@@ -657,7 +657,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         else:
             id_evento=0
             tipo=''
-
+        '''
 
         if cpf is None:
             cpf=''
