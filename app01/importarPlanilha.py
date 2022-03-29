@@ -682,7 +682,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             observacao='cod_servidor: '+str(cod_servidor)+' - evento'
             erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
 
-        '''
+        
         if previdencia=='PREVIDÊNCIA MUNICIPAL':
             previdencia='M'
         elif previdencia=='INSS':
@@ -726,7 +726,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
                 objetos.append(objeto)
                 lista_incluidos.append(cod_servidor)
-        '''
+        
     #Folhames.objects.bulk_create(objetos)
     #Folhaevento.objects.bulk_create(feventos)
     return ''
