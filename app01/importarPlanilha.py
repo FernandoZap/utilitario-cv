@@ -626,7 +626,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         valor = queryP[qp]['valor_evento']
         carga_horaria = queryP[qp]['carga_horaria']
         dias = queryP[qp]['ref_evento']
-    '''
+
         secretaria=secretaria.strip()
         setor=setor.strip()    
 
@@ -664,7 +664,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
         if valor is None:
             valor=0
-
+        '''
 
         if id_secretaria==0 or id_setor==0 or id_funcao==0 or id_vinculo==0 or id_evento==0:
             erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,0)
