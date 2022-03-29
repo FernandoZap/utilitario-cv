@@ -592,7 +592,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
 
     codigo_folha=int(str(i_anomes)[4:6])
-    '''
+    
     queryP = Planilha.objects.values(
         'codigo',
         'cpf',
@@ -614,6 +614,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
         cod_servidor = queryP[qp]['codigo']
         cpf = queryP[qp]['cpf']
+    '''
         secretaria = queryP[qp]['secretaria']
         setor = queryP[qp]['setor']
         funcao = queryP[qp]['funcao']
