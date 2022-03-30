@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Folha,Evento,Folhames
+from .models import Municipio,Folha,Evento
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -379,19 +379,19 @@ def imprimirCSVFolha(request):
             writer.writerow(cabecalho)
             contador=0
 
-
-
             for kk in range(0,len(query1)):
                 somaEventos=0
                 cod_servidor = query1[kk]['cod_servidor']
                 queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor)
-                lista.append(query1[kk]['cod_servidor'])
-                lista.append(query1[kk]['nome'])
-                lista.append(query1[kk]['data_admissao'])
+
+
                 lista.append(query1[kk]['secretaria'])
                 lista.append(query1[kk]['setor'])
+                lista.append(query1[kk]['cod_servidor'])
+                lista.append(query1[kk]['nome'])
                 lista.append(query1[kk]['funcao'])
                 lista.append(query1[kk]['vinculo'])
+                lista.append(query1[kk]['data_admissao'])
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['dias'])
                 for ll in range(len(queryEventos)):

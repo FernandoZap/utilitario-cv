@@ -4,7 +4,8 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Funcao,Evento,Folha,Servidor,Setor,Folhames,Folhaevento,Planilha
+from .models import Secretaria,Vinculo,Funcao,Evento,Setor,Planilha
+#Servidor,Folhames,Folhaevento
 from . import listagens,funcoes_gerais
 
 
@@ -783,9 +784,9 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
         '''
 
 
-        if queryP[qp]['tipo']=='4':
+        if queryP[qp]['tipo']==4:
             tipo_evento='D'
-        elif queryP[qp]['tipo'] in ['1','2','3']:
+        elif queryP[qp]['tipo'] in [1,2,3]:
             tipo_evento='V'
         else:
             tipo_evento='V'            

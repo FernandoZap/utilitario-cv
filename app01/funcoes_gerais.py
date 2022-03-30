@@ -25,13 +25,14 @@ def mesReferencia(mes):
 
 def cabecalhoFolha(id_municipio):
     lista=[]
-    lista.append('Matricula')
-    lista.append('Nome')
-    lista.append('DataAdmissao')
+
     lista.append('Secretaria')
     lista.append('Setor')
+    lista.append('Matricula')
+    lista.append('Nome')
     lista.append('Funcao')
     lista.append('Vinculo')
+    lista.append('DataAdmissao')
     lista.append('CargaHoraria')
     lista.append('Dias')
 

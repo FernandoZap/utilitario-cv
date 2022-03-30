@@ -85,7 +85,7 @@ class Funcao(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 class Servidor(models.Model):  
     id_servidor = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField()
@@ -111,6 +111,8 @@ class Servidor(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+'''
 
 class Secretaria(models.Model):  
     id_secretaria = models.AutoField(primary_key=True)
@@ -399,7 +401,7 @@ class Setor(models.Model):
 
 
 
-
+'''
 class Folhames(models.Model):
     id_folha = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)
@@ -429,7 +431,9 @@ class Folhames(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
+'''
 
+'''
 class Folhaevento(models.Model):
     id_folhaevento = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)
@@ -456,7 +460,7 @@ class Folhaevento(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
