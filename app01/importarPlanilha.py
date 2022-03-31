@@ -189,6 +189,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         carga_horaria = queryP[qp]['carga_horaria']
         dias = queryP[qp]['ref_evento']
 
+        
+        '''
         secretaria=secretaria.strip()
         setor=setor.strip()    
         funcao=funcao.strip()    
@@ -197,6 +199,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         evento=evento.strip()
         cpf=cpf.strip()
         dias=dias.strip()
+        '''
 
 
         '''
