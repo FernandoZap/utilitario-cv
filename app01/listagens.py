@@ -1,4 +1,4 @@
-from .models import Funcao,Vinculo,Secretaria,Vinculo,Evento,Setor
+from .models import Funcao,Vinculo,Secretaria,Vinculo,Evento,Setor,Servidor,Folhames,Grupo_eventos
 
 
 def listagemSecretarias(id_municipio):
@@ -59,7 +59,20 @@ def listagemFolhames(id_municipio,anomes):
     return lista
 
 
+def listagemGrupoEventos(id_municipio):
+    lista=[]
+    geventos = Grupo_eventos.objects.filter(id_municipio=id_municipio)
+    for gevento in geventos:
+        lista.append(gevento.desc_evento)
+    return lista
 
+
+def listagemEventosRef(id_municipio):
+    lista=[]
+    geventos = Eventos.objects.filter(id_municipio=id_municipio,ref_evento=1)
+    for gevento in geventos:
+        lista.append(gevento.evento)
+    return lista
 
 
 def criarDictSecretarias(id_municipio):
@@ -153,45 +166,17 @@ def criarDictTiposDeEventos(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-'''
-def dictSecretarias(id_municipio):
-	if id_municipio==86:
-		return dict(lista_secretarias_86)
-	elif id_municipio==15:
-		return dict(lista_secretarias_15)
 
-def dictSetores(id_municipio):
-	if id_municipio==86:
-		return dict(lista_setores_86)
-	elif id_municipio==15:
-		return dict(lista_setores_15)
+def criarDictGrupoEventos(id_municipio):
+	lista1=[]
+	lista2=[]
+	secs = Grupo_eventos.objects.filter(id_municipio=id_municipio).order_by('id_grupo')
+	for sec in secs:
+		lista1.append(
+			sec.desc_evento
+			)
+		lista2.append(
+			sec.desc_evento_principal
+			)
 
-
-def dictFuncoes(id_municipio):
-	if id_municipio==86:
-		return dict(lista_funcoes_86)
-	elif id_municipio==15:
-		return dict(lista_funcoes_15)
-
-
-def dictVinculos(id_municipio):
-	if id_municipio==86:
-		return dict(lista_vinculos_86)
-	elif id_municipio==15:
-		return dict(lista_vinculos_15)
-
-
-def dictEventos(id_municipio):
-	if id_municipio==86:
-		return dict(lista_eventos_86)
-	elif id_municipio==15:
-		return dict(lista_eventos_15)
-
-
-def dictTiposEventos(id_municipio):
-	if id_municipio==86:
-		return dict(lista_tipos_eventos_86)
-	elif id_municipio==15:
-		return dict(lista_tipos_eventos_15)
-
-'''
+	return dict(zip(lista1,lista2))

@@ -19,4 +19,6 @@ urlpatterns = [
     path('importacaoFolhaExcel', v1.importacaoFolhaExcel, name='importacaoFolhaExcel'),
     path('planilhaErrada', v1.planilhaErrada, name='planilhaErrada'),
     path('listSomaEventos', v1.listSomaEventos, name='listSomaEventos'),
+    path('parateste', v1.parateste),
 ]
+

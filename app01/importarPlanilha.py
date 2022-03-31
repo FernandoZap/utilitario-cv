@@ -4,8 +4,7 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Funcao,Evento,Setor,Planilha
-#Servidor,Folhames,Folhaevento
+from .models import Secretaria,Vinculo,Funcao,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos
 from . import listagens,funcoes_gerais
 
 
@@ -56,451 +55,6 @@ def importarServidores(i_id_municipio,i_anomes,i_municipio):
         
     Servidor.objects.bulk_create(objetos)
     return ''
-
-
-def importarSecretarias(planilha,id_municipio,anomes,current_user,mes_ref):
-
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    objetos=[]
-    lista=[]
-    lista_secretarias=listagens.listagemSecretarias(id_municipio)
-    while row<sheet.max_row+1:
-
-        secretaria = sheet['A' + str(row)].value # DC 
-        row+=1
-
-        if secretaria is not None:
-            if len(secretaria)>2:
-                if secretaria not in lista_secretarias:
-                    if secretaria not in lista:
-                        objeto = Secretaria(
-                            id_municipio=id_municipio,
-                            secretaria=secretaria
-                            )
-                        lista.append(secretaria)
-                        objetos.append(objeto)
-        else:
-            break                    
-        
-    Secretaria.objects.bulk_create(objetos)
-    return None
-
-
-'''
-def importarSetores(planilha,id_municipio,anomes,current_user):
-
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    objetos=[]
-    lista=[]
-    lista_setores=listagens.listagemSetores(id_municipio)
-    while row<sheet.max_row+1 and row<8000:
-
-        setor = sheet['B' + str(row)].value # DC 
-
-        row+=1
-
-        if setor is not None:
-            setor = setor.strip()
-            if len(setor)>2:
-                if setor not in lista_setores:
-                    if setor not in lista:
-                        objeto = Setor(
-                            id_municipio=id_municipio,
-                            setor=setor
-                            )
-                        lista.append(setor)
-                        objetos.append(objeto)
-        else:
-            break                    
-        
-    Setor.objects.bulk_create(objetos)
-    return None
-'''
-
-'''
-
-def importarVinculos(planilha,id_municipio,anomes,current_user,mes_ref):
-
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    objetos=[]
-    lista=[]
-    lista_vinculos=listagens.listagemVinculos(id_municipio)
-    while row<sheet.max_row+1 and row<8000:
-
-        vinculo = sheet['C' + str(row)].value # DC 
-
-        row+=1
-
-        if vinculo is not None:
-            vinculo = vinculo.strip()
-            if len(vinculo)>2:
-                if vinculo not in lista_vinculos:
-                    if vinculo not in lista:
-                        objeto = Vinculo(
-                            id_municipio=id_municipio,
-                            vinculo=vinculo
-                            )
-                        lista.append(vinculo)
-                        objetos.append(objeto)
-        else:
-            break                    
-        
-    Vinculo.objects.bulk_create(objetos)
-    return None
-'''
-
-'''
-def importarFuncoes(planilha,id_municipio,anomes,current_user):
-
-    lote = str(datetime.datetime.now().today())[0:19]
-
-    idop = current_user
-
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    objetos=[]
-    lista=[]
-    lista_funcoes=listagens.listagemFuncoes(id_municipio)
-    while row<sheet.max_row+1 and row<8000:
-
-        funcao = sheet['D' + str(row)].value # DC 
-
-        row+=1
-
-        if funcao is not None:
-            funcao = funcao.strip()
-            if len(funcao)>2:
-                if funcao not in lista_funcoes:
-                    if funcao not in lista:
-                        objeto = Funcao(
-                            id_municipio=id_municipio,
-                            funcao=funcao
-                            )
-                        lista.append(funcao)
-                        objetos.append(objeto)
-        else:
-            break                    
-        
-    Funcao.objects.bulk_create(objetos)
-    return None
-
-'''
-
-'''
-def importarEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    objetos=[]
-    lista=[]
-    lista_eventos=listagens.listagemEventos(id_municipio)
-    while row<sheet.max_row+1 and row<5500:
-
-        evento = sheet['E' + str(row)].value # DC 
-
-        mes_referencia = sheet['D' + str(row)].value # Código da pasta
-        municipio_ref = sheet['AH' + str(row)].value # Código da pasta
-        data_referencia = sheet['B' + str(row)].value # Código da pasta
-        cod_evento = sheet['AV' + str(row)].value # Código da pasta
-
-
-        if mes_referencia is None:
-            row+=1
-            continue
-        if municipio_ref is None:
-            row+=1
-            continue
-
-        if mes_referencia=='' or municipio_ref=='':
-            row+=1
-            continue
-
-        data_ref=str(data_referencia)            
-
-        if row==2:
-            if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
-                #print ('anomes 1: '+str(anomes))
-                #print ('data_ref: '+data_ref[0:4]+data_ref[5:7])
-                #print ('Erro: ano e mes não confere com a planilha informada.')
-                return 'Erro: ano e mes não confere com a planilha informada.'
-            if municipio_ref.upper()!=municipio.upper():
-                #print ('municipio: '+municipio)
-                #print ('Erro: nome da prefeitura não confere com planilha informada.')
-                return 'Erro: nome da prefeitura não confere com planilha informada.'
-
-        if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
-            row+=1    
-            continue
-
-
-
-
-        row+=1
-
-        if evento is not None:
-            evento = evento.strip()
-            if len(evento)>2:
-                if evento not in lista_eventos:
-                    if evento not in lista:
-                        objeto = Evento(
-                            id_municipio=id_municipio,
-                            evento=evento,
-                            codigo=cod_evento,
-                            tipo='V'
-                            )
-                        lista.append(evento)
-                        objetos.append(objeto)
-        else:
-            break                    
-        
-    Evento.objects.bulk_create(objetos)
-    return None
-
-'''
-
-def importarSecFuncVincEventos(planilha,id_municipio,anomes,current_user,municipio,mes_ref):
-
-
-    wb = openpyxl.load_workbook(planilha)
-    sheets = wb.sheetnames
-
-    sheet0 = sheets[0]
-
-    sheet = wb.get_sheet_by_name(sheet0)
-
-
-    row=2
-    erro=0
-    qtde_itens=0
-    retorno = True
-
-    row=2
-    erro=0
-    carga_secretaria=[]
-    carga_funcao=[]
-    carga_vinculo=[]
-    carga_evento=[]
-
-
-    ls_secretaria=[]
-    ls_funcao=[]
-    ls_vinculo=[]
-    ls_evento=[]
-
-
-    lista_secretarias=listagens.listagemSecretarias(id_municipio)
-    lista_funcoes=listagens.listagemFuncoes(id_municipio)
-    lista_vinculos=listagens.listagemVinculos(id_municipio)
-    lista_eventos=listagens.listagemEventos(id_municipio)
-
-
-    while row<sheet.max_row+1:
-
-        secretaria = sheet['W' + str(row)].value # DC 
-        setor = sheet['X' + str(row)].value # DC 
-        funcao = sheet['AB' + str(row)].value # DC 
-        vinculo = sheet['Y' + str(row)].value # DC 
-        evento = sheet['AJ' + str(row)].value # DC 
-        nome_servidor = sheet['I' + str(row)].value # DC 
-        data_referencia = sheet['B' + str(row)].value # Código da pasta
-        municipio_ref = sheet['AH' + str(row)].value # Código da pasta
-        cod_evento = sheet['AV' + str(row)].value # Código da pasta
-        tipo = sheet['AI' + str(row)].value # Código da pasta
-
-        mes_referencia = sheet['D' + str(row)].value # Código da pasta
-
-        if mes_referencia is None:
-            row+=1
-            continue
-        if municipio_ref is None:
-            row+=1
-            continue
-        if nome_servidor is None:
-            row+=1
-            continue
-
-        if mes_referencia=='' or municipio_ref=='' or nome_servidor=='':
-            row+=1
-            continue
-
-
-        municipio_ref=municipio_ref.strip()
-
-        data_ref=str(data_referencia)
-
-
-        if row==2:
-            if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
-                #print ('anomes 1: '+str(anomes))
-                #print ('data_ref: '+data_ref[0:4]+data_ref[5:7])
-                #print ('Erro: ano e mes não confere com a planilha informada.')
-                return 'Erro: ano e mes não confere com a planilha informada.'
-            if municipio_ref.upper()!=municipio.upper():
-                #print ('municipio: '+municipio)
-                #print ('Erro: nome da prefeitura não confere com planilha informada.')
-                return 'Erro: nome da prefeitura não confere com planilha informada.'
-
-        if str(anomes)!=data_ref[0:4]+data_ref[5:7] and mes_ref!=mes_referencia.strip():
-            row+=1    
-            continue
-        row+=1
-
-
-        if nome_servidor is None:
-            break
-        if len(nome_servidor.strip())==0:
-            break
-
-        if tipo=='4':
-            tipo_evento='D'
-        elif tipo in ['1','2','3']:
-            tipo_evento='V'
-        else:
-            tipo_evento='V'            
-
-
-        if secretaria is not None:
-            secretaria=secretaria.strip()
-            if len(secretaria)>2:
-                if secretaria not in lista_secretarias:
-                    if secretaria not in ls_secretaria:
-                        obj_secretaria = Secretaria(
-                            id_municipio=id_municipio,
-                            secretaria=secretaria
-                            )
-                        ls_secretaria.append(secretaria)
-                        carga_secretaria.append(obj_secretaria)
-
-
-        if funcao is not None:
-            funcao=funcao.strip()
-            if len(funcao)>2:
-                if funcao not in lista_funcoes:
-                    if funcao not in ls_funcao:
-                        obj_funcao = Funcao(
-                            id_municipio=id_municipio,
-                            funcao=funcao
-                            )
-                        ls_funcao.append(funcao)
-                        carga_funcao.append(obj_funcao)
-
-        if vinculo is not None:
-            vinculo=vinculo.strip()
-            if len(vinculo)>2:
-                if vinculo not in lista_vinculos:
-                    if vinculo not in ls_vinculo:
-                        obj_vinculo = Vinculo(
-                            id_municipio=id_municipio,
-                            vinculo=vinculo
-                            )
-                        ls_vinculo.append(vinculo)
-                        carga_vinculo.append(obj_vinculo)
-
-        if evento is not None:
-            evento=evento.strip()
-            if len(evento)>2:
-                if evento not in lista_eventos:
-                    if evento not in ls_evento:
-                        obj_evento = Evento(
-                            id_municipio=id_municipio,
-                            evento=evento,
-                            codigo=cod_evento,
-                            tipo = tipo_evento
-                            )
-                        ls_evento.append(evento)
-                        carga_evento.append(obj_evento)
-    
-    Secretaria.objects.bulk_create(carga_secretaria)
-    Funcao.objects.bulk_create(carga_funcao)
-    Vinculo.objects.bulk_create(carga_vinculo)
-    Evento.objects.bulk_create(carga_evento)
-
-    return None
-
 
 
 def importarSetores(i_id_municipio,i_anomes,i_municipio):
@@ -583,6 +137,10 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
+    lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
+    dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
+
+
 
     lista=[]
     lista_eventosMes=[]
@@ -590,6 +148,9 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
     objetos=[]
     feventos=[]
     lista_incluidos=[]
+
+    lista_ref_eventos=[]
+    obj_ref_ev=[]
 
 
     codigo_folha=int(str(i_anomes)[4:6])
@@ -632,9 +193,19 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         setor=setor.strip()    
         funcao=funcao.strip()    
         vinculo=vinculo.strip()    
-        evento=evento.strip()    
+        previdencia=previdencia.strip()
+        evento=evento.strip()
+        cpf=cpf.strip()
+        dias=dias.strip()
 
-        
+        if evento in lista_grupo_eventos:
+            evento1 = dict_grupo_eventos[evento]
+        else:
+            evento1 = evento
+
+        evento = evento1
+
+    
         if secretaria in lista_secretarias:
             id_secretaria = dict_secretarias[secretaria]
         else:
@@ -644,6 +215,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             id_setor = dict_setores[secretaria+setor]
         else:
             id_setor=0            
+
 
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
@@ -668,7 +240,6 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
         if valor is None:
             valor=0
-
 
         if id_secretaria==0:
             observacao='cod_servidor: '+str(cod_servidor)+' - secretaria'
@@ -730,11 +301,24 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
                 objetos.append(objeto)
                 lista_incluidos.append(cod_servidor)
+
+        if evento=='VENCIMENTO BASE':
+            if cod_servidor not in lista_ref_eventos:
+                ref_ev = Refeventos(
+                    anomes=i_anomes,
+                    id_municipio=i_id_municipio,
+                    cod_servidor=cod_servidor,
+                    ref_eventos = dias
+                    )
+
+                obj_ref_ev.append(ref_ev)
+                lista_ref_eventos.append(cod_servidor)
+
         
     Folhames.objects.bulk_create(objetos)
     Folhaevento.objects.bulk_create(feventos)
+    Refeventos.objects.bulk_create(obj_ref_ev)
     return ''
-
 
 
 def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):

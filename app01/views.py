@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Folha,Evento
+from .models import Municipio,Evento,Planilha,Grupo_eventos
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -151,9 +151,6 @@ def listFolhaResumo(request):
         anomes = int(ano+mes)
         referencia = mes+"/"+ano
 
-
-        #quantidade_de_funcionario=Folha.objects.filter(anomes=anomes,id_municipio=id_municipio).annotation(Count('cod_servidor'))
-
         cursor.execute("SELECT f001_quantidadeServidoresMes (%s,%s)",[anomes,id_municipio])
         qt = dictfetchall(cursor)
         #qt[0]["f001_quantidadeServidores (202111,'86')"]
@@ -280,8 +277,6 @@ def listSomaEventos(request):
         referencia = mes+"/"+ano
 
 
-        #quantidade_de_funcionario=Folha.objects.filter(anomes=anomes,id_municipio=id_municipio).annotation(Count('cod_servidor'))
-
         cursor.execute("SELECT f001_quantidadeServidoresMes (%s,%s)",[anomes,id_municipio])
         qt = dictfetchall(cursor)
         for e in qt[0].values():
@@ -395,7 +390,9 @@ def imprimirCSVFolha(request):
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['dias'])
                 for ll in range(len(queryEventos)):
-                    lista.append(queryEventos[ll]['valor'])
+                    valor_evento = queryEventos[ll]['valor']
+                    valor_evento = valor_evento.replace('.',',')
+                    lista.append(valor_evento)
                     somaEventos+=queryEventos[ll]['valor']
                 lista.append(somaEventos)
 
@@ -421,39 +418,47 @@ def imprimirCSVFolha(request):
     )
 
 
+def parateste(request):
 
-'''
-SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,sto.setor,fn.funcao,vc.vinculo,
-fl.carga_horaria,fl.dias
-from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor
-inner join secretarias sec on sec.id_secretaria=fl.id_secretaria inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria
-inner join funcoes fn on fn.id_funcao=fl.id_funcao
-inner join vinculos vc on vc.id_vinculo=fl.id_vinculo
-where fl.anomes=202111 and fl.id_municipio=86
-order by fl.cod_servidor;
-'''
+    lista_grupo_eventos=listagens.listagemGrupoEventos(86)
+    dict_grupo_eventos=listagens.criarDictGrupoEventos(86)
 
 
+    queryP = Planilha.objects.values(
+        'codigo',
+        'cpf',
+        'secretaria',
+        'setor',
+        'funcao',
+        'tipo_admissao',
+        'previdencia',
+        'carga_horaria',
+        'ref_evento',
+        'classificacao',
+        'evento',
+        'cod_evento',
+        'tipo',
+        'valor_evento'
+        ).all()
+
+    for qp in range(len(queryP)):
+
+        cod_servidor = queryP[qp]['codigo']
+        evento1 = queryP[qp]['evento']
+
+        evento1=evento1.strip()
 
 
-'''
-select ev.id_evento,ev.evento,ifnull(fm.valor,0) as valor
-from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and
-fm.anomes=202111 and fm.id_municipio=86 and fm.cod_servidor=%s
-where ev.tipo='V' and ev.id_municipio=86 order by ev.evento
-'''
-'''
+        if evento1 in lista_grupo_eventos:
+            evento = dict_grupo_eventos[evento1]
+        else:
+            evento = evento1            
 
 
-CREATE VIEW v001_valoresmes AS 
-select fm.anomes AS anomes,fm.id_municipio AS id_municipio,fm.
-id_secretaria AS id_secretaria,fm.id_setor AS id_setor,fe.tipo AS tipo,
-fe.id_evento AS id_evento,
-(case when (fe.tipo = 'V') then fe.valor else 0 end) AS vantagens,
-(case when (fe.tipo = 'D') then fe.valor else 0 end) AS descontos 
-from folhames fm inner join folhaeventos fe 
-on fm.cod_servidor = fe.cod_servidor 
-    and fm.id_municipio = fe.id_municipio 
-    and fm.anomes = fe.anomes;
-'''
+        print (str(cod_servidor) + ' - ' + evento1 + ' - '+ evento)
+
+
+        
+    return render(request, 'app01/planilhaErrada.html')
+
 
