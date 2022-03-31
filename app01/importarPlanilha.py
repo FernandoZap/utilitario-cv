@@ -198,12 +198,15 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         cpf=cpf.strip()
         dias=dias.strip()
 
+
+        '''
         if evento in lista_grupo_eventos:
             evento1 = dict_grupo_eventos[evento]
         else:
             evento1 = evento
 
         evento = evento1
+        '''
 
     
         if secretaria in lista_secretarias:
@@ -317,7 +320,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         '''
     Folhames.objects.bulk_create(objetos)
     Folhaevento.objects.bulk_create(feventos)
-    Refeventos.objects.bulk_create(obj_ref_ev)
+    #Refeventos.objects.bulk_create(obj_ref_ev)
     return ''
 
 
