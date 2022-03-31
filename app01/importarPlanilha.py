@@ -269,6 +269,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
             previdencia='N'
         else:
             previndencia=''
+
+        '''            
         
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
@@ -304,7 +306,6 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
                 objetos.append(objeto)
                 lista_incluidos.append(cod_servidor)
-        '''
         if evento=='VENCIMENTO BASE':
             if cod_servidor not in lista_ref_eventos:
                 ref_ev = Refeventos(
@@ -318,8 +319,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
                 lista_ref_eventos.append(cod_servidor)
 
         '''
-    Folhames.objects.bulk_create(objetos)
-    Folhaevento.objects.bulk_create(feventos)
+    #Folhames.objects.bulk_create(objetos)
+    #Folhaevento.objects.bulk_create(feventos)
     #Refeventos.objects.bulk_create(obj_ref_ev)
     return ''
 
