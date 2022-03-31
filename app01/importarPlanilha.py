@@ -137,8 +137,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
-    lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
-    dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
+    #lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
+    #dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
 
 
 
