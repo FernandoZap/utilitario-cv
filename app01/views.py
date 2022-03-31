@@ -155,7 +155,7 @@ def listFolhaResumo(request):
         qt = dictfetchall(cursor)
         #qt[0]["f001_quantidadeServidores (202111,'86')"]
         #print (qt[0]["f001_quantidadeServidores (202111,'86')"])
-        print ('valor da funcao')
+        #print ('valor da funcao')
         for e in qt[0].values():
             qT=e
 
@@ -329,6 +329,9 @@ def listSomaEventos(request):
 
             }
           )
+
+
+
 @login_required
 def imprimirCSVFolha(request):
 

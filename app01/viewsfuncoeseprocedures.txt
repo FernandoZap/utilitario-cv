@@ -54,7 +54,7 @@ delimiter ;
 Create view v005_folhaEventos
 as
 select f.anomes,f.id_municipio,e.evento,e.tipo,f.valor 
-from folhas f,eventos e where f.id_evento=e.id_evento and f.anomes=202111 and f.id_municipio=86 order by e.evento,e.tipo desc;
+from folhasmes f,eventos e where f.id_evento=e.id_evento and f.anomes=202111 and f.id_municipio=86 order by e.evento,e.tipo desc;
 
 
 
@@ -118,4 +118,16 @@ BEGIN
    RETURN total;
 END;
 $total$ LANGUAGE plpgsql;
+
+
+
+
+CREATE  VIEW v005_folhaEventos 
+AS 
+select f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor from folhaeventos f join eventos e) where (f.id_evento = e.id_evento) order by e.evento,e.tipo desc
+
+CREATE  VIEW v005_folhaEventos 
+AS 
+SELECT f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor FROM folhaeventos f INNER JOIN eventos e ON f.id_evento = e.id_evento ORDER BY e.evento,e.tipo DESC
+
 
