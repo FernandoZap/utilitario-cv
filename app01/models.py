@@ -365,7 +365,7 @@ class Evento(models.Model):
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
     codigo = models.IntegerField(default=0)
     evento = models.CharField(max_length=50)
-    ref_evento = models.IntegerField(default=0)
+    exibe_excel = models.IntegerField(default=0)
     cl_orcamentaria = models.CharField(max_length=6, null=True)
     ordenacao = models.IntegerField(default=0)
 
@@ -568,4 +568,3 @@ class Grupo_eventos(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
