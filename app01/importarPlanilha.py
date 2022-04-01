@@ -266,7 +266,6 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         else:
             previndencia=''
 
-        '''            
         
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
@@ -314,10 +313,9 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
                 obj_ref_ev.append(ref_ev)
                 lista_ref_eventos.append(cod_servidor)
 
-        '''
-    #Folhames.objects.bulk_create(objetos)
-    #Folhaevento.objects.bulk_create(feventos)
-    #Refeventos.objects.bulk_create(obj_ref_ev)
+    Folhames.objects.bulk_create(objetos)
+    Folhaevento.objects.bulk_create(feventos)
+    Refeventos.objects.bulk_create(obj_ref_ev)
     return ''
 
 
