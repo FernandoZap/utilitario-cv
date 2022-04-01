@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Grupo_eventos
+from .models import Municipio,Evento,Planilha,Grupo_eventos,Folhames
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -463,3 +463,18 @@ def parateste(request):
 
         
     return render(request, 'app01/planilhaErrada.html')
+
+
+
+
+
+select ev.id_evento,ev.evento,coalesce(fm.valor,0) as valor
+from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and
+fm.anomes=202111 and fm.id_municipio=86 and fm.cod_servidor=403
+where ev.tipo='V' and ev.id_municipio=86 order by ev.evento
+
+
+
+
+
+",[anomes,id_municipio,cod_servidor,id_municipio])
