@@ -394,8 +394,9 @@ def imprimirCSVFolha(request):
                 lista.append(query1[kk]['dias'])
                 for ll in range(len(queryEventos)):
                     valor_evento = queryEventos[ll]['valor']
-                    #valor_evento = valor_evento.replace('.',',')
-                    lista.append(valor_evento)
+                    valor_str = str(valor_evento)
+                    valor_str = valor_str.replace('.',',')
+                    lista.append(valor_str)
                     somaEventos+=queryEventos[ll]['valor']
                 lista.append(somaEventos)
 
