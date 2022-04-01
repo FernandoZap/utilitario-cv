@@ -104,8 +104,3 @@ def gravarErro_01(id_municipio,anomes,observacao):
     log=LogErro(id_municipio=id_municipio,anomes=anomes,observacao=observacao)
     log.save()
     return 'ok'
-
-
-
-
-
