@@ -54,28 +54,24 @@ def modelos(string_id_municipio):
     return modelos[string_id_municipio]
 
 
-def strings_pesquisa(string_id_municipio):
-    modelos_lista = [
-    ('86', 'PREFEITURA MUNICIPAL DE CARIDADE'), 
-    ('15', 'PREFEITURA MUNICIPAL DE CANINDE'),
-    ('124', 'PREFEITURA MUNICIPAL DE QUIXELO'),
-    ('92', 'PREFEITURA MUNICIPAL DE ITATIRA'),
-    ('134', 'PREFEITURA MUNICIPAL DE GRAÇA'),
-    ('42', 'PREFEITURA MUNICIPAL DE MOMBAÇA'),
-    ('109', 'PREFEITURA MUNICIPAL DE SOLONÓPOLE'),
-    ('44', 'PREFEITURA MUNICIPAL DE PEDRA BRANCA'),
-    ('38', 'PREFEITURA MUNICIPAL DE SÃO GONÇALO DO AMARANTE'),
-    ('125', 'PREFEITURA MUNICIPAL DE ALTO SANTO'),
-    ('152', 'PREFEITURA MUNICIPAL DE ARATUBA'),
-    ('162', 'PREFEITURA MUNICIPAL DE IRAPUAN PINHEIRO'),
-    ('76', 'PREFEITURA MUNICIPAL DE INDEPENDÊNCIA'),
-    ('57', 'PREFEITURA MUNICIPAL DE JAGUARIBE'),
-    ('177', 'PREFEITURA MUNICIPAL DE PACUJÁ'),
-    ('119', 'PREFEITURA MUNICIPAL DE PIQUET CARNEIRO'),
-    ('174', 'PREFEITURA MUNICIPAL DE SÃO JOÃO DO JAGUARIBE'),
-    ('107', 'PREFEITURA MUNICIPAL DE VARJOTA')
-    ] 
+def strings_pesquisa(id_municipio):
 
+    lista1=[]
+    lista2=[]
+    secs = Municipio.objects.all()
+    for sec in secs:
+        lista1.append(
+            str(sec.id_municipio)
+            )
+        lista2.append(
+            'PREFEITURA MUNICIPAL DE '+(sec.municipio).upper()
+            )
+
+    dicionario = dict(zip(lista1,lista2))
+    return dicionario[str(id_municipio)]
+
+
+def nome_do_municipio(id_municipio):
 
     lista1=[]
     lista2=[]
@@ -85,11 +81,14 @@ def strings_pesquisa(string_id_municipio):
             sec.id_municipio
             )
         lista2.append(
-            sec.municipio
+            (sec.municipio).upper()
             )
 
     dicionario = dict(zip(lista1,lista2))
-    return dicionario[string_id_municipio]
+    return dicionario[id_municipio]
+
+
+
 
 
 

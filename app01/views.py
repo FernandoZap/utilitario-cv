@@ -77,10 +77,11 @@ def importacaoFolhaExcel(request):
         tabela=request.POST['tabela']
         anomes=int(ano+mes)
 
+
+        municipio = funcoes_gerais.strings_pesquisa(id_municipio)
+
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
-            mn=Municipio.objects.filter(id_municipio=id_municipio).first()
-            municipio=mn.municipio
             return render(request, 'app01/planilhaErrada.html',
                     {
                         'titulo': 'Processamento da Folha',
@@ -91,10 +92,7 @@ def importacaoFolhaExcel(request):
                     }
                 )
 
-
-        municipio = funcoes_gerais.strings_pesquisa(id_municipio)
         mes_ref = funcoes_gerais.mesReferencia(mes)
-
 
         if tabela=='SecFuncVincEventos':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
@@ -361,14 +359,18 @@ def imprimirCSVFolha(request):
         cursor = connection.cursor()
         lista=[]
 
+
+        
+
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is None:
-            municipios=Municipio.objects.all().order_by('municipio')
+            municipio = funcoes_gerais.strings_pesquisa(id_municipio)
             return render(request, 'app01/planilhaErrada.html',
                     {
                         'titulo': 'Impressao do Excel',
-                        'municipios':municipios,
-                        'mensagem':'O arquivo Zip ainda não foi importado'
+                        'municipio':municipio,
+                        'anomes': str(mes)+'/'+str(ano),
+                        'mensagem':'Não existe nenhum registro para essa Folha.'
 
                     }
                 )
