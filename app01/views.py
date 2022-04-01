@@ -361,11 +361,12 @@ def imprimirCSVFolha(request):
         if (1==1):
 
             cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,sto.setor,fn.funcao,vc.vinculo,\
-            fl.carga_horaria,fl.dias\
+            fl.carga_horaria,fl.dias,rf.ref_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
             inner join secretarias sec on sec.id_secretaria=fl.id_secretaria inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria\
             inner join funcoes fn on fn.id_funcao=fl.id_funcao\
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
+            left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
             where fl.anomes=%s and fl.id_municipio=%s\
             order by fl.cod_servidor",[anomes,id_municipio])
 
@@ -391,7 +392,7 @@ def imprimirCSVFolha(request):
                 lista.append(query1[kk]['vinculo'])
                 lista.append(query1[kk]['data_admissao'])
                 lista.append(query1[kk]['carga_horaria'])
-                lista.append(query1[kk]['dias'])
+                lista.append(query1[kk]['ref_eventos'])
                 for ll in range(len(queryEventos)):
                     valor_evento = queryEventos[ll]['valor']
                     valor_str = str(valor_evento)
