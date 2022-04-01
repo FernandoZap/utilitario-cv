@@ -431,6 +431,7 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
                             evento=evento,
                             codigo=cod_evento,
                             tipo = tipo_evento,
+                            exibe_excel = 1,
                             cl_orcamentaria = classificacao
                             )
                         ls_evento.append(evento)
