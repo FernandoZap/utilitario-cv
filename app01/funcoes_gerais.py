@@ -2,7 +2,7 @@
 import os
 import sys
 import re
-from .models import Evento,LogErro
+from .models import Evento,LogErro,Municipio
 import zipfile
 import re
 from django.db import connection
@@ -74,10 +74,22 @@ def strings_pesquisa(string_id_municipio):
     ('119', 'PREFEITURA MUNICIPAL DE PIQUET CARNEIRO'),
     ('174', 'PREFEITURA MUNICIPAL DE SÃO JOÃO DO JAGUARIBE'),
     ('107', 'PREFEITURA MUNICIPAL DE VARJOTA')
-    ]    
+    ] 
 
-    modelos = dict(modelos_lista)    
-    return modelos[string_id_municipio]
+
+    lista1=[]
+    lista2=[]
+    secs = Municipio.objects.all()
+    for sec in secs:
+        lista1.append(
+            sec.id_municipio
+            )
+        lista2.append(
+            sec.municipio
+            )
+
+    dicionario = dict(zip(lista1,lista2))
+    return dicionario[string_id_municipio]
 
 
 

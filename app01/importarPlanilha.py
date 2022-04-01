@@ -54,7 +54,7 @@ def importarServidores(i_id_municipio,i_anomes,i_municipio):
                 lista_incluidos.append(str(codigo))
         
     Servidor.objects.bulk_create(objetos)
-    return ''
+    return 1
 
 
 def importarSetores(i_id_municipio,i_anomes,i_municipio):
@@ -102,7 +102,7 @@ def importarSetores(i_id_municipio,i_anomes,i_municipio):
                             objetos.append(objeto)
         
     Setor.objects.bulk_create(objetos)
-    return None
+    return 1
 
 
 
@@ -316,10 +316,10 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
     Folhames.objects.bulk_create(objetos)
     Folhaevento.objects.bulk_create(feventos)
     Refeventos.objects.bulk_create(obj_ref_ev)
-    return ''
+    return 1
 
 
-def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
+def importarSecFuncVincEventos(i_id_municipio,i_anomes,i_municipio):
 
 
     carga_secretaria=[]
@@ -341,7 +341,7 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
     lista_vinculos=listagens.listagemVinculos(i_id_municipio)
     lista_eventos=listagens.listagemEventos(i_id_municipio)
 
-
+    arquivo_ok=0
 
     queryP = Planilha.objects.values(
         'codigo',
@@ -364,6 +364,7 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
         print (queryP[qp]['evento'])
         print ('--------------------')
         '''
+        arquivo_ok=1
 
 
         if queryP[qp]['tipo']==4:
@@ -437,10 +438,12 @@ def importarSecFuncVincEventos2(i_id_municipio,i_anomes,i_municipio):
                         ls_evento.append(evento)
                         carga_evento.append(obj_evento)
 
+    if arquivo_ok==0:
+        return 0
     Secretaria.objects.bulk_create(carga_secretaria)
     Funcao.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
     Evento.objects.bulk_create(carga_evento)
 
-    return None
+    return 1
 

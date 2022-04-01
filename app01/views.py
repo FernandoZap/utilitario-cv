@@ -77,31 +77,49 @@ def importacaoFolhaExcel(request):
         tabela=request.POST['tabela']
         anomes=int(ano+mes)
 
+        obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
+        if obj is not None:
+            mn=Municipio.objects.filter(id_municipio=id_municipio).first()
+            municipio=mn.municipio
+            return render(request, 'app01/planilhaErrada.html',
+                    {
+                        'titulo': 'Processamento da Folha',
+                        'municipio':municipio,
+                        'anomes':str(mes)+'/'+str(ano),
+                        'mensagem':'A Folha selecionada já foi processada!'
 
-        #modelo = funcoes_gerais.modelos(str(id_municipio))
-        municipio = funcoes_gerais.strings_pesquisa(str(id_municipio))
+                    }
+                )
+
+
+        municipio = funcoes_gerais.strings_pesquisa(id_municipio)
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
 
         if tabela=='SecFuncVincEventos':
-            #retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
-            retorno = importarPlanilha.importarSecFuncVincEventos2(id_municipio,anomes,municipio)
+            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
         elif tabela=='Setor':            
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,municipio)
         elif tabela=='Servidor':            
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,municipio)
         elif tabela=='Folha':            
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,municipio)
-            if retorno!='':
-                return HttpResponseRedirect(reverse('app01:planilhaErrada'))
+        elif tabela == 'Geral':
+            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
+            if retorno==1:
+                retorno = importarPlanilha.importarSetores(id_municipio,anomes,municipio)
+                retorno = importarPlanilha.importarServidores(id_municipio,anomes,municipio)
+                retorno = importarPlanilha.importarFolha(id_municipio,anomes,municipio)
+            else:                
+                return render(request, 'app01/planilhaErrada.html',
+                        {
+                            'titulo': 'Processamento da Folha',
+                            'municipio':municipio,
+                            'anomes':str(mes)+'/'+str(ano),
+                            'mensagem':'Nao existe nenhum registro desse municipio e desse mes para ser processado!'
 
-
-        #retorno = importarPlanilha.importarSecretarias(planilha,id_municipio,anomes,current_user)
-        #retorno = importarPlanilha.importarSetores(planilha,id_municipio,anomes,current_user)
-        #retorno = importarPlanilha.importarVinculos(planilha,id_municipio,anomes,current_user)
-        #retorno = importarPlanilha.importarFuncoes(planilha,id_municipio,anomes,current_user)
-        #retorno = importarPlanilha.importarEventos(planilha,id_municipio,anomes,current_user)
-
+                        }
+                    )
 
         return HttpResponseRedirect(reverse('app01:importacaoFolhaExcel'))
 
@@ -236,9 +254,9 @@ def listFolhaResumo(request):
                 'municipio':municipio,
                 'referencia':referencia,
                 'qtde_funcionario':qT,
-                'total_v':total_v,
-                'total_d':total_d,
-                'total_r':total_r,
+                'total_v':formatMilhar(total_v),
+                'total_d':formatMilhar(total_d),
+                'total_r':formatMilhar(total_r),
 
             }
           )
@@ -342,7 +360,6 @@ def imprimirCSVFolha(request):
         anomes=int(ano+mes)
         cursor = connection.cursor()
         lista=[]
-
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is None:
