@@ -190,17 +190,12 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         dias = queryP[qp]['ref_evento']
 
         
-        '''
         secretaria=secretaria.strip()
         setor=setor.strip()    
         funcao=funcao.strip()    
         vinculo=vinculo.strip()    
         previdencia=previdencia.strip()
         evento=evento.strip()
-        cpf=cpf.strip()
-        dias=dias.strip()
-        '''
-
 
         '''
         if evento in lista_grupo_eventos:
