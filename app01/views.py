@@ -463,5 +463,3 @@ def parateste(request):
 
         
     return render(request, 'app01/planilhaErrada.html')
-
-
