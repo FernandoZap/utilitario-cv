@@ -137,8 +137,8 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
-    #lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
-    #dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
+    lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
+    dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
 
 
 
@@ -197,14 +197,12 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
-        '''
         if evento in lista_grupo_eventos:
             evento1 = dict_grupo_eventos[evento]
         else:
             evento1 = evento
 
         evento = evento1
-        '''
 
     
         if secretaria in lista_secretarias:
