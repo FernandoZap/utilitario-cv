@@ -36,7 +36,7 @@ def cabecalhoFolha(id_municipio):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    objs=Evento.objects.filter(id_municipio=id_municipio,tipo='V').order_by('evento')
+    objs=Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')
     for obj in objs:
         if obj.cl_orcamentaria is None:
             cl_orcamentaria=''
