@@ -21,22 +21,33 @@
 <ul class="menuH decor1">
 
 
-<li><a href="#" class="arrow">1 Cadastro</a>
+<li><a href="#" class="arrow">1 Processamento da Folha</a>
 <ul>
 <li><a href="{% url 'app01:importacaoFolhaExcel' %}">1.1 Processamento da Folha</a></li>
-<li><a href="{% url 'app01:imprimirCSVFolha' %}">1.2 Visualizar Folha em Excel</a></li>
-
 
             </ul>
         </li>
 
-        <li><a href="#" class="arrow">2 Diversos</a>
+        <li><a href="#" class="arrow">2 Consultas</a>
 
             <ul>
-            <li><a href="{% url 'app01:listSomaEventos' %}">2.2 Lista Soma por Eventos</a></li>            
-            <li><a href="{% url 'app01:listFolhaResumo' %}">2.3 Lista Soma por Setores</a></li>
+            <li><a href="{% url 'app01:listSomaEventos' %}">2.1 Lista Soma por Eventos</a></li>            
+            <li><a href="{% url 'app01:listFolhaResumo' %}">2.2 Lista Soma por Setores</a></li>
+
+<li><a href="{% url 'app01:imprimirCSVFolha' %}">2.3 Modelo Base Excel</a></li>            
             </ul>
         </li>
+
+        <li><a href="#" class="arrow">3 Cadastro</a>
+
+            <ul>
+<li><a href="{% url 'app01:agrupar-eventos' %}">3.1 Substituir Eventos</a></li>
+<li><a href="{% url 'app01:agrupar-eventos' %}">3.2 Substituir Funcoes</a></li>
+            </ul>
+        </li>
+
+
+
 
         
         {% if user.is_authenticated %}

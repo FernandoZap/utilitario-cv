@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import (ListView)
 from django.http import HttpResponse,HttpResponseRedirect
-from . import choices,importarPlanilha,listagens,funcoes_gerais
+from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Municipio,Evento,Planilha,Grupo_eventos,Folhames
@@ -21,10 +21,22 @@ from django.db import connection
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 
 
+
+
+
+
+def get(self, request, *args, **kwargs):
+    self.request.session['funcao'] = self.request.user.funcao
+    self.request.session['username'] = self.request.user.username
+    return super().get(request, *args, **kwargs)  
+
+
+
 def sessao(request):
     if not request.session.get('username'):
         request.session['username'] = request.user.username
     return
+
 
 
 
@@ -485,3 +497,71 @@ def parateste(request):
         
     return render(request, 'app01/planilhaErrada.html')
 
+
+
+def agrupareventos(request):
+    sessao(request)
+    titulo_html = 'Agrupar Eventos'
+    current_user_id = request.user.id
+    current_user_name = request.user.username
+
+
+    mensagem=''
+    if (request.method == "POST" and request.FILES['filename']):
+        current_user = request.user.iduser
+
+
+        fileExcel=request.FILES['filename']
+        id_municipio=int(request.POST['municipio'])
+
+        retorno = cadastro_01.grupo_eventos(fileExcel,id_municipio,current_user_id)
+
+        if retorno==1:
+            return HttpResponseRedirect(reverse('app01:agrupar-eventos'))
+
+
+
+    municipios = Municipio.objects.all().order_by('municipio')
+    return render(request, 'app01/agruparEventos.html',
+            {
+                'titulo': titulo_html,
+                'usuario_id': current_user_id,
+                'usuario_username': current_user_name,
+                'municipios': municipios,
+            }
+          )
+
+
+
+
+def agruparfuncoes(request):
+    sessao(request)
+    titulo_html = 'Agrupar Funções'
+    current_user_id = request.user.id
+    current_user_name = request.user.username
+
+
+    mensagem=''
+    if (request.method == "POST" and request.FILES['filename']):
+        current_user = request.user.iduser
+
+
+        fileExcel=request.FILES['filename']
+        id_municipio=int(request.POST['municipio'])
+
+        retorno = cadastro_01.grupo_funcoes(fileExcel,id_municipio,current_user_id)
+
+        if retorno==1:
+            return HttpResponseRedirect(reverse('app01:agrupar-funcoes'))
+
+
+
+    municipios = Municipio.objects.all().order_by('municipio')
+    return render(request, 'app01/agruparFuncoes.html',
+            {
+                'titulo': titulo_html,
+                'usuario_id': current_user_id,
+                'usuario_username': current_user_name,
+                'municipios': municipios,
+            }
+          )

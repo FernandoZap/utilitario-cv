@@ -197,6 +197,14 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
+
+        # trocar as varições de evento por um único evento para deixar todos
+        # com uma única denominação; por exemplo:
+        '''
+          sempre que houver um desses eventos "GRATIFICACAO 1" , "GRATIFICACAO 2" e "GRATIFICACAO A1"
+          trocar por "GRATIFICACAO".
+
+        ''' 
         if evento in lista_grupo_eventos:
             evento1 = dict_grupo_eventos[evento]
         else:
