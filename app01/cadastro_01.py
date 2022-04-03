@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pyodbc as p
 import openpyxl, pprint
 import os
 import sys
