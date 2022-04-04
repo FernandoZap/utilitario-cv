@@ -2,24 +2,36 @@
 import os
 import sys
 from django.db import connection
+from .models import Folhaevento,Evento
 
 
 def delete_lista_de_eventos(lista,id_municipio,lista_id,id_evento,current_user):
 
 
-	cursor = connection.cursor()
+	#cursor = connection.cursor()
 	#cursor.execute("DELETE FROM eventos \
 		#WHERE id_municipio = %s AND evento in %s", [id_municipio,lista])
 
 
+	query = Folhaevento.objects.filter(id_municipio=id_municipio,id_evento__in=lista_id)
+	query.update(id_evento=id_evento)
+
+	'''
 	cursor.execute("UPDATE folhaeventos SET id_evento=%s \
 		WHERE id_municipio = %s AND id_evento in %s", [id_evento,id_municipio,lista_id])
+	'''		
 
+	query = Evento.objects.filter(id_municipio=id_municipio,id_evento__in=lista_id)
+	query.update(exibe_excel=0)
+
+
+	'''
 	cursor.execute("UPDATE eventos SET exibe_excel=0 \
 		WHERE id_municipio = %s AND id_evento in %s", [id_municipio,lista_id])
 
 	cursor.close()
 	del cursor
+	'''
 
 
 def delete_lista_de_funcoes(lista,id_municipio,lista_id,id_funcao,current_user):
