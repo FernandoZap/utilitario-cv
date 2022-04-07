@@ -179,7 +179,7 @@ class Evento(models.Model):
     class Meta:
         db_table = 'eventos'
         constraints = [
-            models.UniqueConstraint(fields=['empresa', 'evento'], name='evento_unique')
+            models.UniqueConstraint(fields=['empresa', 'evento' ], name='e_evento_unique')
         ]
 
 
