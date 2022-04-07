@@ -352,7 +352,7 @@ class Grupo_funcoes(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
+
 class Grupo_eventos(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,null=True)
@@ -373,4 +373,4 @@ class Grupo_eventos(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-'''            
+            
