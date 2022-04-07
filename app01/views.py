@@ -90,7 +90,20 @@ def importacaoFolhaExcel(request):
         anomes=int(ano+mes)
 
 
-        municipio = funcoes_gerais.strings_pesquisa(id_municipio)
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+        else:
+            empresa = 0
+            logerro=LogErro(
+            id_municipio = id_municipio,
+            anomes = anomes,
+            observacao = 'Empresa do municipio nao identificada')
+            logerro.save()
+
+        entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
+
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
@@ -106,20 +119,20 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos':
-            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
-        elif tabela=='Setor':            
-            retorno = importarPlanilha.importarSetores(id_municipio,anomes,municipio)
-        elif tabela=='Servidor':            
-            retorno = importarPlanilha.importarServidores(id_municipio,anomes,municipio)
-        elif tabela=='Folha':            
-            retorno = importarPlanilha.importarFolha(id_municipio,anomes,municipio)
-        elif tabela == 'Geral':
-            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,municipio)
+        if tabela=='SecFuncVincEventos' or 1==3:
+            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
+        elif tabela=='Setor' or 1==4:            
+            retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
+        elif tabela=='Servidor' or 1==3:   
+            retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
+        elif tabela=='Folha' or 1==1:   
+            retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
+        elif tabela == 'Geralss':
+            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
             if retorno==1:
-                retorno = importarPlanilha.importarSetores(id_municipio,anomes,municipio)
-                retorno = importarPlanilha.importarServidores(id_municipio,anomes,municipio)
-                retorno = importarPlanilha.importarFolha(id_municipio,anomes,municipio)
+                retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
+                retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
+                retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
             else:                
                 return render(request, 'app01/planilhaErrada.html',
                         {
@@ -372,6 +385,13 @@ def imprimirCSVFolha(request):
         lista=[]
 
 
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+        else:
+            municipio=''
+            empresa = ''
         
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
@@ -403,7 +423,7 @@ def imprimirCSVFolha(request):
 
             query1 = dictfetchall(cursor)
 
-            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
+            cabecalho = funcoes_gerais.cabecalhoFolha(empresa)
             writer = csv.writer(response, delimiter=';')
             response.write(u'\ufeff'.encode('utf8'))
             writer.writerow(cabecalho)
@@ -412,7 +432,7 @@ def imprimirCSVFolha(request):
             for kk in range(0,len(query1)):
                 somaEventos=0
                 cod_servidor = query1[kk]['cod_servidor']
-                queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor)
+                queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor,empresa)
 
 
                 lista.append(query1[kk]['secretaria'])
@@ -512,9 +532,10 @@ def agrupareventos(request):
 
 
         fileExcel=request.FILES['filename']
-        id_municipio=int(request.POST['municipio'])
+        empresa=int(request.POST['empresa'])
 
-        retorno = cadastro_01.grupo_eventos(fileExcel,id_municipio,current_user_id)
+
+        retorno = cadastro_01.grupo_eventos(fileExcel,empresa,current_user_id)
 
         if retorno==1:
             return HttpResponseRedirect(reverse('app01:agrupar-eventos'))
@@ -530,9 +551,6 @@ def agrupareventos(request):
                 'municipios': municipios,
             }
           )
-
-
-
 
 def agruparfuncoes(request):
     sessao(request)

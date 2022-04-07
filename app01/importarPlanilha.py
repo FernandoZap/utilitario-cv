@@ -4,12 +4,12 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Funcao,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos
+from .models import Secretaria,Vinculo,Funcao,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Grupo_eventos
 from . import listagens,funcoes_gerais
 
 
 
-def importarServidores(i_id_municipio,i_anomes,i_municipio):
+def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
     erro=0
     objetos=[]
@@ -20,16 +20,15 @@ def importarServidores(i_id_municipio,i_anomes,i_municipio):
     lista_cpf=[]
     codigo_folha=int(str(i_anomes)[4:6])
 
-
-
     queryP = Planilha.objects.values(
         'codigo',
         'nome_servidor',
         'data_admissao',
         'cpf'
-        ).filter(entidade=i_municipio,codigo_folha=codigo_folha)
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
 
     for qp in range(len(queryP)):
+
 
         codigo = queryP[qp]['codigo']
         nome_servidor = queryP[qp]['nome_servidor']
@@ -57,7 +56,7 @@ def importarServidores(i_id_municipio,i_anomes,i_municipio):
     return 1
 
 
-def importarSetores(i_id_municipio,i_anomes,i_municipio):
+def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
     objetos=[]
     lista=[]
@@ -74,9 +73,10 @@ def importarSetores(i_id_municipio,i_anomes,i_municipio):
         'secretaria',
         'setor',
         'funcao'
-        ).filter(entidade=i_municipio,codigo_folha=codigo_folha)
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
 
     for qp in range(len(queryP)):
+
 
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
@@ -107,7 +107,7 @@ def importarSetores(i_id_municipio,i_anomes,i_municipio):
 
 
 
-def importarFolha(i_id_municipio,i_anomes,i_municipio):
+def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
 
     #dict_secretarias=listagens.dictSecretarias(id_municipio)
@@ -128,17 +128,17 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
     lista_vinculos = listagens.listagemVinculos(i_id_municipio)
 
     #dict_eventos=listagens.dictEventos(id_municipio)
-    dict_eventos=listagens.criarDictEventos(i_id_municipio)
-    lista_eventos = listagens.listagemEventos(i_id_municipio)
+    dict_eventos=listagens.criarDictEventos(empresa)
+    lista_eventos = listagens.listagemEventos(empresa)
 
     #dict_tipos_eventos=listagens.dictTiposEventos(id_municipio)
-    dict_tipos_eventos=listagens.criarDictTiposDeEventos(i_id_municipio)
+    dict_tipos_eventos=listagens.criarDictTiposDeEventos(empresa)
 
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
-    lista_grupo_eventos=listagens.listagemGrupoEventos(i_id_municipio)
-    dict_grupo_eventos=listagens.criarDictGrupoEventos(i_id_municipio)
+    lista_grupo_eventos=listagens.listagemGrupoEventos(empresa)
+    dict_grupo_eventos=listagens.criarDictGrupoEventos(empresa)
 
 
 
@@ -170,7 +170,7 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
         'cod_evento',
         'tipo',
         'valor_evento'
-        ).filter(entidade=i_municipio,codigo_folha=codigo_folha)
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
 
     for qp in range(len(queryP)):
 
@@ -327,13 +327,15 @@ def importarFolha(i_id_municipio,i_anomes,i_municipio):
     return 1
 
 
-def importarSecFuncVincEventos(i_id_municipio,i_anomes,i_municipio):
+def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
 
     carga_secretaria=[]
     carga_funcao=[]
     carga_vinculo=[]
     carga_evento=[]
+    obj_grupo_evento=[]
+    carga_grupo_evento=[]
 
 
     ls_secretaria=[]
@@ -347,7 +349,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,i_municipio):
     lista_secretarias=listagens.listagemSecretarias(i_id_municipio)
     lista_funcoes=listagens.listagemFuncoes(i_id_municipio)
     lista_vinculos=listagens.listagemVinculos(i_id_municipio)
-    lista_eventos=listagens.listagemEventos(i_id_municipio)
+    lista_eventos=listagens.listagemEventos(empresa)
 
     arquivo_ok=0
 
@@ -361,7 +363,9 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,i_municipio):
         'tipo',
         'tipo_admissao',
         'classificacao'
-        ).filter(entidade=i_municipio,codigo_folha=codigo_folha)
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
+
+
 
     for qp in range(len(queryP)):
         '''
@@ -436,22 +440,36 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,i_municipio):
                 if evento not in lista_eventos:
                     if evento not in ls_evento:
                         obj_evento = Evento(
-                            id_municipio=i_id_municipio,
+                            empresa=empresa,
                             evento=evento,
-                            codigo=cod_evento,
                             tipo = tipo_evento,
                             exibe_excel = 1,
+                            cancelado='N',
                             cl_orcamentaria = classificacao
                             )
-                        ls_evento.append(evento)
                         carga_evento.append(obj_evento)
+
+                        obj_grupo_evento = Grupo_eventos(
+                            empresa=empresa,
+                            evento_original=evento,
+                            evento_principal=evento
+                            )
+                        carga_grupo_evento.append(obj_grupo_evento)
+                        ls_evento.append(evento)
+                        
 
     if arquivo_ok==0:
         return 0
     Secretaria.objects.bulk_create(carga_secretaria)
     Funcao.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
+    '''
+    if len(carga_evento)>0:
+        for kk in range(len(carga_evento)):
+            print ('X'+carga_evento[kk].evento+'X')
+    '''
     Evento.objects.bulk_create(carga_evento)
+    Grupo_eventos.objects.bulk_create(carga_grupo_evento)
 
     return 1
 

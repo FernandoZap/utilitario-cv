@@ -33,8 +33,8 @@ if recommendations.exists():
 class Municipio(models.Model):  
     id_municipio = models.AutoField(primary_key=True)
     municipio = models.CharField(max_length=100)
-    modelo = models.IntegerField(default=0)
-    string_pesquisa = models.CharField(max_length=100,default='')
+    empresa = models.CharField(max_length=100,default='')
+    entidade = models.CharField(max_length=100,default='')
 
     def __str__(self):
         return self.municipio
@@ -165,11 +165,11 @@ class Evento(models.Model):
     ]
 
     id_evento = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField(choices=choices.ID_MUNICIPIOS_CHOICES,default='')
+    empresa = models.CharField(max_length=50,default='')
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
-    codigo = models.IntegerField(default=0)
     evento = models.CharField(max_length=50)
     exibe_excel = models.IntegerField(default=0)
+    cancelado = models.CharField(max_length=1,default='N')
     cl_orcamentaria = models.CharField(max_length=6, null=True)
     ordenacao = models.IntegerField(default=0)
 
@@ -179,7 +179,7 @@ class Evento(models.Model):
     class Meta:
         db_table = 'eventos'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'evento'], name='evento_unique')
+            models.UniqueConstraint(fields=['empresa', 'evento'], name='evento_unique')
         ]
 
 
@@ -355,21 +355,18 @@ class Grupo_funcoes(models.Model):
 
 class Grupo_eventos(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField(null=True)
-    desc_evento = models.CharField(max_length=100,null=True)
-    desc_evento_principal = models.CharField(max_length=100,null=True)
-    id_user =  models.IntegerField(null=True,default=0)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    empresa = models.CharField(max_length=50,null=True)
+    evento_original = models.CharField(max_length=100,null=True)
+    evento_principal = models.CharField(max_length=100,null=True)
 
     def __str__(self):
-        return self.desc_evento
+        return self.evento_original
 
 
     class Meta:
         db_table = 'grupo_eventos'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio','desc_evento' ], name='unique_grupo_eventos')
+            models.UniqueConstraint(fields=['empresa','evento_original' ], name='unique_grupo_eventos')
         ]
 
     @classmethod

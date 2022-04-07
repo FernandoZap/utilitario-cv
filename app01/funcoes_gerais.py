@@ -23,7 +23,7 @@ def mesReferencia(mes):
     return lista_mes[int(mes)]
 
 
-def cabecalhoFolha(id_municipio):
+def cabecalhoFolha(empresa):
     lista=[]
 
     lista.append('Secretaria')
@@ -36,7 +36,7 @@ def cabecalhoFolha(id_municipio):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    objs=Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')
+    objs=Evento.objects.filter(empresa=empresa,tipo='V',exibe_excel=1).order_by('evento')
     for obj in objs:
         if obj.cl_orcamentaria is None:
             cl_orcamentaria=''
@@ -70,6 +70,15 @@ def strings_pesquisa(id_municipio):
     dicionario = dict(zip(lista1,lista2))
     return dicionario[str(id_municipio)]
 
+def entidade(id_municipio):
+    munic = Municipio.objects.get(id_municipio=id_municipio)
+    lista=[]
+    if munic is not None:
+        lista.append(munic.entidade)
+        lista.append(munic.empresa)
+    return lista        
+
+
 
 def nome_do_municipio(id_municipio):
 
@@ -92,12 +101,12 @@ def nome_do_municipio(id_municipio):
 
 
 
-def eventosMes(id_municipio,anomes,cod_servidor):
+def eventosMes(id_municipio,anomes,cod_servidor,empresa):
     cursor = connection.cursor()
     cursor.execute("select ev.id_evento,ev.evento,coalesce(fm.valor,0) as valor \
     from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and \
     fm.anomes=%s and fm.id_municipio=%s and fm.cod_servidor=%s \
-    where ev.tipo='V' and ev.id_municipio=%s and ev.exibe_excel=1 order by ev.evento",[anomes,id_municipio,cod_servidor,id_municipio])
+    where ev.tipo='V' and ev.empresa=%s and ev.exibe_excel=1 order by ev.evento",[anomes,id_municipio,cod_servidor,empresa])
 
     query = dictfetchall(cursor)
     return query

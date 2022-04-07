@@ -26,12 +26,12 @@
       
     
     <div class="col">
-    <label for="id_municipio" class="col-form-label">MUNICÍPIOS</label>
-    <select name="municipio"  id="id_municipio" class="form-control" required>
+    <label for="id_empresa" class="col-form-label">Empresa</label>
+    <select name="empresa"  id="id_empresa" class="form-control" required>
       <option value=""></option>
-      {% for municipio in municipios %}
-        <option value="{{ municipio.id_municipio }}">{{ municipio.municipio }}</option>
-    {% endfor %}        
+      <option value="SS">SS Informatica</option>
+      <option value="Layout">Layout</option>
+      <option value="Aspec">Aspec</option>
     </select>   
     </div>
 </div>

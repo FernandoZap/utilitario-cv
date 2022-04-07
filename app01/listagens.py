@@ -26,11 +26,11 @@ def listagemFuncoes(id_municipio):
 	return lista
 
 
-def listagemEventos(id_municipio):
+def listagemEventos(empresa):
 	lista=[]
-	eventos = Evento.objects.filter(id_municipio=id_municipio)
+	eventos = Grupo_eventos.objects.filter(empresa=empresa)
 	for evento in eventos:
-		lista.append(evento.evento)
+		lista.append(evento.evento_original)
 	return lista
 
 
@@ -59,19 +59,11 @@ def listagemFolhames(id_municipio,anomes):
     return lista
 
 
-def listagemGrupoEventos(id_municipio):
+def listagemGrupoEventos(empresa):
     lista=[]
-    geventos = Grupo_eventos.objects.filter(id_municipio=id_municipio)
+    geventos = Grupo_eventos.objects.filter(empresa=empresa)
     for gevento in geventos:
-        lista.append(gevento.desc_evento)
-    return lista
-
-
-def listagemEventosRef(id_municipio):
-    lista=[]
-    geventos = Eventos.objects.filter(id_municipio=id_municipio,ref_evento=1)
-    for gevento in geventos:
-        lista.append(gevento.evento)
+        lista.append(gevento.evento_original)
     return lista
 
 
@@ -136,10 +128,10 @@ def criarDictVinculos(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-def criarDictEventos(id_municipio):
+def criarDictEventos(empresa):
 	lista1=[]
 	lista2=[]
-	secs = Evento.objects.filter(id_municipio=id_municipio).order_by('id_evento')
+	secs = Evento.objects.filter(empresa=empresa).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
 			sec.evento
@@ -151,10 +143,10 @@ def criarDictEventos(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-def criarDictTiposDeEventos(id_municipio):
+def criarDictTiposDeEventos(empresa):
 	lista1=[]
 	lista2=[]
-	secs = Evento.objects.filter(id_municipio=id_municipio).order_by('id_evento')
+	secs = Evento.objects.filter(empresa=empresa).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
 			sec.id_evento
@@ -167,16 +159,16 @@ def criarDictTiposDeEventos(id_municipio):
 
 
 
-def criarDictGrupoEventos(id_municipio):
+def criarDictGrupoEventos(empresa):
 	lista1=[]
 	lista2=[]
-	secs = Grupo_eventos.objects.filter(id_municipio=id_municipio).order_by('id_grupo')
+	secs = Grupo_eventos.objects.filter(empresa=empresa).order_by('id_grupo')
 	for sec in secs:
 		lista1.append(
-			sec.desc_evento
+			sec.evento_original
 			)
 		lista2.append(
-			sec.desc_evento_principal
+			sec.evento_principal
 			)
 
 	return dict(zip(lista1,lista2))
