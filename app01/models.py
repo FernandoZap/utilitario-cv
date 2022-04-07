@@ -88,10 +88,10 @@ class LogErro(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 class Funcao(models.Model):  
     id_funcao = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField()
+    empresa = models.CharField(max_length=50,default='')
     funcao = models.CharField(max_length=100)
 
     def __str__(self):
@@ -100,13 +100,15 @@ class Funcao(models.Model):
     class Meta:
         db_table = 'funcoes'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio', 'funcao'], name='unique_funcao')
+            models.UniqueConstraint(fields=['empresa', 'funcao'], name='unique_funcao')
         ]
 
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+    '''            
 
 
 class Servidor(models.Model):  
@@ -328,30 +330,28 @@ class Refeventos(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-
+'''
 class Grupo_funcoes(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
-    id_municipio = models.IntegerField(null=True)
-    desc_funcao = models.CharField(max_length=100,null=True)
-    desc_funcao_principal = models.CharField(max_length=100,null=True)
-    id_user =  models.IntegerField(null=True,default=0)
-    updated_at = models.DateTimeField(auto_now=True)
+    empresa = models.CharField(max_length=50,null=True)
+    funcao_original = models.CharField(max_length=100,null=True)
+    funcao_principal = models.CharField(max_length=100,null=True)
 
     def __str__(self):
-        return self.desc_funcao
+        return self.funcao_original
 
 
     class Meta:
         db_table = 'grupo_funcoes'
         constraints = [
-            models.UniqueConstraint(fields=['id_municipio','desc_funcao' ], name='unique_grupo_funcoes')
+            models.UniqueConstraint(fields=['empresa','funcao_original' ], name='unique_grupo_funcoes')
         ]
 
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
+'''
 
 class Grupo_eventos(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
