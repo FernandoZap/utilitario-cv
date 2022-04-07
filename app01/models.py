@@ -88,7 +88,7 @@ class LogErro(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
+
 class Funcao(models.Model):  
     id_funcao = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,default='')
@@ -108,7 +108,6 @@ class Funcao(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-    '''            
 
 
 class Servidor(models.Model):  
@@ -330,7 +329,7 @@ class Refeventos(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-'''
+
 class Grupo_funcoes(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,null=True)
@@ -351,7 +350,7 @@ class Grupo_funcoes(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-'''
+
 
 class Grupo_eventos(models.Model):  
     id_grupo = models.AutoField(primary_key=True)
