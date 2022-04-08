@@ -17,23 +17,6 @@ def listagemSetores(id_municipio):
 		lista.append(setor.secretaria.secretaria+setor.setor)
 	return lista
 
-
-def listagemFuncoes(id_municipio):
-	lista=[]
-	funcoes = Funcao.objects.filter(id_municipio=id_municipio)
-	for funcao in funcoes:
-		lista.append(funcao.funcao)
-	return lista
-
-
-def listagemEventos(empresa):
-	lista=[]
-	eventos = Grupo_eventos.objects.filter(empresa=empresa)
-	for evento in eventos:
-		lista.append(evento.evento_original)
-	return lista
-
-
 def listagemVinculos(id_municipio):
 	lista=[]
 	vinculos = Vinculo.objects.filter(id_municipio=id_municipio)
@@ -58,13 +41,6 @@ def listagemFolhames(id_municipio,anomes):
         lista.append(str(folha.cod_servidor)+'-'+str(anomes))
     return lista
 
-
-def listagemGrupoEventos(empresa):
-    lista=[]
-    geventos = Grupo_eventos.objects.filter(empresa=empresa)
-    for gevento in geventos:
-        lista.append(gevento.evento_original)
-    return lista
 
 
 def criarDictSecretarias(id_municipio):
@@ -98,21 +74,6 @@ def criarDictSetores(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-def criarDictFuncoes(id_municipio):
-	lista1=[]
-	lista2=[]
-	secs = Funcao.objects.filter(id_municipio=id_municipio).order_by('id_funcao')
-	for sec in secs:
-		lista1.append(
-			sec.funcao
-			)
-		lista2.append(
-			sec.id_funcao
-			)
-
-	return dict(zip(lista1,lista2))
-
-
 def criarDictVinculos(id_municipio):
 	lista1=[]
 	lista2=[]
@@ -128,6 +89,37 @@ def criarDictVinculos(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
+
+def listagemGrupoEventos(empresa):
+    lista=[]
+    geventos = Grupo_eventos.objects.filter(empresa=empresa)
+    for gevento in geventos:
+        lista.append(gevento.evento_original)
+    return lista
+
+def criarDictGrupoEventos(empresa):
+	lista1=[]
+	lista2=[]
+	secs = Grupo_eventos.objects.filter(empresa=empresa).order_by('id_grupo')
+	for sec in secs:
+		lista1.append(
+			sec.evento_original
+			)
+		lista2.append(
+			sec.evento_principal
+			)
+
+	return dict(zip(lista1,lista2))
+
+
+def listagemEventos(empresa):
+	lista=[]
+	eventos = Evento.objects.filter(empresa=empresa)
+	for evento in eventos:
+		lista.append(evento.evento)
+	return lista
+
+
 def criarDictEventos(empresa):
 	lista1=[]
 	lista2=[]
@@ -138,6 +130,50 @@ def criarDictEventos(empresa):
 			)
 		lista2.append(
 			sec.id_evento
+			)
+
+	return dict(zip(lista1,lista2))
+
+
+def listagemGrupoFuncoes(empresa):
+    lista=[]
+    gfuncoes = Grupo_funcoes.objects.filter(empresa=empresa).all().order_by('funcao_original')
+    for gfunc in gfuncoes:
+        lista.append(gfunc.funcao_original)
+    return lista
+
+def criarDictGrupoFuncoes(empresa):
+	lista1=[]
+	lista2=[]
+	funcs = Grupo_funcoes.objects.filter(empresa=empresa).order_by('id_grupo')
+	for func in funcs:
+		lista1.append(
+			func.funcao_original
+			)
+		lista2.append(
+			func.funcao_principal
+			)
+
+	return dict(zip(lista1,lista2))
+
+
+def listagemFuncoes(empresa):
+	lista=[]
+	funcoes = Funcao.objects.filter(empresa=empresa)
+	for funcao in funcoes:
+		lista.append(funcao.funcao)
+	return lista
+
+def criarDictFuncoes(empresa):
+	lista1=[]
+	lista2=[]
+	secs = Funcao.objects.filter(empresa=empresa).order_by('id_funcao')
+	for sec in secs:
+		lista1.append(
+			sec.funcao
+			)
+		lista2.append(
+			sec.id_funcao
 			)
 
 	return dict(zip(lista1,lista2))
@@ -157,18 +193,3 @@ def criarDictTiposDeEventos(empresa):
 
 	return dict(zip(lista1,lista2))
 
-
-
-def criarDictGrupoEventos(empresa):
-	lista1=[]
-	lista2=[]
-	secs = Grupo_eventos.objects.filter(empresa=empresa).order_by('id_grupo')
-	for sec in secs:
-		lista1.append(
-			sec.evento_original
-			)
-		lista2.append(
-			sec.evento_principal
-			)
-
-	return dict(zip(lista1,lista2))

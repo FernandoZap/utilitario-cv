@@ -7,6 +7,7 @@ import zipfile
 import re
 from django.db import connection
 from django.db.models import Count,Sum
+import unidecode
 
 
 def mesPorExtenso(mes,modelo):
@@ -124,3 +125,23 @@ def gravarErro_01(id_municipio,anomes,observacao):
     log=LogErro(id_municipio=id_municipio,anomes=anomes,observacao=observacao)
     log.save()
     return 'ok'
+
+
+
+
+def remove_accents(input_str):
+    nkfd_form = unicodedata.normalize('NFKD', input_str)
+    only_ascii = nkfd_form.encode('ASCII', 'ignore')
+    return only_ascii
+
+def to_ascii(ls):
+    for i in range(len(ls)):
+        ls[i] = unidecode.unidecode(ls[i])
+    return ls
+
+def to_ascii_string(string):
+    return unidecode.unidecode(string)
+
+
+
+

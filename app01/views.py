@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Folhames,Grupo_eventos
+from .models import Municipio,Evento,Planilha,Folhames,Grupo_eventos,Secretaria,Setor,Funcao,Grupo_funcoes
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -19,10 +19,6 @@ import zipfile
 from django.db import connection
 
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
-
-
-
-
 
 
 def get(self, request, *args, **kwargs):
@@ -77,6 +73,9 @@ def importacaoFolhaExcel(request):
     #  proventos e descontos.
     #-----------------------------------------------------------------------------
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
+
+
+    #eliminarAcentos('grupo_eventos')
     
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
@@ -119,11 +118,11 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos' or 1==3:
+        if tabela=='SecFuncVincEventos' or 1==2:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
-        elif tabela=='Setor' or 1==4:            
+        elif tabela=='Setor' or 1==2:            
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Servidor' or 1==3:   
+        elif tabela=='Servidor' or 1==2:   
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Folha' or 1==1:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
@@ -583,3 +582,69 @@ def agruparfuncoes(request):
                 'municipios': municipios,
             }
           )
+
+
+
+def eliminarAcentos(tabela):
+
+    if tabela=='grupos_eventos':
+        obj_evs=Grupo_eventos.objects.all()
+        for ev in obj_evs:
+            ev.evento_original=funcoes_gerais.to_ascii_string(ev.evento_original)
+            ev.evento_principal=funcoes_gerais.to_ascii_string(ev.evento_principal)
+
+        Grupo_eventos.objects.bulk_update(obj_evs,['evento_original','evento_principal'])
+
+    elif tabela=='eventos':
+
+        obj_evs=Evento.objects.all()
+        for ev in obj_evs:
+            ev.evento=funcoes_gerais.to_ascii_string(ev.evento)
+
+        Evento.objects.bulk_update(obj_evs,['evento'])
+
+    elif tabela=='secretaria':
+
+        obj_evs=Secretaria.objects.all()
+        for ev in obj_evs:
+            ev.secretaria=funcoes_gerais.to_ascii_string(ev.secretaria)
+
+        Secretaria.objects.bulk_update(obj_evs,['secretaria'])
+
+    elif tabela=='setor':
+
+        obj_evs=Setor.objects.all()
+        for ev in obj_evs:
+            ev.setor=funcoes_gerais.to_ascii_string(ev.setor)
+
+        Setor.objects.bulk_update(obj_evs,['setor'])
+
+    elif tabela=='funcoes':
+
+        obj_evs=Funcao.objects.all()
+        for ev in obj_evs:
+            ev.funcao=funcoes_gerais.to_ascii_string(ev.funcao)
+
+        Funcao.objects.bulk_update(obj_evs,['funcao'])
+
+    elif tabela=='grupo_funcoes':
+
+        obj_evs=Grupo_funcoes.objects.all()
+        for ev in obj_evs:
+            ev.funcao_original=funcoes_gerais.to_ascii_string(ev.funcao_original)
+            ev.funcao_principal=funcoes_gerais.to_ascii_string(ev.funcao_principal)
+
+        Grupo_funcoes.objects.bulk_update(obj_evs,['funcao_original','funcao_principal'])
+
+
+
+
+
+
+
+
+
+
+
+
+

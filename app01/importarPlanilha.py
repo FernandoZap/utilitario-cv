@@ -29,6 +29,10 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
     for qp in range(len(queryP)):
 
+        if qp==0:
+            print ('programa: importarServidores')
+
+
 
         codigo = queryP[qp]['codigo']
         nome_servidor = queryP[qp]['nome_servidor']
@@ -37,6 +41,7 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
 
         nome_servidor=nome_servidor.strip()
+        nome_servidor=funcoes_gerais.to_ascii_string(nome_servidor)
         cpf=cpf.strip()
 
 
@@ -78,12 +83,19 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     for qp in range(len(queryP)):
 
 
+        if qp==0:
+            print ('programa: importarSetores')
+
+
+
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
 
         if setor is not None:
             setor = setor.strip()
+            setor=funcoes_gerais.to_ascii_string(setor)
             secretaria = secretaria.strip()
+            secretaria=funcoes_gerais.to_ascii_string(secretaria)
 
             if secretaria in lista_secretarias:
                 id_secretaria = dict_secretarias[secretaria]
@@ -110,37 +122,36 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
 
-    #dict_secretarias=listagens.dictSecretarias(id_municipio)
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
     lista_secretarias = listagens.listagemSecretarias(i_id_municipio)
 
-    #dict_setores=listagens.dictSetores(id_municipio)
     dict_setores=listagens.criarDictSetores(i_id_municipio)
     lista_setores = listagens.listagemSetores(i_id_municipio)
 
-    #dict_funcoes=listagens.dictFuncoes(id_municipio)
-    dict_funcoes=listagens.criarDictFuncoes(i_id_municipio)
-    lista_funcoes = listagens.listagemFuncoes(i_id_municipio)
+    dict_funcoes=listagens.criarDictFuncoes(empresa)
+    lista_funcoes = listagens.listagemFuncoes(empresa)
 
 
-    #dict_vinculos=listagens.dictVinculos(id_municipio)
     dict_vinculos=listagens.criarDictVinculos(i_id_municipio)
     lista_vinculos = listagens.listagemVinculos(i_id_municipio)
-
-    #dict_eventos=listagens.dictEventos(id_municipio)
-    dict_eventos=listagens.criarDictEventos(empresa)
-    lista_eventos = listagens.listagemEventos(empresa)
-
-    #dict_tipos_eventos=listagens.dictTiposEventos(id_municipio)
-    dict_tipos_eventos=listagens.criarDictTiposDeEventos(empresa)
-
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
     lista_grupo_eventos=listagens.listagemGrupoEventos(empresa)
     dict_grupo_eventos=listagens.criarDictGrupoEventos(empresa)
 
+    
+    lista_eventos = listagens.listagemEventos(empresa)
+    dict_eventos=listagens.criarDictEventos(empresa)
 
+
+    dict_tipos_eventos=listagens.criarDictTiposDeEventos(empresa)
+
+    lista_grupo_funcoes=listagens.listagemGrupoFuncoes(empresa)
+    dict_grupo_funcoes=listagens.criarDictGrupoFuncoes(empresa)
+
+    lista_funcoes=listagens.listagemFuncoes(empresa)
+    dict_funcoes=listagens.criarDictFuncoes(empresa)
 
     lista=[]
     lista_eventosMes=[]
@@ -174,6 +185,10 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
     for qp in range(len(queryP)):
 
+        if qp==0:
+            print ('programa: importarFolha')
+
+
         cod_servidor = queryP[qp]['codigo']
         cpf = queryP[qp]['cpf']
         secretaria = queryP[qp]['secretaria']
@@ -197,6 +212,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
+        secretaria=funcoes_gerais.to_ascii_string(secretaria)
+        setor=funcoes_gerais.to_ascii_string(setor)
+        funcao=funcoes_gerais.to_ascii_string(funcao)
+        vinculo=funcoes_gerais.to_ascii_string(vinculo)
+        evento=funcoes_gerais.to_ascii_string(evento)
+
 
         # trocar as varições de evento por um único evento para deixar todos
         # com uma única denominação; por exemplo:
@@ -211,6 +232,14 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             evento1 = evento
 
         evento = evento1
+
+
+        if funcao in lista_grupo_funcoes:
+            funcao1 = dict_grupo_funcoes[funcao]
+        else:
+            funcao1 = funcao
+
+        funcao = funcao1
 
     
         if secretaria in lista_secretarias:
@@ -227,7 +256,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
         else:
-            id_funcao=0            
+            id_funcao=0 
 
         if vinculo in lista_vinculos:
             id_vinculo = dict_vinculos[vinculo]
@@ -336,6 +365,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     carga_evento=[]
     obj_grupo_evento=[]
     carga_grupo_evento=[]
+    carga_grupo_funcao=[]
 
 
     ls_secretaria=[]
@@ -347,9 +377,10 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
 
     lista_secretarias=listagens.listagemSecretarias(i_id_municipio)
-    lista_funcoes=listagens.listagemFuncoes(i_id_municipio)
+    lista_funcoes=listagens.listagemGrupoFuncoes(empresa)
     lista_vinculos=listagens.listagemVinculos(i_id_municipio)
-    lista_eventos=listagens.listagemEventos(empresa)
+    lista_eventos=listagens.listagemGrupoEventos(empresa)
+
 
     arquivo_ok=0
 
@@ -378,6 +409,9 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         '''
         arquivo_ok=1
 
+        if qp==0:
+            print ('programa: importarSecFuncVincEventos')
+
 
         if queryP[qp]['tipo']==4:
             tipo_evento='D'
@@ -399,6 +433,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if secretaria is not None:
             secretaria=secretaria.strip()
             if len(secretaria)>2:
+                secretaria=funcoes_gerais.to_ascii_string(secretaria)
                 if secretaria not in lista_secretarias:
                     if secretaria not in ls_secretaria:
                         obj_secretaria = Secretaria(
@@ -412,19 +447,28 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if funcao is not None:
             funcao=funcao.strip()
             if len(funcao)>2:
+                funcao=funcoes_gerais.to_ascii_string(funcao)
                 if funcao not in lista_funcoes:
                     if funcao not in ls_funcao:
                         obj_funcao = Funcao(
-                            id_municipio=i_id_municipio,
+                            empresa=empresa,
                             funcao=funcao
                             )
+                        obj_grupo_funcao = Grupo_funcoes(
+                            empresa=empresa,
+                            funcao_original=funcao,
+                            funcao_principal=funcao
+                            )
+
                         ls_funcao.append(funcao)
                         carga_funcao.append(obj_funcao)
+                        carga_grupo_funcao.append(obj_grupo_funcao)
 
         
         if vinculo is not None:
             vinculo=vinculo.strip()
             if len(vinculo)>2:
+                vinculo=funcoes_gerais.to_ascii_string(vinculo)
                 if vinculo not in lista_vinculos:
                     if vinculo not in ls_vinculo:
                         obj_vinculo = Vinculo(
@@ -437,6 +481,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if evento is not None:
             evento=evento.strip()
             if len(evento)>2:
+                evento=funcoes_gerais.to_ascii_string(evento)
                 if evento not in lista_eventos:
                     if evento not in ls_evento:
                         obj_evento = Evento(
@@ -463,13 +508,9 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     Secretaria.objects.bulk_create(carga_secretaria)
     Funcao.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
-    '''
-    if len(carga_evento)>0:
-        for kk in range(len(carga_evento)):
-            print ('X'+carga_evento[kk].evento+'X')
-    '''
     Evento.objects.bulk_create(carga_evento)
     Grupo_eventos.objects.bulk_create(carga_grupo_evento)
+    Grupo_funcoes.objects.bulk_create(carga_grupo_funcao)
 
     return 1
 
