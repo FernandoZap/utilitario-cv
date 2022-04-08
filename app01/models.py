@@ -168,11 +168,10 @@ class Evento(models.Model):
     id_evento = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,default='')
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
-    evento = models.CharField(max_length=50)
-    exibe_excel = models.IntegerField(default=0)
+    evento = models.CharField(max_length=100)
     cancelado = models.CharField(max_length=1,default='N')
     cl_orcamentaria = models.CharField(max_length=6, null=True)
-    ordenacao = models.IntegerField(default=0)
+    id_evento_cv = models.IntegerField(default=0)
 
     def __str__(self):
         return self.evento
@@ -182,6 +181,25 @@ class Evento(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['empresa', 'evento' ], name='e_evento_unique')
         ]
+
+class Eventos_cv(models.Model):  
+    PROVDESC_CHOICES = [
+        ('',''),
+        ('V','VANTAGEM'),
+        ('D','DESCONTO'),
+    ]
+
+    id_evento_cv = models.AutoField(primary_key=True)
+    evento = models.CharField(max_length=100)
+    cancelado = models.CharField(max_length=1,default='N')
+
+    def __str__(self):
+        return self.evento
+
+    class Meta:
+        db_table = 'eventos_cv'
+
+
 
 
 class Setor(models.Model):  
