@@ -131,3 +131,16 @@ AS
 SELECT f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor FROM folhaeventos f INNER JOIN eventos e ON f.id_evento = e.id_evento ORDER BY e.evento,e.tipo DESC
 
 
+CREATE OR REPLACE VIEW public.v005_folhaeventos
+ AS
+ SELECT f.anomes,
+    f.id_municipio,
+    e.evento,
+    e.tipo,
+    f.valor
+   FROM folhaeventos f
+     JOIN eventos e ON f.id_evento = e.id_evento
+  ORDER BY e.evento, e.tipo DESC;
+
+ALTER TABLE public.v005_folhaeventos
+    OWNER TO qatqyrldkytezs;

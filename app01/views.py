@@ -22,6 +22,8 @@ from django.db import connection
 #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
 #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
 
+#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
+
 
 def get(self, request, *args, **kwargs):
     self.request.session['funcao'] = self.request.user.funcao

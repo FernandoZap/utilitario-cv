@@ -170,6 +170,8 @@ class Evento(models.Model):
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
     evento = models.CharField(max_length=50)
     cancelado = models.CharField(max_length=1,default='N')
+    exibe_excel = models.IntegerField(default=1)
+    ordenacao = models.IntegerField(default=0)
     cl_orcamentaria = models.CharField(max_length=6, null=True)
     id_evento_cv = models.IntegerField(default=0)
 
@@ -198,7 +200,6 @@ class Eventos_cv(models.Model):
 
     class Meta:
         db_table = 'eventos_cv'
-
 
 
 
