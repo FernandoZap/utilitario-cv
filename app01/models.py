@@ -168,7 +168,7 @@ class Evento(models.Model):
     id_evento = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,default='')
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
-    evento = models.CharField(max_length=100)
+    evento = models.CharField(max_length=50)
     cancelado = models.CharField(max_length=1,default='N')
     cl_orcamentaria = models.CharField(max_length=6, null=True)
     id_evento_cv = models.IntegerField(default=0)
