@@ -93,6 +93,7 @@ class Funcao(models.Model):
     id_funcao = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,default='')
     funcao = models.CharField(max_length=100)
+    id_funcao_cv = models.IntegerField(default=0)
 
     def __str__(self):
         return self.funcao
@@ -108,6 +109,20 @@ class Funcao(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
+class Funcoes_cv(models.Model):  
+
+    id_funcao_cv = models.AutoField(primary_key=True)
+    funcao = models.CharField(max_length=100)
+    cancelado = models.CharField(max_length=1,default='N')
+
+    def __str__(self):
+        return self.funcao
+
+    class Meta:
+        db_table = 'funcoes_cv'
+        constraints = [
+            models.UniqueConstraint(fields=['funcao'], name='unique_funcoes_cv')
+        ]
 
 
 class Servidor(models.Model):  
@@ -193,6 +208,7 @@ class Eventos_cv(models.Model):
 
     id_evento_cv = models.AutoField(primary_key=True)
     evento = models.CharField(max_length=100)
+    tipo= models.CharField(max_length=1, default='V')
     cancelado = models.CharField(max_length=1,default='N')
 
     def __str__(self):
