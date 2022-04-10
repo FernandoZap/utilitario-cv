@@ -23,7 +23,8 @@ import unicodedata
 
 
 
-#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
+
+#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
 
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
@@ -113,14 +114,20 @@ def importacaoFolhaExcel(request):
     #lista = [912,918,908,509,1077]
     #lista = [219,921,371,522,278,903,910,748,200,20,909,226,517,485,216,752,1082,922,427,487,917,924,991,79,223]
 
-    lista = [231,240,916,944,382,920,772,291,584,326,623,989,316,235,1005,234,330,899,215,907,221,983,459,1001,182,915,56,431,923,919,906,753,209,911,741,914,319,465,999,181,402,\
-737,    218,245,994,254,295,120]
-    objs=Funcao.objects.filter(id_funcao__in=lista)
+
+
+
+    lista = [755,26,707,35,137,141,142,143,144,146,147,150,151,152,153,\
+    158,161,162,172,179,181,201,213,217,236,240,246,250,290,301,321,324,346,348,358,371,372,388,390,412,419,420,425,430,485,520,600,602,609,611,613,614,632,\
+    698,699,700,701,702,703,704,705,706,707,708,709,710,711,712,713,714,715,716,717,718,719,720,745,750,758,784,813,
+    813]
+
+    objs=Funcoes_cv.objects.filter(id_funcao__in=lista)
     for obj in objs:
         funcao=obj.funcao
         c_str1=remove_combining_fluent(funcao)
         obj.funcao=c_str1
-    Funcao.objects.bulk_update(objs,['funcao'])               
+    Funcoes_cv.objects.bulk_update(objs,['funcao'])               
 
     '''
     objs=Funcoes_cv.objects.all()
