@@ -91,7 +91,7 @@ def importacaoFolhaExcel(request):
             lista.append(obj.evento)
     print ('-------------------------------')            
     '''
-
+    '''
     lista = [6,20,25,26,28,30,32,31,41,62,63,81,107,109,111,135,146,154,173,155,148,184,187,198,201,215,216,217,221,227,229,247,257,260,262,263,264,282]
     objs=Evento.objects.filter(id_evento__in=lista)
     for obj in objs:
@@ -100,6 +100,32 @@ def importacaoFolhaExcel(request):
         #print (evento+ '-> '+c_str1)
         obj.evento=c_str1
     Evento.objects.bulk_update(objs,['evento'])               
+    '''
+
+
+    objs=Eventos_cv.objects.all()
+    for obj in objs:
+        evento=obj.evento
+        c_str1=remove_combining_fluent(evento)
+        obj.evento=c_str1
+    Eventos_cv.objects.bulk_update(objs,['evento'])               
+
+    objs=Funcao.objects.all()
+    for obj in objs:
+        funcao=obj.funcao
+        c_str1=remove_combining_fluent(funcao)
+        obj.funcao=c_str1
+    Funcao.objects.bulk_update(objs,['funcao'])               
+
+
+    objs=Funcoes_cv.objects.all()
+    for obj in objs:
+        funcao=obj.funcao
+        c_str1=remove_combining_fluent(funcao)
+        obj.funcao=c_str1
+    Funcoes_cv.objects.bulk_update(objs,['funcao'])               
+
+
 
     '''
     obj=Planilha.objects.get(id_planilha=45)
