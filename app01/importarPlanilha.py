@@ -438,7 +438,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         funcao=funcoes_gerais.remove_combining_fluent(funcao)
         vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
         evento=funcoes_gerais.remove_combining_fluent(evento)
-        setor=funcoes_gerais.remove_combining_fluent(setor)
 
         
         if secretaria is not None:
