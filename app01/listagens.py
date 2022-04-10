@@ -1,4 +1,4 @@
-from .models import Vinculo,Secretaria,Vinculo,Evento,Setor,Servidor,Folhames ,Grupo_eventos,Funcao,Grupo_funcoes
+from .models import Vinculo,Secretaria,Setor,Evento,Eventos_cv,Servidor,Folhames,Funcao,Funcoes_cv
 
 
 def listagemSecretarias(id_municipio):
@@ -90,12 +90,6 @@ def criarDictVinculos(id_municipio):
 
 
 
-def listagemGrupoEventos(empresa):
-    lista=[]
-    geventos = Grupo_eventos.objects.filter(empresa=empresa)
-    for gevento in geventos:
-        lista.append(gevento.evento_original)
-    return lista
 
 def criarDictGrupoEventos(empresa):
 	lista1=[]
@@ -129,10 +123,34 @@ def criarDictEventos(empresa):
 			sec.evento
 			)
 		lista2.append(
-			sec.id_evento
+			sec.id_evento_cv
 			)
 
 	return dict(zip(lista1,lista2))
+
+
+def listagemEventos_cv():
+	lista=[]
+	eventos = Eventos_cv.objects.all()
+	for evento in eventos:
+		lista.append(evento.evento)
+	return lista
+
+
+def criarDictEventos_cv():
+	lista1=[]
+	lista2=[]
+	secs = Eventos_cv.objects.all()
+	for sec in secs:
+		lista1.append(
+			sec.evento
+			)
+		lista2.append(
+			sec.id_evento_cv
+			)
+	return dict(zip(lista1,lista2))
+
+
 
 
 def listagemGrupoFuncoes(empresa):
@@ -173,7 +191,29 @@ def criarDictFuncoes(empresa):
 			sec.funcao
 			)
 		lista2.append(
-			sec.id_funcao
+			sec.id_funcao_cv
+			)
+
+	return dict(zip(lista1,lista2))
+
+
+def listagemFuncoes_cv():
+	lista=[]
+	funcoes = Funcoes_cv.objects.all()
+	for funcao in funcoes:
+		lista.append(funcao.funcao)
+	return lista
+
+def criarDictFuncoes_cv():
+	lista1=[]
+	lista2=[]
+	secs = Funcoes_cv.objects.all()
+	for sec in secs:
+		lista1.append(
+			sec.funcao
+			)
+		lista2.append(
+			sec.id_funcao_cv
 			)
 
 	return dict(zip(lista1,lista2))
@@ -185,7 +225,21 @@ def criarDictTiposDeEventos(empresa):
 	secs = Evento.objects.filter(empresa=empresa).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
-			sec.id_evento
+			sec.id_evento_cv
+			)
+		lista2.append(
+			sec.tipo
+			)
+
+	return dict(zip(lista1,lista2))
+
+def criarDictTiposDeEventos_cv():
+	lista1=[]
+	lista2=[]
+	secs = Eventos_cv.objects.all()
+	for sec in secs:
+		lista1.append(
+			sec.id_evento_cv
 			)
 		lista2.append(
 			sec.tipo

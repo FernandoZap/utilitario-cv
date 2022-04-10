@@ -2,7 +2,7 @@
 import os
 import sys
 from django.db import connection
-from .models import Folhaevento,Evento
+from .models import Folhaevento,Evento,Funcao,Eventos_cv,Funcoes_cv
 
 
 def delete_lista_de_eventos(lista,empresa,lista_id,descricao_p,current_user):
@@ -94,3 +94,72 @@ def incluirEventos(empresa,lista_municipios,descricao_p):
 	return 1    
 
 '''
+
+def incluirEventos(empresa,evento,id_evento_cv,tipo,cl_orcamentaria):
+	pass
+
+def incluirListaDeEventos(lst):
+	'''
+	 esta funcao esta sendo chamdas por importarPlanilha.py
+	'''
+	carga_evento=[]
+	lista=[]
+	for kk in range(len(lst)):
+		obj = Eventos_cv.objects.filter(evento=lst[kk]['evento']).first()
+		if obj is not None:
+
+			if obj.evento not in lista:
+				id_evento=obj.id_evento_cv
+
+				obj_new = Evento(
+					empresa=lst[kk]['empresa'],
+					evento=lst[kk]['eventp'],
+					tipo = lst[kk]['tipo'],
+					exibe_excel = 1,
+					cancelado='N',
+					ordenacao=0,
+					cl_orcamentaria = lst[kk]['cl_orcamentaria'],
+					id_evento_cv=id_evento_cv
+					)
+				carga_evento.append(obj_new)
+				lista.appen(obj.evento)
+	if len(lista)>0:
+		Evento.objects.bulk_create(carga_evento)
+
+
+def incluirListaDeFuncoes(lst):
+	'''
+	 esta funcao esta sendo chamdas por importarPlanilha.py
+	'''
+	carga_funcao=[]
+	lista=[]
+	for kk in range(len(lst)):
+		obj = Funcoes_cv.objects.filter(funcao=lst[kk]['funcao']).first()
+		if obj is not None:
+
+			if obj.funcao not in lista:
+				id_funcao_cv=obj.id_funcao_cv
+
+				obj_new = Funcao(
+					empresa=lst[kk]['empresa'],
+					funcao=lst[kk]['funcao'],
+					id_funcao_cv = id_funcao_cv
+					)
+				carga_funcao.append(obj_new)
+				lista.append(obj.funcao)
+	if len(lista)>0:
+		Funcao.objects.bulk_create(carga_funcao)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

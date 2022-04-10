@@ -4,8 +4,8 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Grupo_eventos,Funcao,Grupo_funcoes
-from . import listagens,funcoes_gerais
+from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Eventos_cv,Funcao,Funcoes_cv
+from . import listagens,funcoes_gerais,funcoes_banco
 
 
 
@@ -128,8 +128,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     dict_setores=listagens.criarDictSetores(i_id_municipio)
     lista_setores = listagens.listagemSetores(i_id_municipio)
 
-    dict_funcoes=listagens.criarDictFuncoes(empresa)
+    
     lista_funcoes = listagens.listagemFuncoes(empresa)
+    dict_funcoes=listagens.criarDictFuncoes(empresa)
+
+    lista_funcoes_cv = listagens.listagemFuncoes_cv()
+    dict_funcoes_cv=listagens.criarDictFuncoes_cv()
 
 
     dict_vinculos=listagens.criarDictVinculos(i_id_municipio)
@@ -137,21 +141,16 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
     listagem_folhames=listagens.listagemFolhames(i_id_municipio,i_anomes)
 
-    lista_grupo_eventos=listagens.listagemGrupoEventos(empresa)
-    dict_grupo_eventos=listagens.criarDictGrupoEventos(empresa)
-
-    
     lista_eventos = listagens.listagemEventos(empresa)
     dict_eventos=listagens.criarDictEventos(empresa)
 
+    lista_eventos_cv = listagens.listagemEventos_cv()
+    dict_eventos_cv=listagens.criarDictEventos_cv()
+
+
 
     dict_tipos_eventos=listagens.criarDictTiposDeEventos(empresa)
-
-    lista_grupo_funcoes=listagens.listagemGrupoFuncoes(empresa)
-    dict_grupo_funcoes=listagens.criarDictGrupoFuncoes(empresa)
-
-    lista_funcoes=listagens.listagemFuncoes(empresa)
-    dict_funcoes=listagens.criarDictFuncoes(empresa)
+    dict_tipos_eventos_cv=listagens.criarDictTiposDeEventos_cv()
 
     lista=[]
     lista_eventosMes=[]
@@ -183,6 +182,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         'valor_evento'
         ).filter(entidade=entidade,codigo_folha=codigo_folha)
 
+    print ('entidade: '+entidade)
+    print ('codigo_folha: '+str(codigo_folha))
+
     for qp in range(len(queryP)):
 
         if qp==0:
@@ -212,11 +214,13 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
+        '''
         secretaria=funcoes_gerais.to_ascii_string(secretaria)
         setor=funcoes_gerais.to_ascii_string(setor)
         funcao=funcoes_gerais.to_ascii_string(funcao)
         vinculo=funcoes_gerais.to_ascii_string(vinculo)
         evento=funcoes_gerais.to_ascii_string(evento)
+        '''
 
 
         # trocar as varições de evento por um único evento para deixar todos
@@ -226,37 +230,41 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
           trocar por "GRATIFICACAO".
 
         ''' 
-        if evento in lista_grupo_eventos:
-            evento1 = dict_grupo_eventos[evento]
-        else:
-            evento1 = evento
-
-        evento = evento1
-
-
-        if funcao in lista_grupo_funcoes:
-            funcao1 = dict_grupo_funcoes[funcao]
-        else:
-            funcao1 = funcao
-
-        funcao = funcao1
-
     
         if secretaria in lista_secretarias:
             id_secretaria = dict_secretarias[secretaria]
         else:
             id_secretaria=0            
 
+        if id_secretaria==0:            
+            secretaria = funcoes_gerais.to_ascii_string(secretaria)
+            if secretaria in lista_secretarias:
+                id_secretaria = dict_secretarias[secretaria]
+            else:
+                id_secretaria=0            
+
+
         if secretaria+setor in lista_setores:
             id_setor = dict_setores[secretaria+setor]
         else:
-            id_setor=0            
+            id_setor=0
+
+
+        if id_setor==0:
+            setor = funcoes_gerais.to_ascii_string(setor)
+            if secretaria+setor in lista_setores:
+                id_setor = dict_setores[secretaria+setor]
+
 
 
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
+        elif funcao in lista_funcoes_cv:
+            id_funcao = dict_funcoes_cv[funcao]
         else:
-            id_funcao=0 
+            id_funcao=0
+
+
 
         if vinculo in lista_vinculos:
             id_vinculo = dict_vinculos[vinculo]
@@ -266,10 +274,22 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if evento in lista_eventos:
             id_evento = dict_eventos[evento]
             tipo = dict_tipos_eventos[id_evento]
+        elif evento in lista_eventos_cv:
+            id_evento = dict_eventos_cv[evento]
+            tipo = dict_tipos_eventos_cv[id_evento]
         else:
             id_evento=0
             tipo=''
-        
+
+        if id_evento==0:
+            evento=funcoes_gerais.to_ascii_string(evento)
+            if evento in lista_eventos:
+                id_evento = dict_eventos[evento]
+                tipo = dict_tipos_eventos[id_evento]
+            elif evento in lista_eventos_cv:
+                id_evento = dict_eventos_cv[evento]
+                tipo = dict_tipos_eventos_cv[id_evento]
+
 
         if cpf is None:
             cpf=''
@@ -363,23 +383,27 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     carga_funcao=[]
     carga_vinculo=[]
     carga_evento=[]
-    obj_grupo_evento=[]
-    carga_grupo_evento=[]
-    carga_grupo_funcao=[]
 
 
     ls_secretaria=[]
     ls_funcao=[]
     ls_vinculo=[]
     ls_evento=[]
+    ls_eventos_campos=[]
+    ls_funcoes_campos=[]
 
     codigo_folha=int(str(i_anomes)[4:6])
 
 
     lista_secretarias=listagens.listagemSecretarias(i_id_municipio)
-    lista_funcoes=listagens.listagemGrupoFuncoes(empresa)
+
+    lista_funcoes=listagens.listagemFuncoes(empresa)
+    lista_funcoes_cv=listagens.listagemFuncoes_cv()
+
     lista_vinculos=listagens.listagemVinculos(i_id_municipio)
-    lista_eventos=listagens.listagemGrupoEventos(empresa)
+
+    lista_eventos=listagens.listagemEventos(empresa)
+    lista_eventos_cv=listagens.listagemEventos_cv()
 
 
     arquivo_ok=0
@@ -444,27 +468,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                         carga_secretaria.append(obj_secretaria)
 
         
-        if funcao is not None:
-            funcao=funcao.strip()
-            if len(funcao)>2:
-                funcao=funcoes_gerais.to_ascii_string(funcao)
-                if funcao not in lista_funcoes:
-                    if funcao not in ls_funcao:
-                        obj_funcao = Funcao(
-                            empresa=empresa,
-                            funcao=funcao
-                            )
-                        obj_grupo_funcao = Grupo_funcoes(
-                            empresa=empresa,
-                            funcao_original=funcao,
-                            funcao_principal=funcao
-                            )
-
-                        ls_funcao.append(funcao)
-                        carga_funcao.append(obj_funcao)
-                        carga_grupo_funcao.append(obj_grupo_funcao)
-
-        
         if vinculo is not None:
             vinculo=vinculo.strip()
             if len(vinculo)>2:
@@ -481,36 +484,61 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if evento is not None:
             evento=evento.strip()
             if len(evento)>2:
-                evento=funcoes_gerais.to_ascii_string(evento)
-                if evento not in lista_eventos:
+                if pesquisaEvento(evento,lista_eventos,lista_eventos_cv):
                     if evento not in ls_evento:
-                        obj_evento = Evento(
-                            empresa=empresa,
-                            evento=evento,
-                            tipo = tipo_evento,
-                            exibe_excel = 1,
-                            cancelado='N',
-                            cl_orcamentaria = classificacao
+                        evento_e=funcoes_gerais.to_ascii_string(evento)
+                        obj_new = Eventos_cv(
+                            evento=evento_e,
+                            tipo=tipo_evento,
+                            cancelado='N'
                             )
-                        carga_evento.append(obj_evento)
-
-                        obj_grupo_evento = Grupo_eventos(
-                            empresa=empresa,
-                            evento_original=evento,
-                            evento_principal=evento
-                            )
-                        carga_grupo_evento.append(obj_grupo_evento)
+                        carga_evento.append(obj_new)
                         ls_evento.append(evento)
-                        
+
+        if funcao is not None:
+            funcao=funcao.strip()
+            if len(funcao)>2:
+                if pesquisaFuncao(funcao,lista_funcoes,lista_funcoes_cv):
+                    if funcao not in ls_funcao:
+                        funcao_f=funcoes_gerais.to_ascii_string(funcao)
+                        obj_new = Funcoes_cv(
+                            funcao=funcao_f,
+                            cancelado='N'
+                            )
+                        carga_funcao.append(obj_new)
+                        ls_funcao.append(funcao)
 
     if arquivo_ok==0:
         return 0
     Secretaria.objects.bulk_create(carga_secretaria)
-    Funcao.objects.bulk_create(carga_funcao)
+    Funcoes_cv.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
-    Evento.objects.bulk_create(carga_evento)
-    Grupo_eventos.objects.bulk_create(carga_grupo_evento)
-    Grupo_funcoes.objects.bulk_create(carga_grupo_funcao)
-
+    Eventos_cv.objects.bulk_create(carga_evento)
     return 1
+
+
+
+def pesquisaFuncao(funcao,lista1,lista2):
+    sf1=funcao
+    sf2=funcoes_gerais.to_ascii_string(funcao)
+    if sf1 not in lista1:
+        if sf2 not in lista1:
+            if sf1 not in lista2:
+                if sf2 not in lista1:
+                    return True
+    return False
+
+
+def pesquisaEvento(evento,lista1,lista2):
+    sf1=evento
+    sf2=funcoes_gerais.to_ascii_string(evento)
+    if sf1 not in lista1:
+        if sf2 not in lista1:
+            if sf1 not in lista2:
+                if sf2 not in lista1:
+                    return True
+    return False
+
+
+
 

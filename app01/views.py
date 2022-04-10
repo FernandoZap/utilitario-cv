@@ -17,12 +17,15 @@ import re
 from django.core.files import File
 import zipfile
 from django.db import connection
+import unicodedata
 
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 #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
 #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
 
 #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
+
+#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
 
 
 def get(self, request, *args, **kwargs):
@@ -79,7 +82,54 @@ def importacaoFolhaExcel(request):
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
 
 
-    #eliminarAcentos('grupo_eventos')
+    '''
+    objs=Planilha.objects.filter(id)
+    lista=[]
+    for obj in objs:
+        if obj.evento not in lista:
+            print (str(obj.id_planilha)+' - '+ obj.evento)
+            lista.append(obj.evento)
+    print ('-------------------------------')            
+    '''
+
+    lista = [6,20,25,26,28,30,32,31,41,62,63,81,107,109,111,135,146,154,173,155,148,184,187,198,201,215,216,217,221,227,229,247,257,260,262,263,264,282]
+    objs=Evento.objects.filter(id_evento__in=lista)
+    for obj in objs:
+        evento=obj.evento
+        c_str1=remove_combining_fluent(evento)
+        #print (evento+ '-> '+c_str1)
+        obj.evento=c_str1
+    Evento.objects.bulk_update(objs,['evento'])               
+
+    '''
+    obj=Planilha.objects.get(id_planilha=45)
+    evento1=obj.evento
+    #eliminarAcentos(obj.evento)
+    obj=Planilha.objects.get(id_planilha=453)
+    evento2=obj.evento
+    obj=Planilha.objects.get(id_planilha=94)
+    evento3=obj.evento
+    obj=Planilha.objects.get(id_planilha=1540)
+    evento4=obj.evento
+
+
+    c_str1=remove_combining_fluent(evento1)
+    c_str2=remove_combining_fluent(evento2)
+    c_str3=remove_combining_fluent(evento3)
+    c_str4=remove_combining_fluent(evento4)
+    print('depois da funcao')
+    print ('antes: ' + evento1)
+    print ('depois: '+c_str1)
+    print ('----------------')
+    print ('antes: '+evento2)
+    print('depois: '+c_str2)
+    print ('----------------')
+    print ('antes: '+evento3)
+    print('depois: '+c_str3)
+    print ('----------------')
+    print ('antes: '+evento4)
+    print('depois: '+c_str4)
+    '''
     
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
@@ -124,13 +174,13 @@ def importacaoFolhaExcel(request):
 
         if tabela=='SecFuncVincEventos' or 1==2:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
-        elif tabela=='Setor' or 1==2:            
+        elif tabela=='Setor' or 1==3:            
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Servidor' or 1==2:   
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Folha' or 1==1:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
-        elif tabela == 'Geralss':
+        elif tabela == 'Geralss1':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
             if retorno==1:
                 retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
@@ -588,18 +638,10 @@ def agruparfuncoes(request):
           )
 
 
-
 def eliminarAcentos(tabela):
 
-    if tabela=='grupos_eventos':
-        obj_evs=Grupo_eventos.objects.all()
-        for ev in obj_evs:
-            ev.evento_original=funcoes_gerais.to_ascii_string(ev.evento_original)
-            ev.evento_principal=funcoes_gerais.to_ascii_string(ev.evento_principal)
 
-        Grupo_eventos.objects.bulk_update(obj_evs,['evento_original','evento_principal'])
-
-    elif tabela=='eventos':
+    if tabela=='eventos':
 
         obj_evs=Evento.objects.all()
         for ev in obj_evs:
@@ -630,17 +672,20 @@ def eliminarAcentos(tabela):
             ev.funcao=funcoes_gerais.to_ascii_string(ev.funcao)
 
         Funcao.objects.bulk_update(obj_evs,['funcao'])
-
-    elif tabela=='grupo_funcoes':
-
-        obj_evs=Grupo_funcoes.objects.all()
-        for ev in obj_evs:
-            ev.funcao_original=funcoes_gerais.to_ascii_string(ev.funcao_original)
-            ev.funcao_principal=funcoes_gerais.to_ascii_string(ev.funcao_principal)
-
-        Grupo_funcoes.objects.bulk_update(obj_evs,['funcao_original','funcao_principal'])
+    else:
+        string=funcoes_gerais.to_ascii_string(tabela)
+        print (tabela)
+        print (string)
+        print (tabela.encode('UTF-8'))
+        print ('--------------')
 
 
+
+def remove_combining_fluent(string: str) -> str:
+    normalized = unicodedata.normalize('NFD', string)
+    return ''.join(
+        [l for l in normalized if not unicodedata.combining(l)]
+    )
 
 
 
