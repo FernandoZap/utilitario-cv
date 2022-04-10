@@ -232,32 +232,22 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
           trocar por "GRATIFICACAO".
 
         ''' 
+
+        secretaria = funcoes_gerais.remove_combining_fluent(secretaria)
+        setor = funcoes_gerais.remove_combining_fluent(setor)
+        funcao = funcoes_gerais.remove_combining_fluent(funcao)
+        evento = funcoes_gerais.remove_combining_fluent(evento)
+
     
         if secretaria in lista_secretarias:
             id_secretaria = dict_secretarias[secretaria]
         else:
             id_secretaria=0            
 
-        if id_secretaria==0:            
-            secretaria = funcoes_gerais.to_ascii_string(secretaria)
-            if secretaria in lista_secretarias:
-                id_secretaria = dict_secretarias[secretaria]
-            else:
-                id_secretaria=0            
-
-
         if secretaria+setor in lista_setores:
             id_setor = dict_setores[secretaria+setor]
         else:
             id_setor=0
-
-
-        if id_setor==0:
-            setor = funcoes_gerais.to_ascii_string(setor)
-            if secretaria+setor in lista_setores:
-                id_setor = dict_setores[secretaria+setor]
-
-
 
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
@@ -265,8 +255,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             id_funcao = dict_funcoes_cv[funcao]
         else:
             id_funcao=0
-
-
 
         if vinculo in lista_vinculos:
             id_vinculo = dict_vinculos[vinculo]
@@ -282,16 +270,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         else:
             id_evento=0
             tipo=''
-
-        if id_evento==0:
-            evento=funcoes_gerais.to_ascii_string(evento)
-            if evento in lista_eventos:
-                id_evento = dict_eventos[evento]
-                tipo = dict_tipos_eventos[id_evento]
-            elif evento in lista_eventos_cv:
-                id_evento = dict_eventos_cv[evento]
-                tipo = dict_tipos_eventos_cv[id_evento]
-
 
         if cpf is None:
             cpf=''
