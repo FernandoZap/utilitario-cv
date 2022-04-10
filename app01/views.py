@@ -122,7 +122,7 @@ def importacaoFolhaExcel(request):
     698,699,700,701,702,703,704,705,706,707,708,709,710,711,712,713,714,715,716,717,718,719,720,745,750,758,784,813,
     813]
 
-    objs=Funcoes_cv.objects.filter(id_funcao__in=lista)
+    objs=Funcoes_cv.objects.filter(id_funcao_cv__in=lista)
     for obj in objs:
         funcao=obj.funcao
         c_str1=remove_combining_fluent(funcao)
