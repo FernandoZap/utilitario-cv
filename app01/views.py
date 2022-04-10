@@ -22,7 +22,8 @@ import unicodedata
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 
 
-#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
+
+#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
 
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
@@ -109,7 +110,8 @@ def importacaoFolhaExcel(request):
         obj.evento=c_str1
     Eventos_cv.objects.bulk_update(objs,['evento'])               
     '''
-    lista = [912,918,908,509,1077]
+    #lista = [912,918,908,509,1077]
+    lista = [219,921,371,522,278,903,910,748,200,20,909,226,517,485,216,752,1082,922,427,487,917,924,991,79,223]
     objs=Funcao.objects.filter(id_funcao__in=lista)
     for obj in objs:
         funcao=obj.funcao
