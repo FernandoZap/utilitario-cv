@@ -24,9 +24,7 @@ import unicodedata
 
 
 
-#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
-
-#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
+# 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
 
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
@@ -214,9 +212,9 @@ def importacaoFolhaExcel(request):
 
         if tabela=='SecFuncVincEventos' or 1==2:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
-        elif tabela=='Setor' or 1==1:            
+        elif tabela=='Setor' or 1==2:            
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Servidor' or 1==2:   
+        elif tabela=='Servidor' or 1==1:   
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Folha' or 1==2:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)

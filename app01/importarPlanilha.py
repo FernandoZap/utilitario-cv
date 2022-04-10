@@ -41,7 +41,7 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
 
         nome_servidor=nome_servidor.strip()
-        nome_servidor=funcoes_gerais.to_ascii_string(nome_servidor)
+        nome_servidor=funcoes_gerais.remove_combining_fluent(nome_servidor)
         cpf=cpf.strip()
 
 
