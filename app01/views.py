@@ -21,7 +21,11 @@ import unicodedata
 
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 
-#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
+
+#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
+
+curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
+
 
 def get(self, request, *args, **kwargs):
     self.request.session['funcao'] = self.request.user.funcao
@@ -105,8 +109,8 @@ def importacaoFolhaExcel(request):
         obj.evento=c_str1
     Eventos_cv.objects.bulk_update(objs,['evento'])               
     '''
-
-    objs=Funcao.objects.all()
+    lista = [912,918,908,509,1077]
+    objs=Funcao.objects.filter(id_funcao__in=lista)
     for obj in objs:
         funcao=obj.funcao
         c_str1=remove_combining_fluent(funcao)
