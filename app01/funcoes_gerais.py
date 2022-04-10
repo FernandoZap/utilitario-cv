@@ -8,6 +8,7 @@ import re
 from django.db import connection
 from django.db.models import Count,Sum
 import unidecode
+import unicodedata
 
 
 def mesPorExtenso(mes,modelo):
