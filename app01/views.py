@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao
+from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Eventos_cv,Funcoes_cv
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -20,13 +20,8 @@ from django.db import connection
 import unicodedata
 
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
-#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
-#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
 
-#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
-
-#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
-
+#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
 
 def get(self, request, *args, **kwargs):
     self.request.session['funcao'] = self.request.user.funcao
