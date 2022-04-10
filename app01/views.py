@@ -24,7 +24,7 @@ import unicodedata
 
 #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
 
-curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
+#curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
 
 def get(self, request, *args, **kwargs):
