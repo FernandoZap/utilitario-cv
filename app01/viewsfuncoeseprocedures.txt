@@ -54,7 +54,7 @@ delimiter ;
 Create view v005_folhaEventos
 as
 select f.anomes,f.id_municipio,e.evento,e.tipo,f.valor 
-from folhasmes f,eventos e where f.id_evento=e.id_evento and f.anomes=202111 and f.id_municipio=86 order by e.evento,e.tipo desc;
+from folhasmes f,eventos_cv e where f.id_evento=e.id_evento_cv and f.anomes=202111 and f.id_municipio=86 order by e.evento,e.tipo desc;
 
 
 
@@ -70,7 +70,7 @@ group by sv.nome,sv.data_admissao,fl.cod_servidor,sec.secretaria,sto.setor,fn.fu
 
 
 
-create view v001_valoresmes
+show create view v001_valoresmes;
 as
 select fm.anomes,fm.id_municipio,fm.id_secretaria,fm.id_setor,fe.tipo,fe.id_evento,
 case when fe.tipo='V' THEN fe.valor else 0 end as vantagens,
@@ -144,3 +144,14 @@ CREATE OR REPLACE VIEW public.v005_folhaeventos
 
 ALTER TABLE public.v005_folhaeventos
     OWNER TO qatqyrldkytezs;
+
+
+select f.anomes,f.id_municipio,e.evento,e.tipo,f.valor 
+from folhaeventos f,eventos_cv e where f.id_evento=e.id_evento_cv and f.anomes=202106 and f.id_municipio=92 order by e.evento,e.tipo desc;
+
+
+drop VIEW v005_folhaEventos;
+CREATE VIEW v005_folhaEventos 
+AS 
+select f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor from (folhaeventos f join eventos_cv e) where (f.id_evento = e.id_evento_cv) order by e.evento,e.tipo desc;
+

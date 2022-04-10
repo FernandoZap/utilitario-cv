@@ -144,4 +144,11 @@ def to_ascii_string(string):
 
 
 
+def remove_combining_fluent(string: str) -> str:
+    normalized = unicodedata.normalize('NFD', string)
+    return ''.join(
+        [l for l in normalized if not unicodedata.combining(l)]
+    )
+
+
 

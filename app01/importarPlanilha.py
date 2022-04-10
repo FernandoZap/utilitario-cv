@@ -453,11 +453,17 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         funcao=queryP[qp]['funcao']
         vinculo=queryP[qp]['tipo_admissao']
 
+
+        seecretaria=funcoes_gerais.remove_combining_fluent(secretaria)
+        funcao=funcoes_gerais.remove_combining_fluent(funcao)
+        vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
+        evento=funcoes_gerais.remove_combining_fluent(evento)
+        setor=funcoes_gerais.remove_combining_fluent(setor)
+
         
         if secretaria is not None:
             secretaria=secretaria.strip()
             if len(secretaria)>2:
-                secretaria=funcoes_gerais.to_ascii_string(secretaria)
                 if secretaria not in lista_secretarias:
                     if secretaria not in ls_secretaria:
                         obj_secretaria = Secretaria(
@@ -471,7 +477,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if vinculo is not None:
             vinculo=vinculo.strip()
             if len(vinculo)>2:
-                vinculo=funcoes_gerais.to_ascii_string(vinculo)
                 if vinculo not in lista_vinculos:
                     if vinculo not in ls_vinculo:
                         obj_vinculo = Vinculo(
@@ -530,13 +535,9 @@ def pesquisaFuncao(funcao,lista1,lista2):
 
 
 def pesquisaEvento(evento,lista1,lista2):
-    sf1=evento
-    sf2=funcoes_gerais.to_ascii_string(evento)
-    if sf1 not in lista1:
-        if sf2 not in lista1:
-            if sf1 not in lista2:
-                if sf2 not in lista1:
-                    return True
+    if evento not in lista1:
+        if evento not in lista1:
+            return True
     return False
 
 

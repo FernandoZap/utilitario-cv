@@ -26,6 +26,8 @@ import unicodedata
 
 #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
 
+#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
+
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
 
@@ -115,7 +117,7 @@ def importacaoFolhaExcel(request):
     #lista = [219,921,371,522,278,903,910,748,200,20,909,226,517,485,216,752,1082,922,427,487,917,924,991,79,223]
 
 
-
+    '''
 
     lista = [755,26,707,35,137,141,142,143,144,146,147,150,151,152,153,\
     158,161,162,172,179,181,201,213,217,236,240,246,250,290,301,321,324,346,348,358,371,372,388,390,412,419,420,425,430,485,520,600,602,609,611,613,614,632,\
@@ -129,7 +131,6 @@ def importacaoFolhaExcel(request):
         obj.funcao=c_str1
     Funcoes_cv.objects.bulk_update(objs,['funcao'])               
 
-    '''
     objs=Funcoes_cv.objects.all()
     for obj in objs:
         funcao=obj.funcao
@@ -211,13 +212,13 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos' or 1==2:
+        if tabela=='SecFuncVincEventos' or 1==1:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
         elif tabela=='Setor' or 1==3:            
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Servidor' or 1==2:   
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Folha' or 1==1:   
+        elif tabela=='Folha' or 1==2:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
         elif tabela == 'Geralss1':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
