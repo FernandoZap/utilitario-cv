@@ -90,12 +90,14 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
+        setor=funcoes_gerais.remove_combining_fluent(setor)
+        secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
+
+
 
         if setor is not None:
             setor = setor.strip()
-            setor=funcoes_gerais.to_ascii_string(setor)
             secretaria = secretaria.strip()
-            secretaria=funcoes_gerais.to_ascii_string(secretaria)
 
             if secretaria in lista_secretarias:
                 id_secretaria = dict_secretarias[secretaria]
