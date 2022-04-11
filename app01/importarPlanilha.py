@@ -232,11 +232,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
           trocar por "GRATIFICACAO".
 
         ''' 
-
+        '''
         secretaria = funcoes_gerais.remove_combining_fluent(secretaria)
         setor = funcoes_gerais.remove_combining_fluent(setor)
         funcao = funcoes_gerais.remove_combining_fluent(funcao)
         evento = funcoes_gerais.remove_combining_fluent(evento)
+        '''
 
     
         if secretaria in lista_secretarias:
