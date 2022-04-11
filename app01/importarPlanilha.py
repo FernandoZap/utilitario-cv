@@ -246,10 +246,19 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         else:
             id_secretaria=0            
 
+        if id_secretaria==0:
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'secretaria: '+secretaria)
+
+
+
         if secretaria+setor in lista_setores:
             id_setor = dict_setores[secretaria+setor]
         else:
             id_setor=0
+
+        if id_setor==0:
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'setor: '+setor)
+
 
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
