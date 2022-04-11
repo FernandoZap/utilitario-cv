@@ -380,12 +380,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 )
             carga_erro.append(obj)
 
+    if lista_erro_setor>0:                
+        LogErro.objects.bulk_create(carga_erro)
 
-    LogErro.objects.bulk_create(carga_erro)
-
-    #Folhames.objects.bulk_create(objetos)
-    #Folhaevento.objects.bulk_create(feventos)
-    #Refeventos.objects.bulk_create(obj_ref_ev)
+    Folhames.objects.bulk_create(objetos)
+    Folhaevento.objects.bulk_create(feventos)
+    Refeventos.objects.bulk_create(obj_ref_ev)
     return 1
 
 
