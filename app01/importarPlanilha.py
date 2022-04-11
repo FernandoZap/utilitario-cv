@@ -407,6 +407,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     carga_funcao=[]
     carga_vinculo=[]
     carga_evento=[]
+    carga_evento2=[]
 
     id_municipio=i_id_municipio
     anomes=i_anomes
@@ -526,6 +527,20 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         observacao='teste'
         )
     obj.save()
+
+    if len(ls_evento)>0:
+        for kk in range(len(ls_evento)):
+            obje=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='evento',
+                observacao=ls_evento[kk]
+                )
+            carga_evento2.append(obje)
+    LogErro.objects.bulk_create(carga_evento2)
+
+
 
 
     return 1
