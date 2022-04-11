@@ -2,8 +2,7 @@
 import os
 import sys
 from django.db import connection
-from .models import Folhaevento,Evento,Funcao,Funcoes_cv
-#Eventos_cv,
+from .models import Folhaevento,Evento,Funcao,Funcoes_cv,Eventos_cv
 
 
 def delete_lista_de_eventos(lista,empresa,lista_id,descricao_p,current_user):
