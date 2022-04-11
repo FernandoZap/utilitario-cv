@@ -123,8 +123,6 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
-    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 1')
-
 
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
     lista_secretarias = listagens.listagemSecretarias(i_id_municipio)
@@ -169,12 +167,11 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
     codigo_folha=int(str(i_anomes)[4:6])
 
-    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 2')
-    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
-    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(codigo_folha))
+    #erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 2')
+    #erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
+    #erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(codigo_folha))
 
-    entidade='PREFEITURA MUNICIPAL DE ITATIRA'
-    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
+    #erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
 
 
     
@@ -195,13 +192,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         'valor_evento'
         ).filter(entidade=entidade,codigo_folha=codigo_folha)
 
-    print ('entidade: '+entidade)
-    print ('codigo_folha: '+str(codigo_folha))
 
     for qp in range(len(queryP)):
-
-        if qp==0:
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 3')
 
 
         cod_servidor = queryP[qp]['codigo']
@@ -227,13 +219,11 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
-        '''
         secretaria=funcoes_gerais.to_ascii_string(secretaria)
         setor=funcoes_gerais.to_ascii_string(setor)
         funcao=funcoes_gerais.to_ascii_string(funcao)
         vinculo=funcoes_gerais.to_ascii_string(vinculo)
         evento=funcoes_gerais.to_ascii_string(evento)
-        '''
 
 
         # trocar as varições de evento por um único evento para deixar todos
@@ -304,8 +294,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if id_evento==0:
             observacao='cod_servidor: '+str(cod_servidor)+' - evento'
             erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-
-
         
         if previdencia=='PREVIDÊNCIA MUNICIPAL':
             previdencia='M'
@@ -328,12 +316,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                     tipo = tipo,
                     valor = valor
                 )
-            if qp<=6:
-                erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(cod_servidor))
 
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
-        
         
         if cod_servidor not in lista_incluidos:
             if str(cod_servidor)+'-'+str(i_anomes) not in listagem_folhames:

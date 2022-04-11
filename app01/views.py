@@ -24,7 +24,7 @@ import unicodedata
 
 
 
-
+# git remote set-url origin git@github.com:FernandoZap/utilitario-cv.git
 
 
 
@@ -190,7 +190,7 @@ def importacaoFolhaExcel(request):
             municipio=ls_municipio[0]
             empresa = ls_municipio[1]
         else:
-            empresa = 0
+            empresa = ''
             logerro=LogErro(
             id_municipio = id_municipio,
             anomes = anomes,
@@ -198,6 +198,16 @@ def importacaoFolhaExcel(request):
             logerro.save()
 
         entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
+
+
+        '''
+        print ('-------------------------')
+        print (municipio)
+        print (empresa)
+        print (entidade)
+        print ('-------------------------')
+        '''
+
 
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()

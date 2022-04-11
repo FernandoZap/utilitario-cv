@@ -76,7 +76,7 @@ def entidade(id_municipio):
     munic = Municipio.objects.get(id_municipio=id_municipio)
     lista=[]
     if munic is not None:
-        lista.append(munic.entidade)
+        lista.append(munic.municipio)
         lista.append(munic.empresa)
     return lista        
 
