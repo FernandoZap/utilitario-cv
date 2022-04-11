@@ -380,7 +380,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 )
             carga_erro.append(obj)
 
-    if lista_erro_setor>0:                
+    if len(lista_erro_setor)>0:                
         LogErro.objects.bulk_create(carga_erro)
 
     Folhames.objects.bulk_create(objetos)
