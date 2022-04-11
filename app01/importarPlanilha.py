@@ -123,6 +123,9 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
+    lista_erro_setor=[]
+    lista_erro_secretaria=[]
+
 
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
     lista_secretarias = listagens.listagemSecretarias(i_id_municipio)
@@ -247,7 +250,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             id_secretaria=0            
 
         if id_secretaria==0:
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'secretaria: '+secretaria)
+            if secretaria not in lista_erro_secretaria:
+                lista_erro_secretaria.append(secretaria)
 
 
 
@@ -257,7 +261,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             id_setor=0
 
         if id_setor==0:
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'setor: '+setor)
+            if setor not in lista_erro_setor:
+                lista_erro_setor.append(setor)
 
 
         if funcao in lista_funcoes:
@@ -288,22 +293,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if valor is None:
             valor=0
 
-        if id_secretaria==0:
-            observacao='cod_servidor: '+str(cod_servidor)+' - secretaria'
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-        if id_setor==0:
-            observacao='cod_servidor: '+str(cod_servidor)+' - setor'
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-        if id_vinculo==0:
-            observacao='cod_servidor: '+str(cod_servidor)+' - vinculo'
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-        if id_funcao==0:
-            observacao='cod_servidor: '+str(cod_servidor)+' - funcao'
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-        if id_evento==0:
-            observacao='cod_servidor: '+str(cod_servidor)+' - evento'
-            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-        
         if previdencia=='PREVIDÊNCIA MUNICIPAL':
             previdencia='M'
         elif previdencia=='INSS':
@@ -313,7 +302,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         else:
             previndencia=''
 
-        
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
                     id_municipio = i_id_municipio,
@@ -359,9 +347,14 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 obj_ref_ev.append(ref_ev)
                 lista_ref_eventos.append(cod_servidor)
 
-    Folhames.objects.bulk_create(objetos)
-    Folhaevento.objects.bulk_create(feventos)
-    Refeventos.objects.bulk_create(obj_ref_ev)
+    if len(lista_erro_setor)>0:
+        for kk in range(len(lista_erro_setor)):
+            erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'setor: '+lista_erro_setor[kk]):
+
+
+    #Folhames.objects.bulk_create(objetos)
+    #Folhaevento.objects.bulk_create(feventos)
+    #Refeventos.objects.bulk_create(obj_ref_ev)
     return 1
 
 
