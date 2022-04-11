@@ -273,7 +273,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if id_setor==0:
             if setor is not None:
                 if setor not in lista_erro_setor:
-                    lista_erro_setor.append(setor)
+                    lista_erro_setor.append(str(cod_servidor)+': '+setor)
 
 
         if funcao in lista_funcoes:
