@@ -100,9 +100,6 @@ class Funcao(models.Model):
 
     class Meta:
         db_table = 'funcoes'
-        constraints = [
-            models.UniqueConstraint(fields=['empresa', 'funcao'], name='unique_funcao')
-        ]
 
     @classmethod
     def truncate(cls):
