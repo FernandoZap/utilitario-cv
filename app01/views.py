@@ -172,14 +172,22 @@ def importacaoFolhaExcel(request):
     print ('antes: '+evento4)
     print('depois: '+c_str4)
 
-    '''
-
     objs=Funcao.objects.all()
     for obj in objs:
         funcao=obj.funcao
         funcao=remove_combining_fluent(funcao)
         obj.funcao=funcao
-    Funcao.objects.bulk_update(objs,['funcao'])               
+    Funcao.objects.bulk_update(objs,['funcao'])
+    '''
+
+    objs=Funcoes_cv.objects.all()
+    for obj in objs:
+        funcao=obj.funcao
+        funcao=remove_combining_fluent(funcao)
+        obj.funcao=funcao
+    Funcoes_cv.objects.bulk_update(objs,['funcao'])
+
+
 
     
     mensagem=''
