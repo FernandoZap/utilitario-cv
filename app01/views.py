@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Eventos_cv,Funcoes_cv
+from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Eventos_cv,Funcoes_cv,Vinculo
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -215,13 +215,14 @@ def importacaoFolhaExcel(request):
         obj.setor=setor
     Setor.objects.bulk_update(objs,['setor'])
 
-
+    '''
     objs1=Vinculo.objects.all()
     for obj in objs1:
         vinculo=obj.vinculo
         vinculo=remove_combining_fluent(vinculo)
         obj.vinculo=vinculo
     Vinculo.objects.bulk_update(objs1,['vinculo'])
+    '''
 
 
 
