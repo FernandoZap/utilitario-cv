@@ -349,7 +349,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
     if len(lista_erro_setor)>0:
         for kk in range(len(lista_erro_setor)):
-            erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'setor: '+lista_erro_setor[kk]):
+            erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'setor: '+lista_erro_setor[kk])
 
 
     #Folhames.objects.bulk_create(objetos)
