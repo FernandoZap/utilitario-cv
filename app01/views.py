@@ -126,13 +126,13 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos' or 1==2:
+        if tabela=='SecFuncVincEvento':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
-        elif tabela=='sss' or 1==2:    
+        elif tabela=='Setor':    
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='ccccc':            
+        elif tabela=='Servidor':            
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Folha' or 1==2:   
+        elif tabela=='Folha':
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
         elif tabela == 'Geral':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
