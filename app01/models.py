@@ -193,6 +193,9 @@ class Evento(models.Model):
     class Meta:
         db_table = 'eventos'
 
+
+
+'''
 class Eventos_cv(models.Model):  
     PROVDESC_CHOICES = [
         ('',''),
@@ -210,7 +213,7 @@ class Eventos_cv(models.Model):
 
     class Meta:
         db_table = 'eventos_cv'
-
+'''
 
 
 class Setor(models.Model):  

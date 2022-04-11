@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Eventos_cv,Funcoes_cv,Vinculo
+from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Funcoes_cv,Vinculo
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv

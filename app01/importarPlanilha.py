@@ -4,7 +4,8 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Eventos_cv,Funcao,Funcoes_cv,LogErro
+from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Funcao,Funcoes_cv,LogErro
+#Eventos_cv
 from . import listagens,funcoes_gerais,funcoes_banco
 
 
@@ -515,8 +516,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         Secretaria.objects.bulk_create(carga_secretaria)
     if len(ls_vinculo)>0:        
         Vinculo.objects.bulk_create(carga_vinculo)        
-    #if len(ls_evento)>0:
-        #Eventos_cv.objects.bulk_create(carga_evento)
+    if len(ls_evento)>0:
+        Eventos_cv.objects.bulk_create(carga_evento)
 
 
     obj=LogErro(
