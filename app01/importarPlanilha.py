@@ -198,7 +198,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     for qp in range(len(queryP)):
 
         if qp==0:
-            print ('programa: importarFolha')
+            erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 3')
 
 
         cod_servidor = queryP[qp]['codigo']
@@ -325,6 +325,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                     tipo = tipo,
                     valor = valor
                 )
+            if qp<=6:
+                erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(cod_servidor)
 
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
