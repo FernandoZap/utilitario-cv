@@ -494,16 +494,28 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                         ls_vinculo.append(vinculo)
                         carga_vinculo.append(obj_vinculo)
 
+        if evento is not None:
+            evento=evento.strip()
+            if len(evento)>2:
+                evento=funcoes_gerais.remove_combining_fluent(evento)
+                if pesquisaEvento(evento,lista_eventos,lista_eventos_cv):
+                    if evento not in ls_evento:
+                        obj_new = Eventos_cv(
+                            evento=evento,
+                            tipo=tipo_evento,
+                            cancelado='N'
+                            )
+                        carga_evento.append(obj_new)
+                        ls_evento.append(evento)
+
+
 
     if len(ls_secretaria)>0:
         Secretaria.objects.bulk_create(carga_secretaria)
     if len(ls_vinculo)>0:        
         Vinculo.objects.bulk_create(carga_vinculo)        
-
-
-
-
-
+    if len(ls_evento)>0:
+        Eventos_cv.objects.bulk_create(carga_evento)
 
 
     obj=LogErro(
