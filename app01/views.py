@@ -178,7 +178,6 @@ def importacaoFolhaExcel(request):
         funcao=remove_combining_fluent(funcao)
         obj.funcao=funcao
     Funcao.objects.bulk_update(objs,['funcao'])
-    '''
 
     objs=Funcoes_cv.objects.all()
     for obj in objs:
@@ -186,6 +185,24 @@ def importacaoFolhaExcel(request):
         funcao=remove_combining_fluent(funcao)
         obj.funcao=funcao
     Funcoes_cv.objects.bulk_update(objs,['funcao'])
+
+    '''
+    objs1=Evento.objects.all()
+    for obj in objs1:
+        evento=obj.evento
+        evento=remove_combining_fluent(evento)
+        obj.evento=evento
+    Evento.objects.bulk_update(obj1s,['evento'])
+
+
+    objs=Eventos_cv.objects.all()
+    for obj in objs:
+        evento=obj.evento
+        evento=remove_combining_fluent(evento)
+        obj.evento=evento
+    Eventos_cv.objects.bulk_update(objs,['evento'])
+
+
 
 
 

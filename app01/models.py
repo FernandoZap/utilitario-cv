@@ -192,9 +192,6 @@ class Evento(models.Model):
 
     class Meta:
         db_table = 'eventos'
-        constraints = [
-            models.UniqueConstraint(fields=['empresa', 'evento' ], name='e_evento_unique')
-        ]
 
 class Eventos_cv(models.Model):  
     PROVDESC_CHOICES = [
