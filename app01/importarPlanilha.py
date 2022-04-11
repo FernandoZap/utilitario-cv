@@ -4,7 +4,7 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Eventos_cv,Funcao,Funcoes_cv
+from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Eventos_cv,Funcao,Funcoes_cv,LogErro
 from . import listagens,funcoes_gerais,funcoes_banco
 
 
@@ -15,6 +15,9 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
     objetos=[]
     lista=[]
     lista_servidores=listagens.listagemServidores(i_id_municipio)
+
+    id_municipio=i_id_municipio
+    anomes=i_anomes
 
     lista_incluidos=[]
     lista_cpf=[]
@@ -72,6 +75,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     codigo_folha=int(str(i_anomes)[4:6])
 
 
+    id_municipio=i_id_municipio
+    anomes=i_anomes
 
     queryP = Planilha.objects.values(
         'codigo',
@@ -126,6 +131,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     lista_erro_setor=[]
     lista_erro_secretaria=[]
 
+    id_municipio=i_id_municipio
+    anomes=i_anomes
+
 
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
     lista_secretarias = listagens.listagemSecretarias(i_id_municipio)
@@ -166,6 +174,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
     lista_ref_eventos=[]
     obj_ref_ev=[]
+    carga_erro=[]
 
 
     codigo_folha=int(str(i_anomes)[4:6])
@@ -350,7 +359,29 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 lista_ref_eventos.append(cod_servidor)
 
     if len(lista_erro_secretaria)>0:
-        erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'secretaria')
+        for kk in range(len(lista_erro_secretaria)):
+            obj=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='secretaria',
+                observacao=lista_erro_secretaria[kk]
+                )
+            carga_erro.append(obj)
+
+    if len(lista_erro_setor)>0:
+        for kk in range(len(lista_erro_setor)):
+            obj=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='setor',
+                observacao=lista_erro_setor[kk]
+                )
+            carga_erro.append(obj)
+
+
+    LogErro.objects.bulk_create(carga_erro)
 
     #Folhames.objects.bulk_create(objetos)
     #Folhaevento.objects.bulk_create(feventos)
