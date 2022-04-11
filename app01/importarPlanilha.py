@@ -294,6 +294,10 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             observacao='cod_servidor: '+str(cod_servidor)+' - evento'
             erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
 
+        sec_t=str(id_secretaria)+' - ' + secretaria
+        erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,sec_t)            
+
+
         
         if previdencia=='PREVIDÊNCIA MUNICIPAL':
             previdencia='M'
