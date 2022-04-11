@@ -173,6 +173,10 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
     erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(codigo_folha))
 
+    entidade='PREFEITURA MUNICIPAL DE ITATIRA'
+    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
+
+
     
     queryP = Planilha.objects.values(
         'codigo',
