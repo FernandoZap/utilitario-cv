@@ -86,150 +86,6 @@ def importacaoFolhaExcel(request):
     #-----------------------------------------------------------------------------
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
 
-
-    '''
-    objs=Planilha.objects.filter(id)
-    lista=[]
-    for obj in objs:
-        if obj.evento not in lista:
-            print (str(obj.id_planilha)+' - '+ obj.evento)
-            lista.append(obj.evento)
-    print ('-------------------------------')            
-    '''
-    '''
-    lista = [6,20,25,26,28,30,32,31,41,62,63,81,107,109,111,135,146,154,173,155,148,184,187,198,201,215,216,217,221,227,229,247,257,260,262,263,264,282]
-    objs=Evento.objects.filter(id_evento__in=lista)
-    for obj in objs:
-        evento=obj.evento
-        c_str1=remove_combining_fluent(evento)
-        #print (evento+ '-> '+c_str1)
-        obj.evento=c_str1
-    Evento.objects.bulk_update(objs,['evento'])               
-    '''
-
-    '''
-    objs=Eventos_cv.objects.all()
-    for obj in objs:
-        evento=obj.evento
-        c_str1=remove_combining_fluent(evento)
-        obj.evento=c_str1
-    Eventos_cv.objects.bulk_update(objs,['evento'])               
-    '''
-    #lista = [912,918,908,509,1077]
-    #lista = [219,921,371,522,278,903,910,748,200,20,909,226,517,485,216,752,1082,922,427,487,917,924,991,79,223]
-
-
-    '''
-
-    lista = [755,26,707,35,137,141,142,143,144,146,147,150,151,152,153,\
-    158,161,162,172,179,181,201,213,217,236,240,246,250,290,301,321,324,346,348,358,371,372,388,390,412,419,420,425,430,485,520,600,602,609,611,613,614,632,\
-    698,699,700,701,702,703,704,705,706,707,708,709,710,711,712,713,714,715,716,717,718,719,720,745,750,758,784,813,
-    813]
-
-    objs=Funcoes_cv.objects.filter(id_funcao_cv__in=lista)
-    for obj in objs:
-        funcao=obj.funcao
-        c_str1=remove_combining_fluent(funcao)
-        obj.funcao=c_str1
-    Funcoes_cv.objects.bulk_update(objs,['funcao'])               
-
-    objs=Funcoes_cv.objects.all()
-    for obj in objs:
-        funcao=obj.funcao
-        c_str1=remove_combining_fluent(funcao)
-        obj.funcao=c_str1
-    Funcoes_cv.objects.bulk_update(objs,['funcao'])               
-    '''
-
-
-
-    '''
-    obj=Planilha.objects.get(id_planilha=45)
-    evento1=obj.evento
-    #eliminarAcentos(obj.evento)
-    obj=Planilha.objects.get(id_planilha=453)
-    evento2=obj.evento
-    obj=Planilha.objects.get(id_planilha=94)
-    evento3=obj.evento
-    obj=Planilha.objects.get(id_planilha=1540)
-    evento4=obj.evento
-
-
-    c_str1=remove_combining_fluent(evento1)
-    c_str2=remove_combining_fluent(evento2)
-    c_str3=remove_combining_fluent(evento3)
-    c_str4=remove_combining_fluent(evento4)
-    print('depois da funcao')
-    print ('antes: ' + evento1)
-    print ('depois: '+c_str1)
-    print ('----------------')
-    print ('antes: '+evento2)
-    print('depois: '+c_str2)
-    print ('----------------')
-    print ('antes: '+evento3)
-    print('depois: '+c_str3)
-    print ('----------------')
-    print ('antes: '+evento4)
-    print('depois: '+c_str4)
-
-    objs=Funcao.objects.all()
-    for obj in objs:
-        funcao=obj.funcao
-        funcao=remove_combining_fluent(funcao)
-        obj.funcao=funcao
-    Funcao.objects.bulk_update(objs,['funcao'])
-
-    objs=Funcoes_cv.objects.all()
-    for obj in objs:
-        funcao=obj.funcao
-        funcao=remove_combining_fluent(funcao)
-        obj.funcao=funcao
-    Funcoes_cv.objects.bulk_update(objs,['funcao'])
-
-    objs1=Evento.objects.all()
-    for obj in objs1:
-        evento=obj.evento
-        evento=remove_combining_fluent(evento)
-        obj.evento=evento
-    Evento.objects.bulk_update(objs1,['evento'])
-
-
-    objs=Eventos_cv.objects.all()
-    for obj in objs:
-        evento=obj.evento
-        evento=remove_combining_fluent(evento)
-        obj.evento=evento
-    Eventos_cv.objects.bulk_update(objs,['evento'])
-    objs=Secretaria.objects.all()
-    for obj in objs:
-        secretaria=obj.secretaria
-        secretaria=remove_combining_fluent(secretaria)
-        obj.secretaria=secretaria
-    Secretaria.objects.bulk_update(objs,['secretaria'])
-
-    '''
-    objs=Setor.objects.all()
-    for obj in objs:
-        setor=obj.setor
-        setor=remove_combining_fluent(setor)
-        obj.setor=setor
-    Setor.objects.bulk_update(objs,['setor'])
-
-    '''
-    objs1=Vinculo.objects.all()
-    for obj in objs1:
-        vinculo=obj.vinculo
-        vinculo=remove_combining_fluent(vinculo)
-        obj.vinculo=vinculo
-    Vinculo.objects.bulk_update(objs1,['vinculo'])
-    '''
-
-
-
-
-
-
-    
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
     if (request.method == "POST"):
@@ -256,17 +112,6 @@ def importacaoFolhaExcel(request):
 
         entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
 
-
-        '''
-        print ('-------------------------')
-        print (municipio)
-        print (empresa)
-        print (entidade)
-        print ('-------------------------')
-        '''
-
-
-
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
             return render(request, 'app01/planilhaErrada.html',
@@ -281,7 +126,7 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos' or 1==1:
+        if tabela=='SecFuncVincEventos' or 1==2:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
         elif tabela=='sss' or 1==2:    
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
@@ -289,7 +134,7 @@ def importacaoFolhaExcel(request):
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Folha' or 1==2:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
-        elif tabela == 'Geralss1':
+        elif tabela == 'Geral':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
             if retorno==1:
                 retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)

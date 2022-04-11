@@ -202,6 +202,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     lista_ref_eventos=[]
     obj_ref_ev=[]
     carga_erro=[]
+    carga_folhaeventos=[]
+    carga_folhames=[]
+    carga_refeventos=[]
 
 
     codigo_folha=int(str(i_anomes)[4:6])
@@ -249,7 +252,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         valor = queryP[qp]['valor_evento']
         carga_horaria = queryP[qp]['carga_horaria']
         dias = queryP[qp]['ref_evento']
-
         
         secretaria=secretaria.strip()
         setor=setor.strip()    
@@ -258,26 +260,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         previdencia=previdencia.strip()
         evento=evento.strip()
 
-        secretaria=funcoes_gerais.to_ascii_string(secretaria)
-        setor=funcoes_gerais.to_ascii_string(setor)
-        funcao=funcoes_gerais.to_ascii_string(funcao)
-        vinculo=funcoes_gerais.to_ascii_string(vinculo)
-        evento=funcoes_gerais.to_ascii_string(evento)
+        secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
+        setor=funcoes_gerais.remove_combining_fluent(setor)
+        funcao=funcoes_gerais.remove_combining_fluent(funcao)
+        vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
+        evento=funcoes_gerais.remove_combining_fluent(evento)
 
-
-        # trocar as varições de evento por um único evento para deixar todos
-        # com uma única denominação; por exemplo:
-        '''
-          sempre que houver um desses eventos "GRATIFICACAO 1" , "GRATIFICACAO 2" e "GRATIFICACAO A1"
-          trocar por "GRATIFICACAO".
-
-        ''' 
-        '''
-        secretaria = funcoes_gerais.remove_combining_fluent(secretaria)
-        setor = funcoes_gerais.remove_combining_fluent(setor)
-        funcao = funcoes_gerais.remove_combining_fluent(funcao)
-        evento = funcoes_gerais.remove_combining_fluent(evento)
-        '''
 
     
         if secretaria in lista_secretarias:
@@ -290,8 +278,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 if secretaria not in lista_erro_secretaria:
                     lista_erro_secretaria.append(secretaria)
 
-
-
         if secretaria+setor in lista_setores:
             id_setor = dict_setores[secretaria+setor]
         else:
@@ -301,7 +287,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             if setor is not None:
                 if setor not in lista_erro_setor:
                     lista_erro_setor.append(str(cod_servidor)+': '+setor)
-
 
         if funcao in lista_funcoes:
             id_funcao = dict_funcoes[funcao]
@@ -342,8 +327,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
-                    id_municipio = i_id_municipio,
-                    anomes = i_anomes,
+                    id_municipio = id_municipio,
+                    anomes = anomes,
                     cod_servidor = cod_servidor,
                     previdencia = previdencia,
                     cl_orcamentaria = cl_orcamentaria,
@@ -352,14 +337,14 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                     valor = valor
                 )
 
-            feventos.append(obj_feventos)
+            carga_folhaeventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
         
         if cod_servidor not in lista_incluidos:
             if str(cod_servidor)+'-'+str(i_anomes) not in listagem_folhames:
-                objeto = Folhames(
-                    anomes=i_anomes,
-                    id_municipio=i_id_municipio,
+                objeto_folhames = Folhames(
+                    anomes=anomes,
+                    id_municipio=id_municipio,
                     cod_servidor=cod_servidor,
                     cpf=cpf,
                     id_secretaria=id_secretaria,
@@ -371,18 +356,18 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                     carga_horaria=carga_horaria
                     )
 
-                objetos.append(objeto)
+                carga_folhames.append(objeto_folhames)
                 lista_incluidos.append(cod_servidor)
         if evento=='VENCIMENTO BASE':
             if cod_servidor not in lista_ref_eventos:
                 ref_ev = Refeventos(
-                    anomes=i_anomes,
-                    id_municipio=i_id_municipio,
+                    anomes=anomes,
+                    id_municipio=id_municipio,
                     cod_servidor=cod_servidor,
                     ref_eventos = dias
                     )
 
-                obj_ref_ev.append(ref_ev)
+                carga_refeventos.append(ref_ev)
                 lista_ref_eventos.append(cod_servidor)
 
     if len(lista_erro_secretaria)>0:
@@ -410,9 +395,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     if len(lista_erro_setor)>0:                
         LogErro.objects.bulk_create(carga_erro)
 
-    Folhames.objects.bulk_create(objetos)
-    Folhaevento.objects.bulk_create(feventos)
-    Refeventos.objects.bulk_create(obj_ref_ev)
+    Folhames.objects.bulk_create(carga_folhames)
+    Folhaevento.objects.bulk_create(carga_folhaeventos)
+    Refeventos.objects.bulk_create(carga_refeventos)
     return 1
 
 
@@ -473,10 +458,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         '''
         arquivo_ok=1
 
-        if qp==0:
-            print ('programa: importarSecFuncVincEventos')
-
-
         if queryP[qp]['tipo']==4:
             tipo_evento='D'
         elif queryP[qp]['tipo'] in [1,2,3]:
@@ -527,9 +508,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                 evento=funcoes_gerais.remove_combining_fluent(evento)
                 if pesquisaEvento(evento,lista_eventos,lista_eventos_cv):
                     if evento not in ls_evento:
-                        evento_e=funcoes_gerais.to_ascii_string(evento)
                         obj_new = Eventos_cv(
-                            evento=evento_e,
+                            evento=evento,
                             tipo=tipo_evento,
                             cancelado='N'
                             )
@@ -554,7 +534,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     Secretaria.objects.bulk_create(carga_secretaria)
     Funcoes_cv.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
-    #Eventos_cv.objects.bulk_create(carga_evento)
+    Eventos_cv.objects.bulk_create(carga_evento)
     return 1
 
 
@@ -568,7 +548,7 @@ def pesquisaFuncao(funcao,lista1,lista2):
 
 def pesquisaEvento(evento,lista1,lista2):
     if evento not in lista1:
-        if evento not in lista1:
+        if evento not in lista2:
             return True
     return False
 
