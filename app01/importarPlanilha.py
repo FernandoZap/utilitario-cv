@@ -68,6 +68,9 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
     objetos=[]
     lista=[]
+    carga_erro=[]
+
+    lista_erro_secretaria=[]
     lista_setores=listagens.listagemSetores(i_id_municipio)
 
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
@@ -95,21 +98,29 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
-        setor=funcoes_gerais.remove_combining_fluent(setor)
-        secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
 
 
 
-        if setor is not None:
+
+
+        if setor is not None and secretaria is not None:
             setor = setor.strip()
             secretaria = secretaria.strip()
+
+            setor=funcoes_gerais.remove_combining_fluent(setor)
+            secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
+
 
             if secretaria in lista_secretarias:
                 id_secretaria = dict_secretarias[secretaria]
                 obj_sec = Secretaria.objects.get(pk=id_secretaria)
+            else:
+                obj_sec=None
+                if secretaria not in lista_erro_secretaria:
+                    lista_erro_secretaria.append(secretaria)
 
 
-                if len(setor)>2:
+                if len(setor)>2 and obj_sec is not None:
                     if secretaria+setor not in lista_setores:
                         if secretaria+setor not in lista:
                             objeto = Setor(
@@ -120,7 +131,23 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
                             lista.append(secretaria+setor)
                             objetos.append(objeto)
         
-    Setor.objects.bulk_create(objetos)
+    if len(lista)>0:
+        Setor.objects.bulk_create(objetos)
+
+    if len(lista_erro_secretaria)>0:
+        for kk in range(len(lista_erro_secretaria)):
+            obj=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='secretaria',
+                observacao=lista_erro_secretaria[kk]
+                )
+            carga_erro.append(obj)
+
+    if len(lista_erro_secretaria)>0:
+        LogErro.objects.bulk_create(carga_erro)
+
     return 1
 
 
@@ -466,15 +493,10 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         funcao=queryP[qp]['funcao']
         vinculo=queryP[qp]['tipo_admissao']
 
-
-        seecretaria=funcoes_gerais.remove_combining_fluent(secretaria)
-        funcao=funcoes_gerais.remove_combining_fluent(funcao)
-        vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
-        evento=funcoes_gerais.remove_combining_fluent(evento)
-
-        
+    
         if secretaria is not None:
             secretaria=secretaria.strip()
+            secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
             if len(secretaria)>2:
                 if secretaria not in lista_secretarias:
                     if secretaria not in ls_secretaria:
@@ -489,6 +511,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if vinculo is not None:
             vinculo=vinculo.strip()
             if len(vinculo)>2:
+                vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
                 if vinculo not in lista_vinculos:
                     if vinculo not in ls_vinculo:
                         obj_vinculo = Vinculo(
@@ -501,6 +524,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if evento is not None:
             evento=evento.strip()
             if len(evento)>2:
+                evento=funcoes_gerais.remove_combining_fluent(evento)
                 if pesquisaEvento(evento,lista_eventos,lista_eventos_cv):
                     if evento not in ls_evento:
                         evento_e=funcoes_gerais.to_ascii_string(evento)
@@ -515,11 +539,11 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if funcao is not None:
             funcao=funcao.strip()
             if len(funcao)>2:
+                funcao=funcoes_gerais.remove_combining_fluent(funcao)
                 if pesquisaFuncao(funcao,lista_funcoes,lista_funcoes_cv):
                     if funcao not in ls_funcao:
-                        funcao_f=funcoes_gerais.to_ascii_string(funcao)
                         obj_new = Funcoes_cv(
-                            funcao=funcao_f,
+                            funcao=funcao,
                             cancelado='N'
                             )
                         carga_funcao.append(obj_new)
@@ -530,19 +554,15 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     Secretaria.objects.bulk_create(carga_secretaria)
     Funcoes_cv.objects.bulk_create(carga_funcao)
     Vinculo.objects.bulk_create(carga_vinculo)
-    Eventos_cv.objects.bulk_create(carga_evento)
+    #Eventos_cv.objects.bulk_create(carga_evento)
     return 1
 
 
 
 def pesquisaFuncao(funcao,lista1,lista2):
-    sf1=funcao
-    sf2=funcoes_gerais.to_ascii_string(funcao)
-    if sf1 not in lista1:
-        if sf2 not in lista1:
-            if sf1 not in lista2:
-                if sf2 not in lista1:
-                    return True
+    if funcao not in lista1:
+        if funcao not in lista2:
+            return True
     return False
 
 

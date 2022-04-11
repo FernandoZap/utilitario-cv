@@ -171,7 +171,16 @@ def importacaoFolhaExcel(request):
     print ('----------------')
     print ('antes: '+evento4)
     print('depois: '+c_str4)
+
     '''
+
+    objs=Funcao.objects.all()
+    for obj in objs:
+        funcao=obj.funcao
+        funcao=remove_combining_fluent(funcao)
+        obj.funcao=funcao
+    Funcao.objects.bulk_update(objs,['funcao'])               
+
     
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
@@ -224,11 +233,13 @@ def importacaoFolhaExcel(request):
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
-        if tabela=='SecFuncVincEventos' or 1==2:
+        if tabela=='SecFuncVincEventos' or 1==1:
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa, )
+        elif tabela=='sss' or 1==2:    
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
+        elif tabela=='ccccc':            
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Folha' or 1==1:   
+        elif tabela=='Folha' or 1==2:   
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
         elif tabela == 'Geralss1':
             retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
