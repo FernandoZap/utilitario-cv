@@ -7,7 +7,6 @@ from openpyxl.styles import NamedStyle
 from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Eventos_cv,Funcao,Funcoes_cv,LogErro
 from . import listagens,funcoes_gerais,funcoes_banco
 
-'''
 
 def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -62,7 +61,6 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
         
     Servidor.objects.bulk_create(objetos)
     return 1
-'''
 
 def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
