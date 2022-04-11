@@ -459,6 +459,31 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         else:
             tipo_evento='V'
 
+        cod_evento=queryP[qp]['cod_evento']
+        evento=queryP[qp]['evento']
+        classificacao=queryP[qp]['classificacao']
+
+        secretaria=queryP[qp]['secretaria']
+        funcao=queryP[qp]['funcao']
+        vinculo=queryP[qp]['tipo_admissao']
+
+    
+        if secretaria is not None:
+            secretaria=secretaria.strip()
+            secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
+            if len(secretaria)>2:
+                if secretaria not in lista_secretarias:
+                    if secretaria not in ls_secretaria:
+                        obj_secretaria = Secretaria(
+                            id_municipio=i_id_municipio,
+                            secretaria=secretaria
+                            )
+                        ls_secretaria.append(secretaria)
+                        carga_secretaria.append(obj_secretaria)
+    if len(ls_secretaria)>0:
+        Secretaria.objects.bulk_create(carga_secretaria)
+
+
     obj=LogErro(
         id_municipio=id_municipio,
         anomes=anomes,
