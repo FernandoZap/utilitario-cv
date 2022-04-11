@@ -250,8 +250,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             id_secretaria=0            
 
         if id_secretaria==0:
-            if secretaria not in lista_erro_secretaria:
-                lista_erro_secretaria.append(secretaria)
+            if secretaria is not None:
+                if secretaria not in lista_erro_secretaria:
+                    lista_erro_secretaria.append(secretaria)
 
 
 
@@ -261,8 +262,9 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
             id_setor=0
 
         if id_setor==0:
-            if setor not in lista_erro_setor:
-                lista_erro_setor.append(setor)
+            if setor is not None:
+                if setor not in lista_erro_setor:
+                    lista_erro_setor.append(setor)
 
 
         if funcao in lista_funcoes:
@@ -348,7 +350,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 lista_ref_eventos.append(cod_servidor)
 
     if len(lista_erro_setor)>0:
-        for kk in range(len(lista_erro_setor)):
+        for kk in range(0,5):
             erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'setor: '+lista_erro_setor[kk])
 
 
