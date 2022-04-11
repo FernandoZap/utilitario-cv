@@ -399,7 +399,81 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
 
 
+
 def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
+
+
+    carga_secretaria=[]
+    carga_funcao=[]
+    carga_vinculo=[]
+    carga_evento=[]
+
+    id_municipio=i_id_municipio
+    anomes=i_anomes
+
+
+    ls_secretaria=[]
+    ls_funcao=[]
+    ls_vinculo=[]
+    ls_evento=[]
+    ls_eventos_campos=[]
+    ls_funcoes_campos=[]
+
+    codigo_folha=int(str(i_anomes)[4:6])
+
+
+    lista_secretarias=listagens.listagemSecretarias(i_id_municipio)
+
+    lista_funcoes=listagens.listagemFuncoes(empresa)
+    lista_funcoes_cv=listagens.listagemFuncoes_cv()
+
+    lista_vinculos=listagens.listagemVinculos(i_id_municipio)
+
+    lista_eventos=listagens.listagemEventos(empresa)
+    lista_eventos_cv=listagens.listagemEventos_cv()
+
+
+    arquivo_ok=0
+
+    queryP = Planilha.objects.values(
+        'codigo',
+        'secretaria',
+        'setor',
+        'funcao',
+        'evento',
+        'cod_evento',
+        'tipo',
+        'tipo_admissao',
+        'classificacao'
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
+
+
+
+    for qp in range(len(queryP)):
+        arquivo_ok=1
+
+        if queryP[qp]['tipo']==4:
+            tipo_evento='D'
+        elif queryP[qp]['tipo'] in [1,2,3]:
+            tipo_evento='V'
+        else:
+            tipo_evento='V'
+
+    obj=LogErro(
+        id_municipio=id_municipio,
+        anomes=anomes,
+        numero_linha=0,
+        codigo='secretaria',
+        observacao='teste'
+        )
+    obj.save()
+
+
+    return 1
+
+
+
+def importarSecFuncVincEventos2(i_id_municipio,i_anomes,entidade,empresa):
 
 
     carga_secretaria=[]
