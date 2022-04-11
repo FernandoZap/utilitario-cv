@@ -398,7 +398,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     return 1
 
 
-'''
 
 def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -527,7 +526,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     Vinculo.objects.bulk_create(carga_vinculo)
     Eventos_cv.objects.bulk_create(carga_evento)
     return 1
-'''
 
 
 def pesquisaFuncao(funcao,lista1,lista2):
