@@ -62,7 +62,7 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
         
     Servidor.objects.bulk_create(objetos)
     return 1
-
+'''
 
 def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -151,7 +151,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     return 1
 
 
-
+'''
 
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -402,7 +402,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
 '''
 
-
+'''
 
 def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -451,14 +451,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
 
     for qp in range(len(queryP)):
-        '''
-        print (queryP[qp]['secretaria'])
-        print (queryP[qp]['setor'])
-        print (queryP[qp]['funcao'])
-        print (queryP[qp]['tipo_admissao'])
-        print (queryP[qp]['evento'])
-        print ('--------------------')
-        '''
         arquivo_ok=1
 
         if queryP[qp]['tipo']==4:
@@ -539,7 +531,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     Vinculo.objects.bulk_create(carga_vinculo)
     Eventos_cv.objects.bulk_create(carga_evento)
     return 1
-
+'''
 
 
 def pesquisaFuncao(funcao,lista1,lista2):
