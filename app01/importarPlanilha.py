@@ -326,7 +326,7 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                     valor = valor
                 )
             if qp<=6:
-                erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(cod_servidor)
+                erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(cod_servidor))
 
             feventos.append(obj_feventos)
             lista_eventosMes.append(str(cod_servidor)+'-'+str(cod_evento))
