@@ -149,7 +149,6 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     return 1
 
 
-'''
 
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
@@ -398,7 +397,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     Refeventos.objects.bulk_create(carga_refeventos)
     return 1
 
-'''
 
 '''
 
