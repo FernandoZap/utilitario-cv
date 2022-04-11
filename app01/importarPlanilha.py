@@ -170,9 +170,8 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
     codigo_folha=int(str(i_anomes)[4:6])
 
     erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 2')
-
-
-
+    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
+    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,str(codigo_folha))
 
     
     queryP = Planilha.objects.values(
