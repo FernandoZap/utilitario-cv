@@ -123,6 +123,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
 def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
+    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 1')
+
 
     dict_secretarias=listagens.criarDictSecretarias(i_id_municipio)
     lista_secretarias = listagens.listagemSecretarias(i_id_municipio)
@@ -166,6 +168,12 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
 
 
     codigo_folha=int(str(i_anomes)[4:6])
+
+    erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,'gravando log 2')
+
+
+
+
     
     queryP = Planilha.objects.values(
         'codigo',
@@ -293,9 +301,6 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
         if id_evento==0:
             observacao='cod_servidor: '+str(cod_servidor)+' - evento'
             erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,observacao)
-
-        sec_t=str(id_secretaria)+' - ' + secretaria
-        erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,sec_t)            
 
 
         
