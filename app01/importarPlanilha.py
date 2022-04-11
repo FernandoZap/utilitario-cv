@@ -349,10 +349,11 @@ def importarFolha(i_id_municipio,i_anomes,entidade,empresa):
                 obj_ref_ev.append(ref_ev)
                 lista_ref_eventos.append(cod_servidor)
 
+    '''
     if len(lista_erro_setor)>0:
         for kk in range(0,5):
             erro=funcoes_gerais.gravarErro_01(id_municipio,anomes,'setor: '+lista_erro_setor[kk])
-
+    '''
 
     #Folhames.objects.bulk_create(objetos)
     #Folhaevento.objects.bulk_create(feventos)
