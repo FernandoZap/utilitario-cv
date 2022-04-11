@@ -192,7 +192,7 @@ def importacaoFolhaExcel(request):
         evento=obj.evento
         evento=remove_combining_fluent(evento)
         obj.evento=evento
-    Evento.objects.bulk_update(obj1s,['evento'])
+    Evento.objects.bulk_update(objs1,['evento'])
 
 
     objs=Eventos_cv.objects.all()
