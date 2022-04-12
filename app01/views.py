@@ -74,7 +74,6 @@ def formatMilhar(valor):
     return vd
 
 
-@login_required
 def importacaoFolhaExcel(request):
     #lista = listagens.listagemSetores2(86)
     #print (lista)
@@ -391,7 +390,6 @@ def listSomaEventos(request):
 
 
 
-@login_required
 def imprimirCSVFolha(request):
 
     if request.method=='POST':
