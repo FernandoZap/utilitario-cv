@@ -15,6 +15,7 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
     objetos=[]
     lista=[]
     lista_servidores=listagens.listagemServidores(i_id_municipio)
+    lista_servidores_verificados=[]
 
     id_municipio=i_id_municipio
     anomes=i_anomes
@@ -32,10 +33,6 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
 
     for qp in range(len(queryP)):
 
-        if qp==0:
-            print ('programa: importarServidores')
-
-
 
         codigo = queryP[qp]['codigo']
         nome_servidor = queryP[qp]['nome_servidor']
@@ -47,18 +44,23 @@ def importarServidores(i_id_municipio,i_anomes,entidade,empresa):
         nome_servidor=funcoes_gerais.remove_combining_fluent(nome_servidor)
         cpf=cpf.strip()
 
+        #srv = Servidor.objects.filter(id_municipio=id_municipio,cod_servidor=codigo).first()
 
-        if str(codigo) not in lista_servidores:
-            if str(codigo) not in lista_incluidos:
-                objeto = Servidor(
-                    id_municipio=i_id_municipio,
-                    cod_servidor=codigo,
-                    nome = nome_servidor,
-                    cpf = cpf,
-                    data_admissao = data_admissao
-                    )
-                objetos.append(objeto)
-                lista_incluidos.append(str(codigo))
+
+        if codigo not in lista_servidores_verificados:
+            if str(codigo) not in lista_servidores:
+                if str(codigo) not in lista_incluidos:
+                    objeto = Servidor(
+                        id_municipio=i_id_municipio,
+                        cod_servidor=codigo,
+                        nome = nome_servidor,
+                        cpf = cpf,
+                        data_admissao = data_admissao
+                        )
+                    objetos.append(objeto)
+                    lista_incluidos.append(str(codigo))
+        lista_servidores_verificados.append(codigo)                
+
         
     Servidor.objects.bulk_create(objetos)
     return 1
@@ -68,6 +70,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     objetos=[]
     lista=[]
     carga_erro=[]
+    ls_setores_verificados=[]
 
     lista_erro_secretaria=[]
     lista_setores=listagens.listagemSetores(i_id_municipio)
@@ -89,18 +92,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
     for qp in range(len(queryP)):
 
-
-        if qp==0:
-            print ('programa: importarSetores')
-
-
-
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
-
-
-
-
 
         if setor is not None and secretaria is not None:
             setor = setor.strip()
@@ -109,26 +102,28 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
             setor=funcoes_gerais.remove_combining_fluent(setor)
             secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
 
+            if setor+secretaria not in ls_setores_verificados:
 
-            if secretaria in lista_secretarias:
-                id_secretaria = dict_secretarias[secretaria]
-                obj_sec = Secretaria.objects.get(pk=id_secretaria)
-            else:
-                obj_sec=None
-                if secretaria not in lista_erro_secretaria:
-                    lista_erro_secretaria.append(secretaria)
+                if secretaria in lista_secretarias:
+                    id_secretaria = dict_secretarias[secretaria]
+                    obj_sec = Secretaria.objects.get(pk=id_secretaria)
+                else:
+                    obj_sec=None
+                    if secretaria not in lista_erro_secretaria:
+                        lista_erro_secretaria.append(secretaria)
 
 
-                if len(setor)>2 and obj_sec is not None:
-                    if secretaria+setor not in lista_setores:
-                        if secretaria+setor not in lista:
-                            objeto = Setor(
-                                id_municipio=i_id_municipio,
-                                secretaria=obj_sec,
-                                setor=setor
-                                )
-                            lista.append(secretaria+setor)
-                            objetos.append(objeto)
+                    if len(setor)>2 and obj_sec is not None:
+                        if secretaria+setor not in lista_setores:
+                            if secretaria+setor not in lista:
+                                objeto = Setor(
+                                    id_municipio=i_id_municipio,
+                                    secretaria=obj_sec,
+                                    setor=setor
+                                    )
+                                lista.append(secretaria+setor)
+                                objetos.append(objeto)
+            ls_setores_verificados.append(setor+secretaria)
         
     if len(lista)>0:
         Setor.objects.bulk_create(objetos)
@@ -409,6 +404,13 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     carga_vinculo=[]
     carga_evento=[]
     carga_evento2=[]
+    carga_funcao=[]
+
+    ls_evento_verificado=[]
+    ls_funcao_verificada=[]
+    ls_vinculo_verificado=[]
+    ls_secretaria_verificada=[]
+
 
     id_municipio=i_id_municipio
     anomes=i_anomes
@@ -473,43 +475,67 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         if secretaria is not None:
             secretaria=secretaria.strip()
             secretaria=funcoes_gerais.remove_combining_fluent(secretaria)
-            if len(secretaria)>2:
-                if secretaria not in lista_secretarias:
-                    if secretaria not in ls_secretaria:
-                        obj_secretaria = Secretaria(
-                            id_municipio=i_id_municipio,
-                            secretaria=secretaria
-                            )
-                        ls_secretaria.append(secretaria)
-                        carga_secretaria.append(obj_secretaria)
+            if secretaria not in ls_secretaria_verificada:
+                if len(secretaria)>2:
+                    if secretaria not in lista_secretarias:
+                        if secretaria not in ls_secretaria:
+                            obj_secretaria = Secretaria(
+                                id_municipio=i_id_municipio,
+                                secretaria=secretaria
+                                )
+                            ls_secretaria.append(secretaria)
+                            carga_secretaria.append(obj_secretaria)
+        ls_secretaria_verificada.append(secretaria)                        
 
         if vinculo is not None:
             vinculo=vinculo.strip()
             if len(vinculo)>2:
+
                 vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
-                if vinculo not in lista_vinculos:
-                    if vinculo not in ls_vinculo:
-                        obj_vinculo = Vinculo(
-                            id_municipio=i_id_municipio,
-                            vinculo=vinculo
-                            )
-                        ls_vinculo.append(vinculo)
-                        carga_vinculo.append(obj_vinculo)
+                if vinculo not in ls_vinculo_verificado:
+                    if vinculo not in lista_vinculos:
+                        if vinculo not in ls_vinculo:
+                            obj_vinculo = Vinculo(
+                                id_municipio=i_id_municipio,
+                                vinculo=vinculo
+                                )
+                            ls_vinculo.append(vinculo)
+                            carga_vinculo.append(obj_vinculo)
+        ls_vinculo_verificado.append(vinculo)                        
 
         if evento is not None:
             evento=evento.strip()
             if len(evento)>2:
                 evento=funcoes_gerais.remove_combining_fluent(evento)
-                if pesquisaEvento(evento,lista_eventos,lista_eventos_cv):
-                    if evento not in ls_evento:
-                        obj_new = Eventos_cv(
-                            evento=evento,
-                            tipo=tipo_evento,
-                            cancelado='N'
-                            )
-                        carga_evento.append(obj_new)
-                        ls_evento.append(evento)
+                if evento not in ls_evento_verificado:
+                    ev1=Evento.objects.filter(empresa=empresa,evento=evento).first()
+                    if ev1 is None:
+                        ev2=Eventos_cv.objects.filter(evento=evento).first()
+                        if ev2 is None:
+                            if evento not in ls_evento:
+                                obj_new = Eventos_cv(
+                                    evento=evento,
+                                    tipo=tipo_evento,
+                                    cancelado='N'
+                                    )
+                                carga_evento.append(obj_new)
+                                ls_evento.append(evento)
+        ls_evento_verificado.append(evento)                                
 
+        if funcao is not None:
+            funcao=funcao.strip()
+            if len(funcao)>2:
+                funcao=funcoes_gerais.remove_combining_fluent(funcao)
+                if funcao not in ls_funcao_verificada:
+                    if pesquisaFuncao(funcao,lista_funcoes,lista_funcoes_cv):
+                        if funcao not in ls_funcao:
+                            obj_new = Funcoes_cv(
+                                funcao=funcao,
+                                cancelado='N'
+                                )
+                            carga_funcao.append(obj_new)
+                            ls_funcao.append(funcao)
+        ls_funcao_verificada.append(funcao)                            
 
 
     if len(ls_secretaria)>0:
@@ -518,7 +544,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         Vinculo.objects.bulk_create(carga_vinculo)        
     if len(ls_evento)>0:
         Eventos_cv.objects.bulk_create(carga_evento)
-
+    if len(ls_funcao)>0:
+        Funcoes_cv.objects.bulk_create(carga_funcao)
 
     obj=LogErro(
         id_municipio=id_municipio,
