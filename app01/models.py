@@ -6,6 +6,20 @@ from . import choices
 
 #SET FOREIGN_KEY_CHECKS = 0;
 
+    #Restaurar o auto-increment no pgadmin
+#http://blog.abraseucodigo.com.br/problemas-com-postgres-django-sequences.html
+'''
+neste exemplo estamos corrigindo o problema na tabela eventos_cv
+SELECT c.relname FROM pg_class c WHERE c.relkind = 'S';
+select * from eventos_cv_id_evento_cv_seq
+select count(*) from eventos_cv
+SELECT setval('eventos_cv_id_evento_cv_seq', 137);
+
+observacao: o valor 137 é o resultado do select  count(*).
+'''
+
+
+
 #sudo /opt/pentaho/client-tools/data-integration/spoon.sh
 
 
