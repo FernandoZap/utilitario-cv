@@ -453,7 +453,7 @@ def imprimirCSVFolha(request):
             for kk in range(0,len(query1)):
                 somaEventos=0
                 cod_servidor = query1[kk]['cod_servidor']
-                queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor,empresa)
+                queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor)
 
 
                 lista.append(query1[kk]['secretaria'])

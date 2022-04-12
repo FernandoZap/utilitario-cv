@@ -111,12 +111,12 @@ def nome_do_municipio(id_municipio):
     dicionario = dict(zip(lista1,lista2))
     return dicionario[id_municipio]
 
-def eventosMes(id_municipio,anomes,cod_servidor,empresa):
+def eventosMes(id_municipio,anomes,cod_servidor):
     cursor = connection.cursor()
     cursor.execute("select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor \
     from eventos_cv ev inner join folhaeventos fm on fm.id_evento=ev.id_evento_cv and \
     fm.anomes=%s and fm.id_municipio=%s and fm.cod_servidor=%s \
-    where ev.tipo='V'order by ev.evento",[anomes,id_municipio,cod_servidor,empresa])
+    where ev.tipo='V'order by ev.evento",[anomes,id_municipio,cod_servidor])
 
     query = dictfetchall(cursor)
     return query
