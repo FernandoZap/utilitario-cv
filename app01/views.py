@@ -432,6 +432,11 @@ def imprimirCSVFolha(request):
         response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
         if (1==1):
 
+            ls_eventos = set([ev.id_evento_cv for ev in  Evento.objects.filter(empresa='SS',tipo='V')])
+
+            eventos = [ev.evento for ev in Eventos_cv.objects.filter(id_evento_cv__in=ls_eventos).order_by('evento')]
+
+
             cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,'setor' as setor,fn.funcao,vc.vinculo,\
             fl.carga_horaria,fl.dias,rf.ref_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
@@ -455,6 +460,14 @@ def imprimirCSVFolha(request):
                 cod_servidor = query1[kk]['cod_servidor']
                 queryEventos=funcoes_gerais.eventosMes(id_municipio,anomes,cod_servidor)
 
+                lista_ev1=[]
+                lista_ev2=[]
+
+                for qq in range(len(queryEventos)):
+                    lista_ev1.append(queryEventos[qq]['evento'])
+                    lista_ev2.append(queryEventos[qq]['valor'])
+                dict_eventos=dict(zip(lista_ev1,lista_ev2))
+
 
                 lista.append(query1[kk]['secretaria'])
                 lista.append(query1[kk]['setor'])
@@ -465,13 +478,25 @@ def imprimirCSVFolha(request):
                 lista.append(query1[kk]['data_admissao'])
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['ref_eventos'])
+
+
+                for qq in range(len(eventos)):
+                    if eventos[qq] in lista_ev1:
+                        valor=dict_eventos[eventos[qq]]
+                    else:
+                        valor=0
+                    lista.append(valor)
+
+                '''
                 for ll in range(len(queryEventos)):
                     valor_evento = queryEventos[ll]['valor']
                     valor_str = str(valor_evento)
                     valor_str = valor_str.replace('.',',')
                     lista.append(valor_str)
                     somaEventos+=queryEventos[ll]['valor']
-                lista.append(somaEventos)
+                '''
+
+                #lista.append(somaEventos)
 
 
                 writer.writerow(lista)

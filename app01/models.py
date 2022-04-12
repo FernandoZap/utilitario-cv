@@ -217,6 +217,8 @@ class Eventos_cv(models.Model):
     ]
 
     id_evento_cv = models.AutoField(primary_key=True)
+    
+
     evento = models.CharField(max_length=100)
     tipo= models.CharField(max_length=1, default='V')
     cancelado = models.CharField(max_length=1,default='N')
