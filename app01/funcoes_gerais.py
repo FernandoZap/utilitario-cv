@@ -2,7 +2,7 @@
 import os
 import sys
 import re
-from .models import Evento,LogErro,Municipio
+from .models import Evento,LogErro,Municipio,Eventos_cv
 import zipfile
 import re
 from django.db import connection
@@ -38,7 +38,19 @@ def cabecalhoFolha(empresa):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    objs=Evento.objects.filter(empresa=empresa,tipo='V',exibe_excel=1).order_by('evento')
+    lista = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N')]
+
+    lista_set = set(lista)
+
+    ev_cv = Eventos_cv.objects.filter(tipo='V',id_evento_cv__in=lista_set).order_by('evento')
+
+    for ob in ev_cv:
+        lista.append(ob.evento)
+    lista.append('soma')        
+
+
+    '''
+    objs=Evento_cv..objects.filter(empresa=empresa,tipo='V',exibe_excel=1).order_by('evento')
     for obj in objs:
         if obj.cl_orcamentaria is None:
             cl_orcamentaria=''
@@ -46,6 +58,7 @@ def cabecalhoFolha(empresa):
             cl_orcamentaria=obj.cl_orcamentaria
         lista.append(obj.evento+' ('+cl_orcamentaria+')')
     lista.append('Soma')
+    '''
     return lista
 
 
@@ -98,17 +111,12 @@ def nome_do_municipio(id_municipio):
     dicionario = dict(zip(lista1,lista2))
     return dicionario[id_municipio]
 
-
-
-
-
-
 def eventosMes(id_municipio,anomes,cod_servidor,empresa):
     cursor = connection.cursor()
-    cursor.execute("select ev.id_evento,ev.evento,coalesce(fm.valor,0) as valor \
-    from eventos ev left join folhaeventos fm on fm.id_evento=ev.id_evento and \
+    cursor.execute("select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor \
+    from eventos_cv ev inner join folhaeventos fm on fm.id_evento=ev.id_evento_cv and \
     fm.anomes=%s and fm.id_municipio=%s and fm.cod_servidor=%s \
-    where ev.tipo='V' and ev.empresa=%s and ev.exibe_excel=1 order by ev.evento",[anomes,id_municipio,cod_servidor,empresa])
+    where ev.tipo='V'order by ev.evento",[anomes,id_municipio,cod_servidor,empresa])
 
     query = dictfetchall(cursor)
     return query

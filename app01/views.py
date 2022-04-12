@@ -123,7 +123,7 @@ def importacaoFolhaExcel(request):
         entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
         if id_municipio==38:
             entidade='GOVERNO MUNICIPAL DE SAO GONCALO DO AMARANTE'
-            
+
 
 
 
@@ -436,7 +436,7 @@ def imprimirCSVFolha(request):
             fl.carga_horaria,fl.dias,rf.ref_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
             inner join secretarias sec on sec.id_secretaria=fl.id_secretaria inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria\
-            inner join funcoes fn on fn.id_funcao=fl.id_funcao\
+            inner join funcoes_cv fn on fn.id_funcao_cv=fl.id_funcao\
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
             where fl.anomes=%s and fl.id_municipio=%s\
