@@ -86,13 +86,14 @@ def importacaoFolhaExcel(request):
     #-----------------------------------------------------------------------------
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
 
-
+    '''
     objs=Eventos_cv.objects.all()
     for obj in objs:
         evento=obj.evento
         evento=funcoes_gerais.remove_combining_fluent(evento)
         obj.evento=evento
     Eventos_cv.objects.bulk_update(objs,['evento'])
+    '''
 
 
 
