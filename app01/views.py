@@ -432,9 +432,9 @@ def imprimirCSVFolha(request):
         response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
         if (1==1):
 
-            ls_eventos = set([ev.id_evento_cv for ev in  Evento.objects.filter(empresa='SS',tipo='V')])
+            ls_eventos = set([ev.id_evento_cv for ev in  Evento.objects.filter(empresa='SS',tipo='V',cancelado='N')])
 
-            eventos = [ev.evento for ev in Eventos_cv.objects.filter(id_evento_cv__in=ls_eventos).order_by('evento')]
+            eventos = [ev.evento for ev in Eventos_cv.objects.filter(id_evento_cv__in=ls_eventos,tipo='V').order_by('evento')]
 
 
             cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,'setor' as setor,fn.funcao,vc.vinculo,\
