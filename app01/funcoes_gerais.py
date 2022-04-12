@@ -38,9 +38,9 @@ def cabecalhoFolha(empresa):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    lista = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N')]
+    lista_ids = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N')]
 
-    lista_set = set(lista)
+    lista_set = set(lista_ids)
 
     ev_cv = Eventos_cv.objects.filter(tipo='V',id_evento_cv__in=lista_set).order_by('evento')
 
