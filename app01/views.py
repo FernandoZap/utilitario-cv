@@ -432,10 +432,10 @@ def imprimirCSVFolha(request):
         response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
         if (1==1):
 
-            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,sto.setor,fn.funcao,vc.vinculo,\
+            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,'setor' as setor,fn.funcao,vc.vinculo,\
             fl.carga_horaria,fl.dias,rf.ref_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
-            inner join secretarias sec on sec.id_secretaria=fl.id_secretaria inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria\
+            inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
             inner join funcoes_cv fn on fn.id_funcao_cv=fl.id_funcao\
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \

@@ -155,3 +155,68 @@ CREATE VIEW v005_folhaEventos
 AS 
 select f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor from (folhaeventos f join eventos_cv e) where (f.id_evento = e.id_evento_cv) order by e.evento,e.tipo desc;
 
+
+CREATE VIEW v005_folhaEventos 
+AS 
+select f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor from folhaeventos f join eventos_cv e on f.id_evento = e.id_evento_cv order by e.evento,e.tipo desc;
+
+
+
+select ev.id_evento,ev.evento,coalesce(fm.valor,0) as valor \
+    from eventos_cv ev left join folhaeventos fm on fm.id_evento=ev.id_evento and \
+    fm.anomes=%s and fm.id_municipio=%s and fm.cod_servidor=%s \
+    where ev.tipo='V' and ev.empresa=%s and ev.exibe_excel=1 order by ev.evento",[anomes,id_municipio,cod_servido
+
+
+select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor \
+    from eventos_cv ev left join folhaeventos fm on fm.id_evento=ev.id_evento_cv and \
+    fm.anomes=202111 and fm.id_municipio=38 and fm.cod_servidor=1762 \
+    where ev.tipo='V' order by ev.evento",[anomes,id_municipio,cod_servido
+
+
+
+select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor
+from eventos_cv ev left join folhaeventos fm on fm.id_evento=ev.id_evento_cv and
+fm.anomes=202111 and fm.id_municipio=38 and fm.cod_servidor=1762
+where ev.tipo='V' order by ev.evento;
+
+
+
+
+1762,32
+
+
+
+
+
+
+
+select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor
+    from eventos_cv ev inner join folhaeventos fm on fm.id_evento=ev.id_evento_cv and
+    fm.anomes=202111 and fm.id_municipio=38 and fm.cod_servidor=1762
+    where ev.tipo='V'order by ev.evento
+
+
+
+SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,sto.setor,fn.funcao,vc.vinculo,
+fl.carga_horaria,fl.dias,rf.ref_eventos
+from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor
+inner join secretarias sec on sec.id_secretaria=fl.id_secretaria inner join setores sto on sto.id_setor=fl.id_setor and sto.secretaria_id=fl.id_secretaria
+inner join funcoes_cv fn on fn.id_funcao_cv=fl.id_funcao
+inner join vinculos vc on vc.id_vinculo=fl.id_vinculo
+left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes
+where fl.anomes=202111 and fl.id_municipio=38
+order by fl.cod_servidor limit 5;
+
+
+",[anomes,id_municipio])
+
+
+
+
+
+
+
+
+
+
