@@ -121,6 +121,11 @@ def importacaoFolhaExcel(request):
             logerro.save()
 
         entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
+        if id_municipio==38:
+            entidade='GOVERNO MUNICIPAL DE SAO GONCALO DO AMARANTE'
+            
+
+
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
