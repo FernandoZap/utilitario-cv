@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Funcoes_cv,Vinculo
+from .models import Municipio,Evento,Planilha,Folhames,Secretaria,Setor,Funcao,Funcoes_cv,Vinculo,Eventos_cv
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -85,6 +85,16 @@ def importacaoFolhaExcel(request):
     #  proventos e descontos.
     #-----------------------------------------------------------------------------
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
+
+
+    objs=Evento.objects.all()
+    for obj in objs:
+        evento=obj.evento
+        evento=funcoes_gerais.remove_combining_fluent(evento)
+        obj.evento=evento
+    Evento.objects.bulk_update(objs,['evento'])
+
+
 
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
