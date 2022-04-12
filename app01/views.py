@@ -444,7 +444,7 @@ def imprimirCSVFolha(request):
             inner join funcoes_cv fn on fn.id_funcao_cv=fl.id_funcao\
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
-            where fl.anomes=%s and fl.id_municipio=%s\
+            where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
             order by fl.cod_servidor",[anomes,id_municipio])
 
             query1 = dictfetchall(cursor)
