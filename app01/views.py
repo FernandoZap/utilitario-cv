@@ -94,6 +94,14 @@ def importacaoFolhaExcel(request):
     Eventos_cv.objects.bulk_update(objs,['evento'])
     '''
 
+    ls1=[e.id_evento_cv for e in Eventos_cv.objects.all()]
+    ls2=[e.id_evento_cv for e in Evento.objects.all()]
+    ls3=set(ls2)
+
+    for k in range(len(ls1)):
+        if ls1[k] not in ls3:
+            #print (ls1[k])
+            Eventos_cv.objects.get(pk=ls1[k]).delete()
 
 
     mensagem=''
