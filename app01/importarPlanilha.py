@@ -137,14 +137,15 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
                     if ev1 is None:
                         ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
                         if ev2 is not None:
-                            id_funcao_cv=ev2.id_funcao_cv
-                            funcao_new=Funcao(
-                                empresa=empresa,
-                                funcao=funcao,
-                                id_funcao_cv=id_funcao_cv
-                            )
-                            ls_funcao.append(funcao+' - ' +str(id_funcao_cv))
-                            carga_funcao.append(funcao_new)
+                            if funcao not in ls_funcao:
+                                id_funcao_cv=ev2.id_funcao_cv
+                                funcao_new=Funcao(
+                                    empresa=empresa,
+                                    funcao=funcao,
+                                    id_funcao_cv=id_funcao_cv
+                                )
+                                ls_funcao.append(funcao)
+                                carga_funcao.append(funcao_new)
         ls_funcao_verificada.append(funcao)
 
 
@@ -166,23 +167,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     if len(lista_erro_secretaria)>0:
         LogErro.objects.bulk_create(carga_erro)
 
-    if len(ls_funcao)>0:
-        for kk in range(len(ls_funcao)):
-            obj=LogErro(
-                id_municipio=id_municipio,
-                anomes=anomes,
-                numero_linha=0,
-                codigo='funcao',
-                observacao=ls_funcao[kk]
-                )
-            carga_erro2.append(obj)
-    if len(carga_erro2)>0:
-        LogErro.objects.bulk_create(carga_erro2)
-
-
-
-    #if len(carga_funcao)>0:
-        #Funcao.objects.bulk_create(carga_funcao)
+    if len(carga_funcao)>0:
+        Funcao.objects.bulk_create(carga_funcao)
 
     return 1
 
