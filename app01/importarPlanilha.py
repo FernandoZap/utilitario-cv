@@ -155,22 +155,24 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     if len(lista)>0:
         Setor.objects.bulk_create(carga_setor)
 
-    if len(lista_erro_secretaria)>0:
-        for kk in range(len(lista_erro_secretaria)):
+    if len(ls_funcao)>0:
+        for kk in range(len(ls_funcao)):
             obj=LogErro(
                 id_municipio=id_municipio,
                 anomes=anomes,
                 numero_linha=0,
-                codigo='secretaria',
-                observacao=lista_erro_secretaria[kk]
+                codigo='funcao',
+                observacao=ls_funcao[kk]
                 )
             carga_erro.append(obj)
 
-    if len(lista_erro_secretaria)>0:
+    if len(ls_funcao)>0:
         LogErro.objects.bulk_create(carga_erro)
 
-    if len(ls_funcao)>0:
-        Funcao.objects.bulk_create(carga_funcao)
+
+
+    #if len(ls_funcao)>0:
+        #Funcao.objects.bulk_create(carga_funcao)
 
     return 1
 
