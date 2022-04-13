@@ -101,7 +101,6 @@ def importacaoFolhaExcel(request):
         if ls1[k] not in ls3:
             #print (ls1[k])
             Eventos_cv.objects.get(pk=ls1[k]).delete()
-    '''
 
     ls1=[e.id_funcao_cv for e in Funcoes_cv.objects.all()]
     ls2=[e.id_funcao_cv for e in Funcao.objects.all()]
@@ -111,6 +110,7 @@ def importacaoFolhaExcel(request):
         if ls1[k] not in ls3:
             #print (ls1[k])
             Funcoes_cv.objects.get(pk=ls1[k]).delete()
+    '''            
 
 
 
