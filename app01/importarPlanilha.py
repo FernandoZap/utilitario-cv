@@ -561,7 +561,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                         funcao_new.save()
 
 
-        ls_funcao_verificada.append(funcao)                            .
+        ls_funcao_verificada.append(funcao) 
 
 
     if len(ls_secretaria)>0:
