@@ -73,6 +73,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     ls_setores_verificados=[]
     ls_funcao_verificada=[]
     carga_funcao=[]
+    carga_setor=[]
 
     lista_erro_secretaria=[]
     lista_setores=listagens.listagemSetores(i_id_municipio)
@@ -110,23 +111,19 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
                 if secretaria in lista_secretarias:
                     id_secretaria = dict_secretarias[secretaria]
                     obj_sec = Secretaria.objects.get(pk=id_secretaria)
-                else:
-                    obj_sec=None
-                    if secretaria not in lista_erro_secretaria:
-                        lista_erro_secretaria.append(secretaria)
+                    if obj_sec is not None:
+                        if len(setor)>2:
+                            if secretaria+setor not in lista_setores:
+                                if secretaria+setor not in lista:
+                                    objeto = Setor(
+                                        id_municipio=i_id_municipio,
+                                        secretaria=obj_sec,
+                                        setor=setor
+                                        )
+                                    lista.append(secretaria+setor)
+                                    carga_setor.append(objeto)
 
-
-                    if len(setor)>2 and obj_sec is not None:
-                        if secretaria+setor not in lista_setores:
-                            if secretaria+setor not in lista:
-                                objeto = Setor(
-                                    id_municipio=i_id_municipio,
-                                    secretaria=obj_sec,
-                                    setor=setor
-                                    )
-                                lista.append(secretaria+setor)
-                                objetos.append(objeto)
-        ls_setores_verificados.append(setor+secretaria)
+            ls_setores_verificados.append(setor+secretaria)
 
 
         if funcao is not None:
@@ -150,7 +147,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
         
     if len(lista)>0:
-        Setor.objects.bulk_create(objetos)
+        Setor.objects.bulk_create(carga_setor)
 
     if len(lista_erro_secretaria)>0:
         for kk in range(len(lista_erro_secretaria)):
