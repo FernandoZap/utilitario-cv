@@ -71,6 +71,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     lista=[]
     carga_erro=[]
     ls_setores_verificados=[]
+    ls_funcao_verificada=[]
+    carga_funcao=[]
 
     lista_erro_secretaria=[]
     lista_setores=listagens.listagemSetores(i_id_municipio)
@@ -94,6 +96,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
         setor = queryP[qp]['setor']
         secretaria = queryP[qp]['secretaria']
+        funcao = queryP[qp]['funcao']
 
         if setor is not None and secretaria is not None:
             setor = setor.strip()
@@ -123,7 +126,28 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
                                     )
                                 lista.append(secretaria+setor)
                                 objetos.append(objeto)
-            ls_setores_verificados.append(setor+secretaria)
+        ls_setores_verificados.append(setor+secretaria)
+
+
+        if funcao is not None:
+            funcao=funcao.strip()
+            if len(funcao)>2:
+                funcao=funcoes_gerais.remove_combining_fluent(funcao)
+                if funcao not in ls_funcao_verificada:
+                    ev1=Funcao.objects.filter(empresa=empresa,funcao=funcao).first()
+                    if ev1 is None:
+                        ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
+                        if ev2 is not None:
+                            id_funcao_cv=ev2.id_funcao_cv
+                            funcao_new=Funcao(
+                                empresa=empresa,
+                                funcao=funcao,
+                                id_funcao_cv=id_funcao_cv
+                            )
+                            carga_funcao.append(funcao_new)
+        ls_funcao_verificada.append(funcao)
+
+
         
     if len(lista)>0:
         Setor.objects.bulk_create(objetos)
@@ -141,6 +165,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
     if len(lista_erro_secretaria)>0:
         LogErro.objects.bulk_create(carga_erro)
+    if len(carga_funcao)>0:
+        Funcao.objects.bulk_create(carga_funcao)
 
     return 1
 
@@ -548,17 +574,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                                 funcao=funcao,
                                 cancelado='N'
                                 )
-                            funcao_new.save()
-                            ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
-                            id_funcao_cv=ev2.id_funcao_cv
-                        else:
-                            id_funcao_cv=0 #ev2.id_funcao_cv
-                        funcao_new=Funcao(
-                            empresa=empresa,
-                            funcao=funcao,
-                            id_funcao_cv=id_funcao_cv
-                            )
-                        #funcao_new.save()
+                            carga_funcao.append(funcao_new)
 
 
         ls_funcao_verificada.append(funcao) 
@@ -568,6 +584,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         Secretaria.objects.bulk_create(carga_secretaria)
     if len(ls_vinculo)>0:        
         Vinculo.objects.bulk_create(carga_vinculo)        
+    if len(carga_funcao)>0:
+        Funcoes_cv.objects.bulk_create(carga_funcao)        
 
     obj=LogErro(
         id_municipio=id_municipio,
