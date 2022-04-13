@@ -2,7 +2,7 @@
 import os
 import sys
 import re
-from .models import Evento,LogErro,Municipio,Eventos_cv
+from .models import LogErro,Municipio
 import zipfile
 import re
 from django.db import connection
@@ -38,7 +38,7 @@ def cabecalhoFolha(empresa):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    lista_ids = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N')]
+    lista_ids = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N',tipo='V')]
 
     lista_set = set(lista_ids)
 

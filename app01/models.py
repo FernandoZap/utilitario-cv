@@ -102,6 +102,7 @@ class LogErro(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
+
 '''
 class Funcao(models.Model):  
     id_funcao = models.AutoField(primary_key=True)
@@ -187,7 +188,7 @@ class Secretaria(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 class Evento(models.Model):  
     PROVDESC_CHOICES = [
         ('',''),
@@ -196,6 +197,7 @@ class Evento(models.Model):
     ]
 
     id_evento = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField()
     empresa = models.CharField(max_length=50,default='')
     tipo = models.CharField(max_length=9,choices=PROVDESC_CHOICES,default='V')
     evento = models.CharField(max_length=50)
@@ -211,28 +213,7 @@ class Evento(models.Model):
     class Meta:
         db_table = 'eventos'
 
-
-
-class Eventos_cv(models.Model):  
-    PROVDESC_CHOICES = [
-        ('',''),
-        ('V','VANTAGEM'),
-        ('D','DESCONTO'),
-    ]
-
-    id_evento_cv = models.AutoField(primary_key=True)
-    
-
-    evento = models.CharField(max_length=100)
-    tipo= models.CharField(max_length=1, default='V')
-    cancelado = models.CharField(max_length=1,default='N')
-
-    def __str__(self):
-        return self.evento
-
-    class Meta:
-        db_table = 'eventos_cv'
-
+'''        
 
 class Setor(models.Model):  
     id_setor = models.AutoField(primary_key=True)

@@ -4,7 +4,7 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Eventos_cv
+from .models import Secretaria,Vinculo,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro
 
 from . import listagens,funcoes_gerais,funcoes_banco
 
@@ -436,7 +436,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     carga_vinculo=[]
     carga_evento=[]
     carga_evento2=[]
-    carga_funcao=[]
 
     ls_evento_verificado=[]
     ls_funcao_verificada=[]
@@ -460,8 +459,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
 
     lista_secretarias=listagens.listagemSecretarias(i_id_municipio)
 
-    lista_funcoes=listagens.listagemFuncoes(empresa)
-    lista_funcoes_cv=listagens.listagemFuncoes_cv()
+    lista_funcoes=listagens.listagemFuncoes(id_municipio)
 
     lista_vinculos=listagens.listagemVinculos(i_id_municipio)
 
@@ -572,15 +570,15 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
             if len(funcao)>2:
                 funcao=funcoes_gerais.remove_combining_fluent(funcao)
                 if funcao not in ls_funcao_verificada:
-                    ev1=Funcao.objects.filter(empresa=empresa,funcao=funcao).first()
+                    ev1=Funcao.objects.filter(id_municipio=id_municipio,funcao=funcao).first()
                     if ev1 is None:
-                        ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
-                        if ev2 is None:
-                            funcao_new=Funcoes_cv(
-                                funcao=funcao,
-                                cancelado='N'
-                                )
-                            carga_funcao.append(funcao_new)
+                        funcao_new=Funcao(
+                            id_municipio=id_municipio,
+                            empresa=empresa,
+                            funcao=funcao,
+                            id_funcao_cv=0
+                            )
+                        carga_funcao.append(funcao_new)
 
 
         ls_funcao_verificada.append(funcao) 
@@ -591,8 +589,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
     if len(ls_vinculo)>0:        
         Vinculo.objects.bulk_create(carga_vinculo)        
     if len(carga_funcao)>0:
-        Funcoes_cv.objects.bulk_create(carga_funcao)        
-
+        Funcao.objects.bulk_create(carga_funcao)        
+    '''        
     obj=LogErro(
         id_municipio=id_municipio,
         anomes=anomes,
@@ -601,7 +599,8 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         observacao='teste'
         )
     obj.save()
-
+    '''
+    '''
     if len(ls_evento)>0:
         for kk in range(len(ls_evento)):
             obje=LogErro(
@@ -613,6 +612,7 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                 )
             carga_evento2.append(obje)
     LogErro.objects.bulk_create(carga_evento2)
+    '''
     return 1
 
 
