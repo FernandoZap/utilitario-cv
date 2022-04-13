@@ -541,24 +541,24 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                 funcao=funcoes_gerais.remove_combining_fluent(funcao)
                 if funcao not in ls_funcao_verificada:
                     ev1=Funcao.objects.filter(empresa=empresa,funcao=funcao).first()
-                    if ev1 is None:
+                    if ev1 is None and 1==2:
                         ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
                         if ev2 is None:
                             funcao_new=Funcoes_cv(
                                 funcao=funcao,
                                 cancelado='N'
                                 )
-                            funcao_new.save()
+                            #funcao_new.save()
                             ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
-                            id_funcao_cv=ev2.id_funcao_cv
+                            #id_funcao_cv=ev2.id_funcao_cv
                         else:
-                            id_funcao_cv=ev2.id_funcao_cv
+                            id_funcao_cv=0 #ev2.id_funcao_cv
                         funcao_new=Funcao(
                             empresa=empresa,
                             funcao=funcao,
                             id_funcao_cv=id_funcao_cv
                             )
-                        funcao_new.save()
+                        #funcao_new.save()
 
 
         ls_funcao_verificada.append(funcao) 

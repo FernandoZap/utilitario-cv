@@ -145,7 +145,7 @@ def importacaoFolhaExcel(request):
 
 
 
-
+        '''
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
             return render(request, 'app01/planilhaErrada.html',
@@ -157,6 +157,7 @@ def importacaoFolhaExcel(request):
 
                     }
                 )
+        '''
 
         mes_ref = funcoes_gerais.mesReferencia(mes)
 
