@@ -103,13 +103,14 @@ class LogErro(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-'''
+
 class Funcao(models.Model):  
     id_funcao = models.AutoField(primary_key=True)
     id_municipio =  models.IntegerField()
     empresa = models.CharField(max_length=50,default='')
     funcao = models.CharField(max_length=100)
     id_funcao_cv = models.IntegerField(default=0)
+    cancelado = models.CharField(max_length=1,default='N')
 
     def __str__(self):
         return self.funcao
@@ -124,23 +125,6 @@ class Funcao(models.Model):
 
 
 
-class Funcoes_cv(models.Model):  
-
-    id_funcao_cv = models.AutoField(primary_key=True)
-    id_municipio =  models.IntegerField()
-    funcao = models.CharField(max_length=100)
-    cancelado = models.CharField(max_length=1,default='N')
-
-    def __str__(self):
-        return self.funcao
-
-    class Meta:
-        db_table = 'funcoes_cv'
-        constraints = [
-            models.UniqueConstraint(fields=['funcao'], name='unique_funcoes_cv')
-        ]
-
-'''
 class Servidor(models.Model):  
     id_servidor = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField()
@@ -188,7 +172,8 @@ class Secretaria(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
+
+
 class Evento(models.Model):  
     PROVDESC_CHOICES = [
         ('',''),
@@ -213,7 +198,7 @@ class Evento(models.Model):
     class Meta:
         db_table = 'eventos'
 
-'''        
+        
 
 class Setor(models.Model):  
     id_setor = models.AutoField(primary_key=True)
@@ -359,48 +344,3 @@ class Refeventos(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
-'''
-class Grupo_funcoes(models.Model):  
-    id_grupo = models.AutoField(primary_key=True)
-    empresa = models.CharField(max_length=50,null=True)
-    funcao_original = models.CharField(max_length=100,null=True)
-    funcao_principal = models.CharField(max_length=100,null=True)
-
-    def __str__(self):
-        return self.funcao_original
-
-
-    class Meta:
-        db_table = 'grupo_funcoes'
-        constraints = [
-            models.UniqueConstraint(fields=['empresa','funcao_original' ], name='unique_grupo_funcoes')
-        ]
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-
-
-class Grupo_eventos(models.Model):  
-    id_grupo = models.AutoField(primary_key=True)
-    empresa = models.CharField(max_length=50,null=True)
-    evento_original = models.CharField(max_length=100,null=True)
-    evento_principal = models.CharField(max_length=100,null=True)
-
-    def __str__(self):
-        return self.evento_original
-
-
-    class Meta:
-        db_table = 'grupo_eventos'
-        constraints = [
-            models.UniqueConstraint(fields=['empresa','evento_original' ], name='unique_grupo_eventos')
-        ]
-
-    @classmethod
-    def truncate(cls):
-        with connection.cursor() as cursor:
-            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
-'''            
