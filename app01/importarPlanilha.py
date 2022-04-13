@@ -4,7 +4,7 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Funcao,Funcoes_cv,LogErro,Eventos_cv
+from .models import Secretaria,Vinculo,Evento,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,Funcoes_cv,LogErro,Eventos_cv
 
 from . import listagens,funcoes_gerais,funcoes_banco
 

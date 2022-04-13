@@ -5,7 +5,7 @@ import os
 import sys
 import datetime
 from openpyxl.styles import NamedStyle
-from .models import Evento,Funcao
+from .models import Evento
 from . import funcoes_banco
 
 
