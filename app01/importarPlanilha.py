@@ -74,6 +74,8 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
     ls_funcao_verificada=[]
     carga_funcao=[]
     carga_setor=[]
+    ls_funcao=[]
+    carga_erro2=[]
 
     lista_erro_secretaria=[]
     lista_setores=listagens.listagemSetores(i_id_municipio)
@@ -141,6 +143,7 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
                                 funcao=funcao,
                                 id_funcao_cv=id_funcao_cv
                             )
+                            ls_funcao.append(funcao+' - ' +str(id_funcao_cv))
                             carga_funcao.append(funcao_new)
         ls_funcao_verificada.append(funcao)
 
@@ -162,8 +165,24 @@ def importarSetores(i_id_municipio,i_anomes,entidade,empresa):
 
     if len(lista_erro_secretaria)>0:
         LogErro.objects.bulk_create(carga_erro)
-    if len(carga_funcao)>0:
-        Funcao.objects.bulk_create(carga_funcao)
+
+    if len(ls_funcao)>0:
+        for kk in range(len(ls_funcao)):
+            obj=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='funcao',
+                observacao=ls_funcao[kk]
+                )
+            carga_erro2.append(obj)
+    if len(carga_erro2)>0:
+        LogErro.objects.bulk_create(carga_erro2)
+
+
+
+    #if len(carga_funcao)>0:
+        #Funcao.objects.bulk_create(carga_funcao)
 
     return 1
 
