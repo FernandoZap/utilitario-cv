@@ -102,7 +102,7 @@ class LogErro(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
+
 class Funcao(models.Model):  
     id_funcao = models.AutoField(primary_key=True)
     empresa = models.CharField(max_length=50,default='')
@@ -120,7 +120,7 @@ class Funcao(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-'''
+
 
 class Funcoes_cv(models.Model):  
 
