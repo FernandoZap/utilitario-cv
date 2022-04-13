@@ -1,4 +1,4 @@
-from .models import Vinculo,Secretaria,Setor,Evento,Servidor,Folhames,Funcoes_cv,Eventos_cv
+from .models import Vinculo,Secretaria,Setor,Evento,Servidor,Folhames,Eventos_cv
 
 
 def listagemSecretarias(id_municipio):
