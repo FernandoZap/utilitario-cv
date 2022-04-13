@@ -512,29 +512,56 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
                     if ev1 is None:
                         ev2=Eventos_cv.objects.filter(evento=evento).first()
                         if ev2 is None:
-                            if evento not in ls_evento:
-                                obj_new = Eventos_cv(
-                                    evento=evento,
-                                    tipo=tipo_evento,
-                                    cancelado='N'
-                                    )
-                                carga_evento.append(obj_new)
-                                ls_evento.append(evento)
-        ls_evento_verificado.append(evento)                                
+                            evento_new=Eventos_cv(
+                                evento=evento,
+                                tipo=tipo_evento,
+                                cancelado='N'
+                                )
+                            evento_new.save()
+                            ev2=Eventos_cv.objects.filter(evento=evento).first()
+                            id_evento_cv=ev2.id_evento_cv
+                        else:
+                            id_evento_cv=ev2.id_evento_cv
+                        evento_new=Evento(
+                            empresa=empresa,
+                            tipo=tipo_evento,
+                            evento=evento,
+                            cancelado='N',
+                            exibe_excel=1,
+                            ordenacao=0,
+                            cl_orcamentaria='O',
+                            id_evento_cv=id_evento_cv
+                            )
+                        evento_new.save()
+        ls_evento_verificado.append(evento)
+
 
         if funcao is not None:
             funcao=funcao.strip()
             if len(funcao)>2:
                 funcao=funcoes_gerais.remove_combining_fluent(funcao)
                 if funcao not in ls_funcao_verificada:
-                    if pesquisaFuncao(funcao,lista_funcoes,lista_funcoes_cv):
-                        if funcao not in ls_funcao:
-                            obj_new = Funcoes_cv(
+                    ev1=Funcao.objects.filter(empresa=empresa,funcao=funcao).first()
+                    if ev1 is None:
+                        ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
+                        if ev2 is None:
+                            funcao_new=Funcoes_cv(
                                 funcao=funcao,
                                 cancelado='N'
                                 )
-                            carga_funcao.append(obj_new)
-                            ls_funcao.append(funcao)
+                            funcao_new.save()
+                            ev2=Funcoes_cv.objects.filter(funcao=funcao).first()
+                            id_funcao_cv=ev2.id_funcao_cv
+                        else:
+                            id_funcao_cv=ev2.id_funcao_cv
+                        funcao_new=Funcao(
+                            empresa=empresa,
+                            funcao=funcao,
+                            id_funcao_cv=id_funcao_cv
+                            )
+                        funcao_new.save()
+
+
         ls_funcao_verificada.append(funcao)                            
 
 
@@ -542,10 +569,6 @@ def importarSecFuncVincEventos(i_id_municipio,i_anomes,entidade,empresa):
         Secretaria.objects.bulk_create(carga_secretaria)
     if len(ls_vinculo)>0:        
         Vinculo.objects.bulk_create(carga_vinculo)        
-    if len(ls_evento)>0:
-        Eventos_cv.objects.bulk_create(carga_evento)
-    if len(ls_funcao)>0:
-        Funcoes_cv.objects.bulk_create(carga_funcao)
 
     obj=LogErro(
         id_municipio=id_municipio,

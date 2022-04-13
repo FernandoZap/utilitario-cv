@@ -92,7 +92,6 @@ def importacaoFolhaExcel(request):
         evento=funcoes_gerais.remove_combining_fluent(evento)
         obj.evento=evento
     Eventos_cv.objects.bulk_update(objs,['evento'])
-    '''
 
     ls1=[e.id_evento_cv for e in Eventos_cv.objects.all()]
     ls2=[e.id_evento_cv for e in Evento.objects.all()]
@@ -102,6 +101,18 @@ def importacaoFolhaExcel(request):
         if ls1[k] not in ls3:
             #print (ls1[k])
             Eventos_cv.objects.get(pk=ls1[k]).delete()
+    '''
+
+    ls1=[e.id_funcao_cv for e in Funcoes_cv.objects.all()]
+    ls2=[e.id_funcao_cv for e in Funcao.objects.all()]
+    ls3=set(ls2)
+
+    for k in range(len(ls1)):
+        if ls1[k] not in ls3:
+            #print (ls1[k])
+            Funcoes_cv.objects.get(pk=ls1[k]).delete()
+
+
 
 
     mensagem=''
