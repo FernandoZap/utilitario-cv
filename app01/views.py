@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo
+from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -112,371 +112,6 @@ def importacaoFolhaExcel(request):
             Funcoes_cv.objects.get(pk=ls1[k]).delete()
     '''            
 
-
-    lista=[]
-
-    lista.append('ADMINISTRADOR')
-    lista.append('ADVOGADO')
-    lista.append('AGENTE ADMINISTRATIVO')
-    lista.append('AGENTE COMUNITARIO DE SAUDE')
-    lista.append('AGENTE DE COLABORAÇÃO EXTERNA')
-    lista.append('AGENTE DE COMBATE ENDEMIAS')
-    lista.append('AGENTE SOCIAL')
-    lista.append('AGRONOMO')
-    lista.append('ALMOXARIFE')
-    lista.append('ANALISTA AMBIENTAL')
-    lista.append('ANALISTA DE POLITICAS PUBLICAS')
-    lista.append('ANALISTA DE TECNOLOGIA DA INFORMACAO')
-    lista.append('ARQUITETO URBANISTA')
-    lista.append('ARQUIVISTA')
-    lista.append('ASSESSOR COMUNITARIO')
-    lista.append('ASSESSOR DE ANALISE DE CREDITO')
-    lista.append('ASSESSOR DE APOIO A CIDADANIA')
-    lista.append('ASSESSOR DE COMUNICACAO SOCIAL I')
-    lista.append('ASSESSOR DE COMUNICAÇÃO SOCIAL II')
-    lista.append('ASSESSOR DE COMUNICACAO SOCIAL III')
-    lista.append('ASSESSOR DE GABINETE')
-    lista.append('ASSESSOR DE IMPRENSA')
-    lista.append('ASSESSOR DE MARKETING')
-    lista.append('ASSESSOR DE PLANEJAMENTO')
-    lista.append('ASSESSOR ESPECIAL')
-    lista.append('ASSESSOR ESPECIAL DE ART. INSTITUCIONAL')
-    lista.append('ASSESSOR ESPECIAL DE ASSUNTOS LEGISLATIVOS')
-    lista.append('ASSESSOR ESPECIAL DE DES. DO MICRO E PEQUENO EMPREENDEDORISM')
-    lista.append('ASSESSOR ESPECIAL DE MOBILIZAÇÃO SOCIAL')
-    lista.append('ASSESSOR EXECUTIVO')
-    lista.append('ASSESSOR FINANCEIRO')
-    lista.append('ASSESSOR JURIDICO')
-    lista.append('ASSESSOR TECNICO')
-    lista.append('ASSIST. DE GAB. DO PROCURADOR')
-    lista.append('ASSISTENTE DA DEFESA CIVIL')
-    lista.append('ASSISTENTE DE APOIO ADM I')
-    lista.append('ASSISTENTE DE APOIO ADM II')
-    lista.append('ASSISTENTE DE APOIO ADM III')
-    lista.append('ASSISTENTE DE ATIVIDADES CULTURAIS E DESPORTIVAS')
-    lista.append('ASSISTENTE DE COMPRAS')
-    lista.append('ASSISTENTE DE COORD. DE POLITICAS PUB. SOBRE DROGAS')
-    lista.append('ASSISTENTE DE GABINETE I')
-    lista.append('ASSISTENTE DE GABINETE II')
-    lista.append('ASSISTENTE JURÍDICO')
-    lista.append('ASSISTENTE SOCIAL')
-    lista.append('ATENDENTE DE ENFERMAGEM')
-    lista.append('AUDITOR DE CONTROLE INTERNO')
-    lista.append('AUDITOR FISCAL DA RECEITA MUNICIPAL')
-    lista.append('AUXILIAR DE ENFERMAGEM')
-    lista.append('AUXILIAR DE SERVIÇOS GERAIS')
-    lista.append('AUXILIAR EM SAUDE BUCAL')
-    lista.append('BIBLIOTECARIO(A)')
-    lista.append('BOMBEIRO HIDRAULICO')
-    lista.append('CH. AS. MED. HOSP.')
-    lista.append('CHEFE DA CELULA DE INSTANCIA E JULGAMENTO DE DEFESA')
-    lista.append('CHEFE DA DIV DE VIGILANCIA EPIDEMIOLOGICA')
-    lista.append('CHEFE DA FARMACIA')
-    lista.append('CHEFE DA MAN. E FISC. DA REDE')
-    lista.append('CHEFE DA MECANICA')
-    lista.append('CHEFE DA SERRARIA')
-    lista.append('CHEFE DE DIV DE ACOES DAS UBASF')
-    lista.append('CHEFE DE DIV DE ADM DE PESSOAL')
-    lista.append('CHEFE DE DIV. DE APOIO AO CREDITO')
-    lista.append('CHEFE DE DIV DE APOIO A QUALIFICACAO PROFISSIONAL')
-    lista.append('CHEFE DE DIV DE ARTES PLASTICAS E LITERATURA')
-    lista.append('CHEFE DE DIV DE ASSISTENCIA FARMACEUTICA')
-    lista.append('CHEFE DE DIV DE ASSISTENCIA ODONTOLOGICO')
-    lista.append('CHEFE DE DIV DE CADASTRO TECNICO MULTIFINALITARIO')
-    lista.append('CHEFE DE DIV. DE CONSERVAÇÃO AMBIENTAL')
-    lista.append('CHEFE DE DIV DE CONTROLE DE ENDEMIAS')
-    lista.append('CHEFE DE DIV DE DANÇAS REG E ARTESANATO')
-    lista.append('CHEFE DE DIV DE DES DO COMERCIO')
-    lista.append('CHEFE DE DIV. DE DIVULGAÇÃO E PROMOÇÃO')
-    lista.append('CHEFE DE DIV DE EDUCAÇÃO DE TRANSITO E TRANSPORTE')
-    lista.append('CHEFE DE DIV DE ENGENHARIA, SINALIZAÇÃO, ESTUDOS DE TRANSPOR')
-    lista.append('CHEFE DE DIV DE FISCALIZAÇÃO, ADM, CADASTRO E VISTORIA')
-    lista.append('CHEFE DE DIV. DE FISCALIZAÇÃO DE OBRAS')
-    lista.append('CHEFE DE DIV DE FISCALIZAÇÃO DE OBRAS-SRP')
-    lista.append('CHEFE DE DIV DE GESTÃO DE EQUIPAMENTOS TURISTICOS')
-    lista.append('CHEFE DE DIV. DE LIMPEZA PUB. E MANUTENÇÃO')
-    lista.append('CHEFE DE DIV. DE MÚSICA')
-    lista.append('CHEFE DE DIV DE OBRAS E MANUTENCAO')
-    lista.append('CHEFE DE DIV DE OBRAS E SANEAMENTO')
-    lista.append('CHEFE DE DIV DE PECUARIA')
-    lista.append('CHEFE DE DIV DE PESQUISAS E INFORMACOES TURISTICAS')
-    lista.append('CHEFE DE DIV DE PLANEJAMENTO ORÇAMENTARIO E PROJETOS ESPECIA')
-    lista.append('CHEFE DE DIV DE PLANEJAMENTO URBANO')
-    lista.append('CHEFE DE DIV DE PROTOCOLO')
-    lista.append('CHEFE DE DIV DE SERVIÇOS GERAIS')
-    lista.append('CHEFE DE DIV DE SISTEMA DE REFERENCIA E CONTRA-REFERENCIA')
-    lista.append('CHEFE DE DIVISAO DE ADM DE RH')
-    lista.append('CHEFE DE DIVISÃO DE ADMINISTRAÇÃO')
-    lista.append('CHEFE DE DIVISAO DE CICLISMO E ATLETISMO')
-    lista.append('CHEFE DE DIVISÃO DE EXECUÇÃO')
-    lista.append('CHEFE DE DIVISAO DE FINANCAS')
-    lista.append('CHEFE DE DIVISÃO DE FUTEBOL')
-    lista.append('CHEFE DE DIVISAO DE FUTSAL')
-    lista.append('CHEFE DE DIVISAO DE MANUTENÇÃO')
-    lista.append('CHEFE DE DIVISAO DE URBANISMO')
-    lista.append('CHEFE DE DIVISAO DO ALMOXARIFADO')
-    lista.append('CHEFE DE DIVISÃO FINANCEIRA')
-    lista.append('CHEFE DE DIVISÃO TÉCNICA')
-    lista.append('CHEFE DE DIV. PROTAGONISMO JUVENIL')
-    lista.append('CHEFE DE PROJETOS')
-    lista.append('CHEFE DIV DESENVOLVIMENTO DA INDUSTRIA')
-    lista.append('CHEFE DIV. INFOR. ESTATISTICA')
-    lista.append('CHEFE DIVISÃO DE VOLEI')
-    lista.append('CHEFE DIV. PART. COMUNITARIA')
-    lista.append('CHEFE DO ALMOXARIFADO CENTRAL')
-    lista.append('CHEFE DO DEP. DE OBRAS E MANUTENÇÃO')
-    lista.append('CHEFE DO ESCRITORIO DE FORTALEZA')
-    lista.append('CHEFE DO SERV. DE ENG. DE PESCA')
-    lista.append('CHEFE POSTO SERV DIVERSOS')
-    lista.append('COND TRANS ESCOLAR CAT D')
-    lista.append('CONTADOR(A)')
-    lista.append('CONTRA-MESTRO')
-    lista.append('COORD ADMINISTRATIVO DA UPA')
-    lista.append('COORD. ADMINISTRATIVO DO CEMITERIO')
-    lista.append('COORD DA ATENCAO SECUNDARIA E TERCIARIA')
-    lista.append('COORD DA GESTAO DE RECURSOS HUMANO')
-    lista.append('COORD. DA JUVENTUDE, ESPORTE E CULTURA')
-    lista.append('COORD. DA VIGILÂNCIA SOCIAL')
-    lista.append('COORD. DE ADM. GESTÃO ESTRATÉGICA E PESSOAS')
-    lista.append('COORD DE CIENCIA, TECNOLOGIA E INOVAÇAO')
-    lista.append('COORD. DE CONTROLE AVALIAÇÃO REGULAÇÃO E AUDITORIA')
-    lista.append('COORD. DE POLITICAS PUB. SOBRE DROGAS')
-    lista.append('COORD DISTRITAL DA TAIBA E SIUPE')
-    lista.append('COORD DO POLO DE ATENDIMENTO')
-    lista.append('COORDENADOR ADMINISTRATIVO FINANCEIRO')
-    lista.append('COORDENADOR DA ACAO SOCIAL')
-    lista.append('COORDENADOR DA ATENÇÃO BÁSICA')
-    lista.append('COORDENADOR DA DEFESA CIVIL')
-    lista.append('COORDENADOR DA FISIOTERAPIA')
-    lista.append('COORDENADOR DA ILHA DIGITAL')
-    lista.append('COORDENADOR DAS ACOES BASICAS')
-    lista.append('COORDENADOR DA SECAO CADISTA')
-    lista.append('COORDENADOR DE AGENTES DA VIG DA SAU')
-    lista.append('COORDENADOR DE AREA')
-    lista.append('COORDENADOR DE ARTICULAÇÃO INSTITUCIONAL')
-    lista.append('COORDENADOR DE ASSUNTOS EDUCACIONAIS')
-    lista.append('COORDENADOR DE CAPOEIRA')
-    lista.append('COORDENADOR DE COMPRAS E SERVIÇOS')
-    lista.append('COORDENADOR DE DANÇA')
-    lista.append('COORDENADOR DE EQUIPAMENTOS ESPORTIVOS')
-    lista.append('COORDENADOR DE ESPORTE')
-    lista.append('COORDENADOR DE ESPORTES')
-    lista.append('COORDENADOR DE IMPRENSA')
-    lista.append('COORDENADOR DE MOBILIZAÇÃO SOCIAL')
-    lista.append('COORDENADOR DE PLANEJAMENTO ORÇAMENTO E MODERNIZAÇÃO')
-    lista.append('COORDENADOR DE POSTO')
-    lista.append('COORDENADOR DE PROJETOS I')
-    lista.append('COORDENADOR DE PROJETOS III')
-    lista.append('COORDENADOR DE REGULARIZAÇÃO FUNDIÁRIA URBANA E RURAL')
-    lista.append('COORDENADOR DE SERVIÇOS GERAIS')
-    lista.append('COORDENADOR DE TRANSPORTES')
-    lista.append('COORDENADOR DISTRITAL I')
-    lista.append('COORDENADOR DISTRITAL II')
-    lista.append('COORDENADOR DISTRITAL III')
-    lista.append('COORDENADOR DISTRITAL IV')
-    lista.append('COORDENADOR DISTRITAL V')
-    lista.append('COORDENADOR DO CACI')
-    lista.append('COORDENADOR DO CADASTRO UNICO')
-    lista.append('COORDENADOR DO CADASTRO UNICO II')
-    lista.append('COORDENADOR DO CAPS')
-    lista.append('COORDENADOR DO CENTRO DE FEIRAS E CONCENÇÕES')
-    lista.append('COORDENADOR DO CREAS')
-    lista.append('COORDENADOR DO NASF')
-    lista.append('COORDENADOR DO PETI')
-    lista.append('COORDENADOR DO PRO-JOVEM')
-    lista.append('COORDENADOR DO SETOR DE BIOLOGIA DA SEMEIO')
-    lista.append('COORDENADOR GERAL DA EQUIPE TECNICA FAMILIA ACOLHEDORA')
-    lista.append('COORDENADOR LIMPEZA I')
-    lista.append('COORDENADOR LIMPEZA II')
-    lista.append('COORDENADOR PEDAGÓGICO')
-    lista.append('COORDENADOR PROJETOS II')
-    lista.append('COORDENADOR REGIONAL I')
-    lista.append('COORDENADOR REGIONAL II')
-    lista.append('COORD MUN DE POLITICAS P/ CRIANÇAS E ADOLESCENTES')
-    lista.append('COORD MUNICIPAL DE POLITICAS PÚBLICAS PARA AS MULHERES')
-    lista.append('COZINHEIRO(A)')
-    lista.append('DIGITADOR(A)')
-    lista.append('DIRETOR ASSISTENCIA ODONTOLOGICA')
-    lista.append('DIRETOR BANDA MUSICA')
-    lista.append('DIRETOR CLINICO-TECNICO DA UPA')
-    lista.append('DIRETOR CORPO CLINICO')
-    lista.append('DIRETOR DA DEFESA CIVIL PATRIMONIAL E CIDADANIA')
-    lista.append('DIRETOR DA UPA PECÉM')
-    lista.append('DIRETOR DE DEP. ADMINISTRATIVO-FINANCEIRO')
-    lista.append('DIRETOR DE DEPARTAMENTO DE CONSERVAÇÃO')
-    lista.append('DIRETOR DE DEPARTAMENTO DE OBRAS')
-    lista.append('DIRETOR DE DEPARTAMENTO PEDAGOGICO')
-    lista.append('DIRETOR DE DEP DE CULTURA')
-    lista.append('DIRETOR DE DEP DE DES DO TURISMO')
-    lista.append('DIRETOR DE DEP DE DES URBANO')
-    lista.append('DIRETOR DE DEP. DE ESPORTE')
-    lista.append('DIRETOR DE DEP DE GERAÇÃO DE EMPREGO, RENDA E EMPREENDEDORIS')
-    lista.append('DIRETOR DE DEP DE PROTEÇÃO SOCIAL ESPECIAL')
-    lista.append('DIRETOR DE DEP DE RECURSOS HIDRICOS')
-    lista.append('DIRETOR DEP. ADM. E FINANCAS')
-    lista.append('DIRETOR DEPARTAMENTO')
-    lista.append('DIRETOR DEPARTAMENTO DE PLANEJAMENTO')
-    lista.append('DIRETOR DEP. DES.IND.COMERCIO')
-    lista.append('DIRETOR DEP MEIO AMBIENTE')
-    lista.append('DIRETOR DE PROJETOS ESPECIAIS')
-    lista.append('DIRETOR DEP TEC DE SERV DE SAUDE')
-    lista.append('DIRETOR DE UNIDADE ESCOLAR I')
-    lista.append('DIRETOR DE UNIDADE ESCOLAR IV')
-    lista.append('DIRETOR DE UNIDADE ESCOLAR V')
-    lista.append('DIRETOR DE UNIDADE ESCOLAR VI')
-    lista.append('DIRETOR DO DEPARTAMENTO DE PROJETOS')
-    lista.append('DIRETOR PROJETOS')
-    lista.append('EDUCADOR INFANTIL')
-    lista.append('EDUCADOR SOCIAL')
-    lista.append('ELETRICISTA')
-    lista.append('ENCARREGADO PARA ASSUNTO EXTERNOS')
-    lista.append('ENFERMEIRO(A)')
-    lista.append('ENFERMEIRO(A) PSF')
-    lista.append('ENFERMEIRO CHEFE DO PSF')
-    lista.append('ENGENHEIRO AGRONOMO')
-    lista.append('ENGENHEIRO CIVIL')
-    lista.append('ENGENHEIRO ELETRICISTA')
-    lista.append('ENGENHEIRO FLORESTAL')
-    lista.append('ENTREVISTADOR')
-    lista.append('ESTATISTICO')
-    lista.append('FACILITADOR(A)')
-    lista.append('FARMACEUTICO(A) BIOQUIMICO(A)')
-    lista.append('FISCAL AMBIENTAL')
-    lista.append('FISCAL DE OBRAS')
-    lista.append('FISCAL DE OBRAS COM CNH')
-    lista.append('FISCAL DE OBRAS E POSTURAS')
-    lista.append('FISCAL DE VIGILANCIA EM SAUDE')
-    lista.append('FISIOTERAPEUTA')
-    lista.append('FONOAUDIOLOG0')
-    lista.append('FORMADOR ANOS FINAIS ENS FUND LINGUA PORTUGUESA')
-    lista.append('FORMADOR ANOS FINAIS ENS FUND MATEMATICA')
-    lista.append('FORMADOR DA EDUCAÇÃO INFANTIL')
-    lista.append('FORMADOR DOS ANOS INICIAIS DO ENS FUNDAMENTAL')
-    lista.append('GARI VARRIÇÃO E CAPINA')
-    lista.append('GEOGRAFO')
-    lista.append('GERENTE ADMINISTRATIVO')
-    lista.append('GERENTE DA CELULA DE ASSISTENCIA SOCIAL')
-    lista.append('GERENTE DE BIOLOGIA')
-    lista.append('GERENTE DE CADASTRO')
-    lista.append('GERENTE DE CADASTRO E ARREGIMENTAÇÃO DAS FAMILIAS')
-    lista.append('GERENTE DE CADASTRO E EXTESAO FLORESTAL')
-    lista.append('GERENTE DE CELULA DE ATENÇÃO AO INFANTE')
-    lista.append('GERENTE DE CONTENCIOSO JUDICIAL')
-    lista.append('GERENTE DE ESTUDO GEOLÓGICO')
-    lista.append('GERENTE DE LICITAÇÕES')
-    lista.append('GERENTE DE MARKETING AO TURISMO')
-    lista.append('GERENTE DE PARECERES E PROCESSOS')
-    lista.append('GERENTE DE TRIAGEM')
-    lista.append('GERENTE DO SISTEMA TURISTICO')
-    lista.append('GUARDA CIVIL MUNICIPAL')
-    lista.append('INSTRUTOR DA ESCOLINHA DE FUTEBOL')
-    lista.append('INSTRUTOR DE ARTES PLASTICAS E CENICAS')
-    lista.append('INSTRUTOR DE BASQUETE')
-    lista.append('INSTRUTOR DE CAPOEIRA')
-    lista.append('INSTRUTOR DE DANÇA')
-    lista.append('INSTRUTOR DE MUSICA')
-    lista.append('INSTRUTOR DE XADREZ')
-    lista.append('MAESTRO')
-    lista.append('MARCENEIRO')
-    lista.append('MEDICO CARDIOLOGISTA')
-    lista.append('MEDICO CIRURGIAO')
-    lista.append('MEDICO PLANTONISTA')
-    lista.append('MEDICO PSF')
-    lista.append('MEMBRO DO CONS. TUTELAR')
-    lista.append('MOTORISTA')
-    lista.append('MOTORISTA CAT B')
-    lista.append('MOTORISTA CAT. D')
-    lista.append('NUTRICIONISTA')
-    lista.append('ODONTOLOGO(A)')
-    lista.append('ODONTOLOGO(A) PSF')
-    lista.append('OPERADOR DE MAQUINAS')
-    lista.append('ORIENTADOR SOCIAL')
-    lista.append('OUVIDOR DO MUNICIPIO')
-    lista.append('PEDAGOGA')
-    lista.append('PORTEIRO')
-    lista.append('PREFEITO MUNICIPAL')
-    lista.append('PREGOEIRO')
-    lista.append('PRESIDENTE DA COMISSÃO DE LICITAÇÃO')
-    lista.append('PROCURADOR DO MUNICIPIO')
-    lista.append('PROCURADOR GERAL DO MUNICIPIO')
-    lista.append('PROF ANOS FINAIS ENS FUND LINGUA INGLESA')
-    lista.append('PROF ANOS FINAIS ENS FUND LINGUA PORTUGUESA')
-    lista.append('PROF ENS FUND II EDUCAÇÃO FISICA')
-    lista.append('PROF ENS FUND II GEOGRAFIA')
-    lista.append('PROF ENS FUND II HISTORIA')
-    lista.append('PROF ENS FUND II INGLES')
-    lista.append('PROF ENS FUND II LIBRAS')
-    lista.append('PROF ENS FUND II LINGUA PORTUGUESA')
-    lista.append('PROF ENS FUND II MATEMATICA')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND ARTE')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND CIENCIAS')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND EDUC FISICA')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND ENS RELIGIOSO')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND HISTORIA')
-    lista.append('PROFESSOR ANOS FINAIS ENS FUND MATEMATICA')
-    lista.append('PROFESSOR ANOS INICIAIS ENSINO FUNDAMENTAL')
-    lista.append('PROFESSOR DA EDUCAÇÃO INFANTIL')
-    lista.append('PROFESSOR DE EDUC INFANTIL')
-    lista.append('PROFESSOR EDUC BASICA I')
-    lista.append('PROFESSOR EJA 1º SEG')
-    lista.append('PROFESSOR ENS FUND I')
-    lista.append('PROFESSOR ENS FUND II')
-    lista.append('PROFESSOR SALAS ATEND EDUCACIONAL ESPECIALIZADO')
-    lista.append('PROF FUND II CIENCIAS')
-    lista.append('PSICOLOGO')
-    lista.append('PSICOPEDAGOGO')
-    lista.append('REGENTE DE ENSINO')
-    lista.append('SEC.DO TRABALHO E DESENVOLVIMENTO SOCIAL')
-    lista.append('SECRETÁRIA DO GABINETE')
-    lista.append('SECRETARIO(A) EXECUTIVO')
-    lista.append('SECRETÁRIO DA CULTURA')
-    lista.append('SECRETARIO DA INFRAESTRUTURA')
-    lista.append('SECRETÁRIO DA SEC REGIONAL DO PECÉM')
-    lista.append('SECRETARIO DAS FINANCAS')
-    lista.append('SECRETARIO DE CONTROLADORIA OUVIDORIA E TRANSPARENCIA')
-    lista.append('SECRETÁRIO DE PLANEJAMENTO ADM E GESTÃO')
-    lista.append('SECRETARIO DO DES AGRARIO E RURAL')
-    lista.append('SECRETARIO DO DES ECONOMICO')
-    lista.append('SECRETÁRIO DO ESPORTE E JUVENTUDE')
-    lista.append('SECRETARIO DO GOVERNO')
-    lista.append('SECRETARIO DO MEIO AMBIENTE E URBANISMO')
-    lista.append('SECRETARIO ESCOLAR')
-    lista.append('SECRETARIO ESCOLAR COMISSIONADO')
-    lista.append('SECRETARIO EXECUTIVO DOS CONSELHOS')
-    lista.append('SUPERVISOR PEDAGOGICO')
-    lista.append('TECNICO(A) RADIOLOGIA')
-    lista.append('TECNICO EM AGROPECUARIA')
-    lista.append('TECNICO EM EDIFICACAO')
-    lista.append('TECNICO EM ENFERMAGEM')
-    lista.append('TECNICO EM RECURSOS HUMANOS')
-    lista.append('TECNICO EM SAUDE BUCAL')
-    lista.append('TELEFONISTA')
-    lista.append('TERAPEUTA OCUPACIONAL')
-    lista.append('TOPÓGRAFO')
-    lista.append('TRATORISTA')
-    lista.append('TURISMÓLOGO')
-    lista.append('VETERINARIO(A)')
-    lista.append('VICE-PREFEITO')
-    lista.append('VIGIA')
-    lista.append('VISITADOR')
-
-    carga_funcao=[]
-
-    for kk in range(len(lista)):
-        func38=lista[kk]
-        func38=remove_combining_fluent(func38)
-        objf=Funcao(
-            id_municipio=38,
-            empresa='SS',
-            funcao=func38,
-            id_funcao_cv=0
-            )
-        carga_funcao.append(objf)
-
-    Funcao.objects.bulk_create(carga_funcao)
-    lista=[]
-
-
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
     if (request.method == "POST"):
@@ -506,8 +141,6 @@ def importacaoFolhaExcel(request):
             entidade='GOVERNO MUNICIPAL DE SAO GONCALO DO AMARANTE'
 
 
-
-        '''
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
         if obj is not None:
             return render(request, 'app01/planilhaErrada.html',
@@ -519,12 +152,13 @@ def importacaoFolhaExcel(request):
 
                     }
                 )
-        '''
-
         mes_ref = funcoes_gerais.mesReferencia(mes)
-
-        if tabela=='SecFuncVincEvento':
-            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
+        if tabela=='Secretaria':
+            retorno = importarPlanilha.importarSecretaria(id_municipio,anomes,entidade,empresa)
+        elif tabela=='Funcao':
+            retorno = importarPlanilha.importarFuncao(id_municipio,anomes,entidade,empresa)
+        elif tabela=='Evento':
+            retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
         elif tabela=='Setor':    
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Servidor':            
@@ -532,9 +166,11 @@ def importacaoFolhaExcel(request):
         elif tabela=='Folha':
             retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
         elif tabela == 'Geral':
-            retorno = importarPlanilha.importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa)
+            retorno = importarPlanilha.importarSecretaria(id_municipio,anomes,entidade,empresa)
             if retorno==1:
                 retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
+                retorno = importarPlanilha.importarFuncao(id_municipio,anomes,entidade,empresa)
+                retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
             else:                
@@ -814,16 +450,16 @@ def imprimirCSVFolha(request):
         response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
         if (1==1):
 
-            ls_eventos = set([ev.id_evento_cv for ev in  Evento.objects.filter(empresa='SS',tipo='V',cancelado='N')])
 
-            eventos = [ev.evento for ev in Eventos_cv.objects.filter(id_evento_cv__in=ls_eventos,tipo='V').order_by('evento')]
+            eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
 
 
-            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,'setor' as setor,fn.funcao,vc.vinculo,\
+            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo,\
             fl.carga_horaria,fl.dias,rf.ref_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
             inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
-            inner join funcoes_cv fn on fn.id_funcao_cv=fl.id_funcao\
+            inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor \
+            inner join funcoes fn on fn.id_funcao=fl.id_funcao\
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
             where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
@@ -831,7 +467,7 @@ def imprimirCSVFolha(request):
 
             query1 = dictfetchall(cursor)
 
-            cabecalho = funcoes_gerais.cabecalhoFolha(empresa)
+            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
             writer = csv.writer(response, delimiter=';')
             response.write(u'\ufeff'.encode('utf8'))
             writer.writerow(cabecalho)
@@ -861,13 +497,19 @@ def imprimirCSVFolha(request):
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['ref_eventos'])
 
-
+                soma=0
                 for qq in range(len(eventos)):
                     if eventos[qq] in lista_ev1:
                         valor=dict_eventos[eventos[qq]]
+                        soma+=valor
+                        valor_str=str(valor)
+                        valor_str = valor_str.replace('.',',')
                     else:
-                        valor=0
-                    lista.append(valor)
+                        valor_str='0'
+                    lista.append(valor_str)
+                soma_str=str(soma)
+                soma_str = soma_str.replace('.',',')
+                lista.append(soma_str)
 
                 '''
                 for ll in range(len(queryEventos)):
@@ -883,7 +525,9 @@ def imprimirCSVFolha(request):
 
                 writer.writerow(lista)
                 lista=[]
-            
+            cursor.close()
+            del cursor
+
         return response
         #titulo = 'Impressao do Excel *****'
         #municipios=Municipio.objects.all().order_by('municipio')
@@ -1063,12 +707,69 @@ def remove_combining_fluent(string: str) -> str:
     )
 
 
+def consultarTabelas(request):
+
+    if request.method=='POST':
+        id_municipio = request.POST['municipio']
+        tabela = request.POST['tabela']
+        lista=[]
+
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+        else:
+            municipio=''
+            empresa = ''
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="consulta_tabelas.csv"'
+        if (1==1):
+
+            if tabela=='Eventos':
+                query1 = Evento.objects.filter(id_municipio=id_municipio,cancelado='N').order_by('evento')
+                cabecalho = ['municipio','codigo','descricao do evento','tipo','exibe','principal']
+            elif tabela=='Funcoes':
+                query1 = Funcao.objects.filter(id_municipio=id_municipio,cancelado='N').order_by('funcao')
+                cabecalho = ['municipio','codigo','descricao da funcao','principal']
 
 
+            
+
+            writer = csv.writer(response, delimiter=';')
+            response.write(u'\ufeff'.encode('utf8'))
+            writer.writerow(cabecalho)
+            contador=0
+            if tabela=='Eventos':
+                for kk in range(0,len(query1)):
+                    lista.append(municipio)
+                    lista.append(query1[kk].id_evento)
+                    lista.append(query1[kk].evento)
+                    lista.append(query1[kk].tipo)
+                    lista.append(query1[kk].exibe_excel)
+                    lista.append(query1[kk].id_evento_cv)
+                    writer.writerow(lista)
+                    lista=[]
+            elif tabela=='Funcoes':
+                for kk in range(0,len(query1)):
+                    lista.append(municipio)
+                    lista.append(query1[kk].id_funcao)
+                    lista.append(query1[kk].funcao)
+                    lista.append(query1[kk].id_funcao_cv)
+                    writer.writerow(lista)
+                    lista=[]
+            
+        return response
 
 
+    else:
+        titulo = 'Impressao do Excel'
+        municipios=Municipio.objects.all().order_by('municipio')
+    return render(request, 'app01/consultarTabelas.html',
+        {
+            'titulo': titulo,
+            'municipios':municipios,
+            'mensagem':''
 
-
-
-
-
+        }
+    )

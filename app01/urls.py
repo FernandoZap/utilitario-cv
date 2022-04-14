@@ -21,6 +21,7 @@ urlpatterns = [
     path('listSomaEventos', v1.listSomaEventos, name='listSomaEventos'),
     path('agrupar-eventos', v1.agrupareventos, name='agrupar-eventos'),
     path('agrupar-funcoes', v1.agruparfuncoes, name='agrupar-funcoes'),
+    path('consultarTabelas', v1.consultarTabelas, name='consultarTabelas'),
     path('parateste', v1.parateste),
 ]
 

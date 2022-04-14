@@ -281,3 +281,87 @@ where ev.tipo='V'order by ev.evento limit 100
 
 
 
+lista_ids = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N',tipo='V')]
+
+lista_set = set(lista_ids)
+ev_cv = Eventos_cv.objects.filter(tipo='V',id_evento_cv__in=lista_set).order_by('evento')
+
+
+
+ppp=Planilha.objects.annotate(qtde=Count('cod_servidor')).values('cod_servidor', 'nome')
+
+
+Planilha.objects.values('secretaria','setor').annotate(Count('secretaria')).filter(entidade='PREFEITRUA MUNICIPAL DE ITATIRA'codigo_folha=6)
+
+
+
+select s.id_secretaria,s.secretaria,sum(vantagens) as vantagens, sum(descontos) as descontos
+from v001_valoresmes v,secretarias s
+where v.id_secretaria=s.id_secretaria
+and v.id_municipio=92
+and v.anomes=202111
+group by s.id_secretaria,s.secretaria ORDER BY s.secretaria
+
+
+",[id_municipio,anomes])
+
+
+
+select fm.anomes,fm.id_municipio,fm.id_secretaria,fm.id_setor,fe.tipo,fe.id_evento,
+case when fe.tipo='V' THEN fe.valor else 0 end as vantagens,
+case when fe.tipo='D' THEN fe.valor else 0 end as descontos
+from folhames fm,folhaeventos fe
+where fm.cod_servidor=fe.cod_servidor
+and fm.id_municipio=fe.id_municipio
+and fm.anomes=fe.anomes
+and fm.anomes=202111
+
+
+
+select s.id_secretaria,s.secretaria,st.setor,sum(vantagens) as vantagens, sum(descontos) as descontos
+from v001_valoresmes v,secretarias s,setores st
+where v.id_secretaria=s.id_secretaria
+and s.id_secretaria=st.secretaria_id
+and st.id_setor=v.id_setor
+and v.id_municipio=92
+and v.anomes=202106
+group by s.id_secretaria,s.secretaria,st.setor order by s.secretaria,st.setor;
+
+
+",[id_municipio,anomes])
+
+
+
+drop view v005_folhaEventos;
+CREATE VIEW v005_folhaEventos AS select f.anomes AS anomes,f.id_municipio AS id_municipio,e.evento AS evento,e.tipo AS tipo,f.valor AS valor from 
+folhaeventos f join eventos e on f.id_evento = e.id_evento order by e.evento,e.tipo desc;
+
+
+
+
+SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo,
+fl.carga_horaria,fl.dias,rf.ref_eventos
+
+select count(*)
+from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor
+inner join secretarias sec on sec.id_secretaria=fl.id_secretaria
+inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor
+inner join funcoes fn on fn.id_funcao=fl.id_funcao
+inner join vinculos vc on vc.id_vinculo=fl.id_vinculo
+left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes
+where sv.id_municipio=fl.id_municipio and fl.anomes=201106 and fl.id_municipio=92;
+
+order by fl.cod_servidor;
+
+
+
+
+setores = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=92)
+
+
+ITATIRA - SEDE  -  SEC. DE ASSISTENCIA SOCIAL  -  240
+SECRETARIA DE ACAO SOCIAL  -  SEC. DE ASSISTENCIA SOCIAL  -  240
+LAGOA DO MATO  -  SEC. DE GESTAO E PLANEJAMENTO  -  241
+LAGOA DO MATO  -  SEC. DE JUVENTUDE - CONTRATO TEMPORARIO  -  242
+
+

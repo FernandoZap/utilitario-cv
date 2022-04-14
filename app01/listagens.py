@@ -1,4 +1,4 @@
-from .models import Vinculo,Secretaria,Setor,Servidor,Folhames
+from .models import Vinculo,Secretaria,Setor,Servidor,Folhames,Funcao,Evento
 
 
 def listagemSecretarias(id_municipio):
@@ -16,6 +16,14 @@ def listagemSetores(id_municipio):
 	for setor in setores:
 		lista.append(setor.secretaria.secretaria+setor.setor)
 	return lista
+
+def listagemSetores2(id_municipio):
+	lista=[]
+	setores = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=id_municipio)
+	for setor in setores:
+		lista.append(str(setor.secretaria.id_secretaria)+setor.setor)
+	return lista
+
 
 def listagemVinculos(id_municipio):
 	lista=[]
@@ -90,66 +98,31 @@ def criarDictVinculos(id_municipio):
 
 
 
-
-def criarDictGrupoEventos(empresa):
-	lista1=[]
-	lista2=[]
-	secs = Grupo_eventos.objects.filter(empresa=empresa).order_by('id_grupo')
-	for sec in secs:
-		lista1.append(
-			sec.evento_original
-			)
-		lista2.append(
-			sec.evento_principal
-			)
-
-	return dict(zip(lista1,lista2))
-
-
-def listagemEventos(empresa):
+def listagemEventos(id_municipio):
 	lista=[]
-	eventos = Evento.objects.filter(empresa=empresa)
+	eventos = Evento.objects.filter(id_municipio=id_municipio)
 	for evento in eventos:
 		lista.append(evento.evento)
 	return lista
 
 
-def criarDictEventos(empresa):
+def criarDictEventos(id_municipio):
 	lista1=[]
 	lista2=[]
-	secs = Evento.objects.filter(empresa=empresa).order_by('id_evento')
+	secs = Evento.objects.filter(id_municipio=id_municipio).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
 			sec.evento
 			)
+		if sec.id_evento_cv==0:
+			id_object=sec.id_evento
+		else:
+			id_object=sec.id_evento_cv
 		lista2.append(
-			sec.id_evento_cv
+			id_object
 			)
 
 	return dict(zip(lista1,lista2))
-
-
-def listagemEventos_cv():
-	lista=[]
-	eventos = Eventos_cv.objects.all()
-	for evento in eventos:
-		lista.append(evento.evento)
-	return lista
-
-
-def criarDictEventos_cv():
-	lista1=[]
-	lista2=[]
-	secs = Eventos_cv.objects.all()
-	for sec in secs:
-		lista1.append(
-			sec.evento
-			)
-		lista2.append(
-			sec.id_evento_cv
-			)
-	return dict(zip(lista1,lista2))
-
 
 
 def listagemFuncoes(id_municipio):
@@ -170,9 +143,9 @@ def criarDictFuncoes(id_municipio):
 			sec.funcao
 			)
 		if sec.id_funcao_cv==0:
-			id_object=id_funcao
+			id_object=sec.id_funcao
 		else:
-			id_object=id_funcao_cv
+			id_object=sec.id_funcao_cv
 
 		lista2.append(
 			id_object
@@ -181,13 +154,13 @@ def criarDictFuncoes(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-def criarDictTiposDeEventos(empresa):
+def criarDictTiposDeEventos(id_municipio):
 	lista1=[]
 	lista2=[]
-	secs = Evento.objects.filter(empresa=empresa).order_by('id_evento')
+	secs = Evento.objects.filter(id_municipio=id_municipio).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
-			sec.id_evento_cv
+			sec.id_evento
 			)
 		lista2.append(
 			sec.tipo
@@ -195,17 +168,4 @@ def criarDictTiposDeEventos(empresa):
 
 	return dict(zip(lista1,lista2))
 
-def criarDictTiposDeEventos_cv():
-	lista1=[]
-	lista2=[]
-	secs = Eventos_cv.objects.all()
-	for sec in secs:
-		lista1.append(
-			sec.id_evento_cv
-			)
-		lista2.append(
-			sec.tipo
-			)
-
-	return dict(zip(lista1,lista2))
 

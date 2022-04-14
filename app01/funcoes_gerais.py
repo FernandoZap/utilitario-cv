@@ -2,13 +2,14 @@
 import os
 import sys
 import re
-from .models import LogErro,Municipio
+from .models import LogErro,Municipio,Funcao,Evento
 import zipfile
 import re
 from django.db import connection
 from django.db.models import Count,Sum
 import unidecode
 import unicodedata
+
 
 
 def mesPorExtenso(mes,modelo):
@@ -25,7 +26,7 @@ def mesReferencia(mes):
     return lista_mes[int(mes)]
 
 
-def cabecalhoFolha(empresa):
+def cabecalhoFolha(id_municipio):
     lista=[]
 
     lista.append('Secretaria')
@@ -38,14 +39,11 @@ def cabecalhoFolha(empresa):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    lista_ids = [ob.id_evento_cv for ob in Evento.objects.filter(empresa='SS',cancelado='N',tipo='V')]
+    lista_eventos = [ob.evento for ob in Evento.objects.filter(id_municipio=id_municipio,cancelado='N',tipo='V',exibe_excel=1)]
 
-    lista_set = set(lista_ids)
 
-    ev_cv = Eventos_cv.objects.filter(tipo='V',id_evento_cv__in=lista_set).order_by('evento')
-
-    for ob in ev_cv:
-        lista.append(ob.evento)
+    for kk in range(len(lista_eventos)):
+        lista.append(lista_eventos[kk])
     lista.append('soma')        
 
 
@@ -113,8 +111,8 @@ def nome_do_municipio(id_municipio):
 
 def eventosMes(id_municipio,anomes,cod_servidor):
     cursor = connection.cursor()
-    cursor.execute("select ev.id_evento_cv,ev.evento,coalesce(fm.valor,0) as valor \
-    from eventos_cv ev inner join folhaeventos fm on fm.id_evento=ev.id_evento_cv and \
+    cursor.execute("select ev.id_evento, ev.evento,coalesce(fm.valor,0) as valor \
+    from eventos ev inner join folhaeventos fm on fm.id_evento=ev.id_evento and \
     fm.anomes=%s and fm.id_municipio=%s and fm.cod_servidor=%s \
     where ev.tipo='V'order by ev.evento",[anomes,id_municipio,cod_servidor])
 

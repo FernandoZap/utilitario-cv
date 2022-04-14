@@ -8,7 +8,7 @@
 <p align="center">{{ titulo }}</p>
 
     
-   <form action="{% url 'app01:importacaoFolhaExcel' %}" method="post">
+   <form action="{% url 'app01:consultarTabelas' %}" method="post">
     {%csrf_token%}
 
    {% if messages %}
@@ -30,13 +30,8 @@
     <label for="id_tabela" class="col-form-label">Tabela</label>
     <select name="tabela"  id="id_tabela" class="form-control" required>
       <option value=""></option>
-      <option value="Secretaria">Secretarias</option>
-      <option value="Funcao">Funcao</option>
-      <option value="Evento">Evento</option>
-      <option value="Setor">Setores</option>
-      <option value="Servidor">Servidores</option>
-      <option value="Folha">Folha</option>
-      <option value="Geral">Geral</option>
+      <option value="Funcoes">Funcoes</option>
+      <option value="Eventos">Eventos</option>
       <option value=""></option>
 
     </select>   
@@ -55,37 +50,6 @@
     </div>
 
     <input type='hidden' name="operacao" value='atualizar'>
-
-
-    <div class="col">
-    <label for="id_ano" class="col-form-label">Ano</label>
-    <select name="ano"  id="id_ano" class="form-control"  required>
-      <option value=""></option>
-      <option value="2021">2021</option>
-      <option value="2022">2022</option>
-      <option value="2023">2023</option>
-    </select>   
-
-    <label for="id_mes" class="col-form-label">Mes</label>
-    <select name="mes"  id="id_mes" class="form-control" required>
-      <option value=""></option>
-      <option value="01">Janeiro</option>
-      <option value="02">Fevereiro</option>
-      <option value="03">Marco</option>
-      <option value="04">Abril</option>
-      <option value="05">Maio</option>
-      <option value="06">JUnho</option>
-      <option value="07">Julho</option>
-      <option value="08">Agosto</option>
-      <option value="09">Setembro</option>
-      <option value="10">Outubro</option>
-      <option value="11">Novembro</option>
-      <option value="12">Dezembro</option>
-
-    </select> 
-
-
-    </div>
 
     <br>
     <h2><span class="mensagem">{{ mensagem }}</span></h2>
