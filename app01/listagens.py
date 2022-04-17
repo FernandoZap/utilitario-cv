@@ -66,7 +66,6 @@ def criarDictSecretarias(id_municipio):
 	return dict(zip(lista1,lista2))
 
 
-
 def criarDictSetores(id_municipio):
 	lista1=[]
 	lista2=[]
@@ -167,5 +166,3 @@ def criarDictTiposDeEventos(id_municipio):
 			)
 
 	return dict(zip(lista1,lista2))
-
-

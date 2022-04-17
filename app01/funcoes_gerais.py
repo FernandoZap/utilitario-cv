@@ -46,17 +46,6 @@ def cabecalhoFolha(id_municipio):
         lista.append(lista_eventos[kk])
     lista.append('soma')        
 
-
-    '''
-    objs=Evento_cv..objects.filter(empresa=empresa,tipo='V',exibe_excel=1).order_by('evento')
-    for obj in objs:
-        if obj.cl_orcamentaria is None:
-            cl_orcamentaria=''
-        else:
-            cl_orcamentaria=obj.cl_orcamentaria
-        lista.append(obj.evento+' ('+cl_orcamentaria+')')
-    lista.append('Soma')
-    '''
     return lista
 
 
@@ -109,6 +98,7 @@ def nome_do_municipio(id_municipio):
     dicionario = dict(zip(lista1,lista2))
     return dicionario[id_municipio]
 
+'''
 def eventosMes(id_municipio,anomes,cod_servidor):
     cursor = connection.cursor()
     cursor.execute("select ev.id_evento, ev.evento,coalesce(fm.valor,0) as valor \
@@ -118,6 +108,46 @@ def eventosMes(id_municipio,anomes,cod_servidor):
 
     query = dictfetchall(cursor)
     return query
+'''
+
+def eventosMes(id_municipio,anomes):
+    cursor = connection.cursor()
+    cursor.execute("select fm.cod_servidor,ev.id_evento, ev.evento,coalesce(fm.valor,0) as valor \
+    from eventos ev inner join folhaeventos fm on fm.id_evento=ev.id_evento and \
+    fm.anomes=%s and fm.id_municipio=%s \
+    where ev.tipo='V'order by cod_servidor",[anomes,id_municipio])
+
+    query = dictfetchall(cursor)
+    for kk in range(0,len(query)):
+        cod_servidor=query[kk]['cod_servidor']
+        break
+
+    lst1=[]
+    lst2=[]
+    lst3=[]
+    for kk in range(0,len(query)):
+        flag=0
+        if query[kk]['cod_servidor'] not in lst1:
+            if len(lst3)>0:
+                lst2.append(lst3)
+            lst1.append(query[kk]['cod_servidor'])
+            lst3=[]
+            lst3.append(
+                {
+                    'evento':query[kk]['evento'],
+                    'valor':query[kk]['valor']
+                }
+            )
+        else:
+            lst3.append(
+                {
+                    'evento':query[kk]['evento'],
+                    'valor':query[kk]['valor']
+                }
+            )
+    lst2.append(lst3)
+    return dict(zip(lst1,lst2))
+
 
 
 def dictfetchall(cursor):
@@ -133,9 +163,6 @@ def gravarErro_01(id_municipio,anomes,observacao):
     log.save()
     return 'ok'
 
-
-
-
 def remove_accents(input_str):
     nkfd_form = unicodedata.normalize('NFKD', input_str)
     only_ascii = nkfd_form.encode('ASCII', 'ignore')
@@ -150,12 +177,27 @@ def to_ascii_string(string):
     return unidecode.unidecode(string)
 
 
-
 def remove_combining_fluent(string: str) -> str:
     normalized = unicodedata.normalize('NFD', string)
     return ''.join(
         [l for l in normalized if not unicodedata.combining(l)]
     )
+
+
+def montarDiciionarioEventoDoServidor(eventosDoServidor):
+    lista1=[]
+    lista2=[]
+    for kk in range(len(eventosDoServidor)):
+        lista1.append(eventosDoServidor[kk]['evento'])
+        lista2.append(eventosDoServidor[kk]['valor'])
+    return dict(zip(lista1,lista2))
+
+
+def montaListaEventoDoServidor(eventosDoServidor):
+    lista=[]
+    for kk in range(len(eventosDoServidor)):
+        lista.append(eventosDoServidor[kk]['evento'])
+    return lista
 
 
 

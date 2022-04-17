@@ -225,16 +225,7 @@ and rf.anomes=fl.anomes
 where fl.anomes=202111 and fl.id_municipio=38
 order by fl.cod_servidor limit 5;
 
-
-
-
 ",[anomes,id_municipio])
-
-
-
-
-
-
 
 
 SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,'setor' as setor,fn.funcao,vc.vinculo,
@@ -364,4 +355,57 @@ SECRETARIA DE ACAO SOCIAL  -  SEC. DE ASSISTENCIA SOCIAL  -  240
 LAGOA DO MATO  -  SEC. DE GESTAO E PLANEJAMENTO  -  241
 LAGOA DO MATO  -  SEC. DE JUVENTUDE - CONTRATO TEMPORARIO  -  242
 
+
+
+q=Folhames.objects.values('cod_servidor').aggregate(Count('id_municipio'),Count('anomes'))
+
+
+
+qqP=Planilha.objects.values(
+        'funcao').annotate(Count('funcao')).filter(codigo_folha=6).order_by('funcao')
+
+
+qqP=Folhaevento.objects.filter(tipo='V',id_municipio=92,anomes__gte=202104,anomes__lte=202107).aggregate(Sum('valor'))
+
+qP=Folhaevento.objects.filter(tipo='V',id_municipio=92,anomes__gte=202104,anomes__lte=202107).annotate(Count('cod_servidor'))
+
+
+qP=Folhaevento.objects.annotate(Count('id_municipio'))
+
+
+
+
+
+
+Create view v003_qtdeServidores
+as
+select f.id_municipio,m.municipio,anomes,count(*) as quantidade from folhames f, municipios m where f.id_municipio=m.id_municipio group by f.id_municipio,m.municipio,anomes; 
+
+
+Create view v004_valortotalFolha
+as
+select f.id_municipio,m.municipio,anomes,sum(valor) valor from folhaeventos f, municipios m where f.id_municipio=m.id_municipio and f.tipo='V' group by f.id_municipio,m.municipio,anomes;
+
+
+if id_municipio>0:
+select v3.municipio,concat(right(concat('',v3.anomes),2),'/',left(concat('',v3.anomes),4)) as mesref,v3.quantidade,v4.valor,v3.anomes 
+from v003_qtdeServidores v3,v004_valortotalFolha v4 where
+ v3.id_municipio=v4.id_municipio and v3.anomes=v4.anomes
+ and v3.id_municipio=92 order by v3.municipio,v3.anomes;
+else:
+select v3.municipio,concat(right(concat('',v3.anomes),2),'/',left(concat('',v3.anomes),4)) as mesref,v3.quantidade,v4.valor,v3.anomes 
+from v003_qtdeServidores v3,v004_valortotalFolha v4 where
+ v3.id_municipio=v4.id_municipio and v3.anomes=v4.anomes
+ order by v3.municipio,v3.anomes;
+
+
+
+
+lst1=[101,201]
+lst2=[[{'evento':'venc base','valor':101},{'evento':'irrf','valor':102}],[{'evento':'venc base','valor':201},{'evento':'irrf','valor':202}]],
+
+
+
+
+ 
 
