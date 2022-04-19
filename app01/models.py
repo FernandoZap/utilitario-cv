@@ -42,6 +42,8 @@ if recommendations.exists():
     cursor.execute(“DELETE FROM app_recommendation WHERE store_id = %s”, [store.id])
 
 '''
+#2022-04-19
+#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
 #---------------------------------------------------------------------------
 
 class Municipio(models.Model):  
