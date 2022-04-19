@@ -524,7 +524,7 @@ def importarSecFuncVincEventos(id_municipio,anomes,entidade,empresa):
                                 )
                             ls_vinculo.append(vinculo)
                             carga_vinculo.append(obj_vinculo)
-        ls_vinculo_verificado.append(vinculo)                        
+            ls_vinculo_verificado.append(vinculo)                        
 
         if evento is not None:
             evento=evento.strip()
@@ -782,5 +782,44 @@ def importarEventos(id_municipio,anomes,entidade,empresa):
 
     if len(carga_evento)>0:
         Evento.objects.bulk_create(carga_evento)        
+
+    return 1
+
+
+
+def importarVinculos(id_municipio,anomes,entidade,empresa):
+
+    carga_vinculo=[]
+    ls_vinculo_verificado=[]
+    ls_vinculo=[]
+    codigo_folha=int(str(anomes)[4:6])
+    lista_vinculos=listagens.listagemVinculos(id_municipio)
+    arquivo_ok=0
+    queryP = Planilha.objects.values(
+        'codigo',
+        'tipo_admissao',
+        ).filter(entidade=entidade,codigo_folha=codigo_folha)
+
+    for qp in range(len(queryP)):
+
+        vinculo=queryP[qp]['tipo_admissao']
+        if vinculo is not None:
+            vinculo=vinculo.strip()
+            if len(vinculo)>2:
+
+                vinculo=funcoes_gerais.remove_combining_fluent(vinculo)
+                if vinculo not in ls_vinculo_verificado:
+                    if vinculo not in lista_vinculos:
+                        if vinculo not in ls_vinculo:
+                            obj_vinculo = Vinculo(
+                                id_municipio=id_municipio,
+                                vinculo=vinculo
+                                )
+                            ls_vinculo.append(vinculo)
+                            carga_vinculo.append(obj_vinculo)
+            ls_vinculo_verificado.append(vinculo)                        
+
+    if len(ls_vinculo)>0:
+        Vinculo.objects.bulk_create(carga_vinculo)        
 
     return 1

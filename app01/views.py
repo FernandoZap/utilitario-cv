@@ -173,6 +173,8 @@ def importacaoFolhaExcel(request):
             retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
         elif tabela=='Setor':    
             retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
+        elif tabela=='Vinculos':
+            retorno = importarPlanilha.importarVinculos(id_municipio,anomes,entidade,empresa)
         elif tabela=='Servidor':            
             retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
         elif tabela=='Folha':
@@ -183,6 +185,7 @@ def importacaoFolhaExcel(request):
                 retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarFuncao(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
+                retorno = importarPlanilha.importarVinculos(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
                 retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
             else:                
