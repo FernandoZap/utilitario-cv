@@ -5,6 +5,7 @@ from . import choices
 
 
 #SET FOREIGN_KEY_CHECKS = 0;
+#heroku run python manage.py shell --app civitas-plataforma
 
 # TUTORIAL How to Reset Migrations
 #https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html

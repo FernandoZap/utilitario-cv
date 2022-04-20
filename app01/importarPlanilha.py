@@ -741,7 +741,7 @@ def importarEventos(id_municipio,anomes,entidade,empresa):
     arquivo_ok=0
 
     queryP=Planilha.objects.values(
-        'evento','tipo','classificacao').annotate(Count('evento')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('evento')
+        'evento','tipo').annotate(Count('evento')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('evento')
 
 
     for qp in range(len(queryP)):
@@ -755,7 +755,7 @@ def importarEventos(id_municipio,anomes,entidade,empresa):
             tipo_evento='V'
 
         evento=queryP[qp]['evento']
-        classificacao=queryP[qp]['classificacao']
+        #classificacao=queryP[qp]['classificacao']
 
         if evento is not None:
             evento=evento.strip()

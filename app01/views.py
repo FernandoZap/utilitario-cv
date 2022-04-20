@@ -369,7 +369,7 @@ def listSomaEventos(request):
         for e in qt[0].values():
             qT=e
 
-        cursor.execute("Select evento,tipo,sum(valor) as valor from v005_folhaEventos where \
+        cursor.execute("Select evento,tipo,sum(valor) as valor from v005_folhaeventos where \
             anomes=%s and id_municipio=%s group by evento,tipo order by tipo desc,evento",[anomes,id_municipio])
 
         query0 = dictfetchall(cursor)
