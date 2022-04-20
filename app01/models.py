@@ -6,6 +6,9 @@ from . import choices
 
 #SET FOREIGN_KEY_CHECKS = 0;
 
+# TUTORIAL How to Reset Migrations
+#https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html
+
     #Restaurar o auto-increment no pgadmin
 #http://blog.abraseucodigo.com.br/problemas-com-postgres-django-sequences.html
 '''
@@ -43,6 +46,8 @@ if recommendations.exists():
 
 '''
 #2022-04-19
+#git push heroku master
+
 #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
 #---------------------------------------------------------------------------
 

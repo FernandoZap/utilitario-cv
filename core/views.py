@@ -3,7 +3,7 @@ from django.shortcuts import render
 def home(request):
 	usuario = ''
 	user_name = request.user.username
-	return render (request, 'core/home.html', { 'usuario': user_name })
+	return render (request, 'core/home.html', { 'usuario': user_name})
 
 
 def sessao(request):

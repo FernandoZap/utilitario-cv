@@ -79,14 +79,7 @@ def formatMilhar(valor):
 
 def importacaoFolhaExcel(request):
 
-    dictEventos=funcoes_gerais.eventosMes2(86,202111)
-    #print (dictEventos)
-    eventos=dictEventos[3]
-    for kk in range(len(eventos)):
-        print ('evento: '+eventos[kk]['evento']+' - valor: '+str(eventos[kk]['valor']))
 
-
-    
     #lista = listagens.listagemSetores2(86)
     #print (lista)
 
