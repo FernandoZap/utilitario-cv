@@ -6,6 +6,10 @@
 __pycache__
 db.sqlite3
 media
+accounts/__pycache__/
+app01/__pycache__/
+core/__pycache__/
+utilitario/__pycache__/
 
 *.py[cod] 
 *$py.class 

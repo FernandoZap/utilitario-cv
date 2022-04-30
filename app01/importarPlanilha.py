@@ -2,10 +2,10 @@
 import openpyxl, pprint
 import os
 import sys
-import datetime
+from datetime import datetime
 from django.db.models import Count
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento
+from .models import Secretaria,Vinculo,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Folha
 
 from . import listagens,funcoes_gerais,funcoes_banco
 
@@ -31,11 +31,11 @@ def importarServidores(id_municipio,anomes,entidade,empresa):
         ).filter(entidade=entidade,codigo_folha=codigo_folha)
     '''
 
-    queryP = Planilha.objects.values(
+    queryP = Folha.objects.values(
         'codigo',
         'nome_servidor',
         'data_admissao',
-        'cpf').annotate(Count('codigo')).filter(entidade=entidade,codigo_folha=codigo_folha)
+        'cpf').annotate(Count('codigo')).filter(id_municipio=id_municipio,anomes=anomes)
 
     for qp in range(len(queryP)):
 
@@ -45,6 +45,7 @@ def importarServidores(id_municipio,anomes,entidade,empresa):
         nome_servidor = queryP[qp]['nome_servidor']
         cpf = queryP[qp]['cpf']
         data_admissao = queryP[qp]['data_admissao']
+        dt_admissao = datetime.strptime(data_admissao, '%Y-%m-%d').date()
 
 
         nome_servidor=nome_servidor.strip()
@@ -62,7 +63,7 @@ def importarServidores(id_municipio,anomes,entidade,empresa):
                         cod_servidor=codigo,
                         nome = nome_servidor,
                         cpf = cpf,
-                        data_admissao = data_admissao
+                        data_admissao = dt_admissao
                         )
                     objetos.append(objeto)
                     lista_incluidos.append(codigo)
@@ -101,9 +102,9 @@ def importarSetores(id_municipio,anomes,entidade,empresa):
     '''        
 
 
-    queryP=Planilha.objects.values(
+    queryP=Folha.objects.values(
         'secretaria',
-        'setor').annotate(Count('secretaria')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('secretaria')
+        'setor').annotate(Count('secretaria')).filter(id_municipio=id_municipio,anomes=anomes).order_by('secretaria')
 
     for qp in range(len(queryP)):
 
@@ -633,8 +634,8 @@ def importarSecretaria(id_municipio,anomes,entidade,empresa):
 
     arquivo_ok=0
 
-    queryP=Planilha.objects.values(
-        'secretaria').annotate(Count('secretaria')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('secretaria')
+    queryP=Folha.objects.values(
+        'secretaria').annotate(Count('secretaria')).filter(id_municipio=id_municipio,anomes=anomes).order_by('secretaria')
 
 
     for qp in range(len(queryP)):
@@ -682,8 +683,8 @@ def importarFuncao(id_municipio,anomes,entidade,empresa):
 
     arquivo_ok=0
 
-    queryP=Planilha.objects.values(
-        'funcao').annotate(Count('funcao')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('funcao')
+    queryP=Folha.objects.values(
+        'funcao').annotate(Count('funcao')).filter(id_municipio=id_municipio,anomes=anomes).order_by('funcao')
 
 
     for qp in range(len(queryP)):
@@ -740,8 +741,8 @@ def importarEventos(id_municipio,anomes,entidade,empresa):
 
     arquivo_ok=0
 
-    queryP=Planilha.objects.values(
-        'evento','tipo').annotate(Count('evento')).filter(entidade=entidade,codigo_folha=codigo_folha).order_by('evento')
+    queryP=Folha.objects.values(
+        'evento','tipo').annotate(Count('evento')).filter(id_municipio=id_municipio,anomes=anomes).order_by('evento')
 
 
     for qp in range(len(queryP)):
@@ -795,10 +796,10 @@ def importarVinculos(id_municipio,anomes,entidade,empresa):
     codigo_folha=int(str(anomes)[4:6])
     lista_vinculos=listagens.listagemVinculos(id_municipio)
     arquivo_ok=0
-    queryP = Planilha.objects.values(
+    queryP = Folha.objects.values(
         'codigo',
         'tipo_admissao',
-        ).filter(entidade=entidade,codigo_folha=codigo_folha)
+        ).filter(id_municipio=id_municipio,anomes=anomes)
 
     for qp in range(len(queryP)):
 
