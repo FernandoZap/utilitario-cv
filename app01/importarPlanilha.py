@@ -204,7 +204,7 @@ def importarFolha(id_municipio,anomes,entidade,empresa):
 
     #erro=funcoes_gerais.gravarErro_01(i_id_municipio,i_anomes,entidade)
 
-    queryP = Planilha.objects.values(
+    queryP = Folha.objects.values(
         'codigo',
         'cpf',
         'secretaria',
@@ -219,7 +219,7 @@ def importarFolha(id_municipio,anomes,entidade,empresa):
         'cod_evento',
         'tipo',
         'valor_evento'
-        ).filter(entidade=entidade,codigo_folha=codigo_folha)
+        ).filter(id_municipio=id_municipio,anomes=anomes)
 
 
     for qp in range(len(queryP)):
@@ -310,14 +310,6 @@ def importarFolha(id_municipio,anomes,entidade,empresa):
         if valor is None:
             valor=0
 
-        if previdencia=='PREVIDÊNCIA MUNICIPAL':
-            previdencia='M'
-        elif previdencia=='INSS':
-            previdencia='I'
-        elif previdencia=='NÃO PAGA':
-            previdencia='N'
-        else:
-            previndencia=''
 
         if str(cod_servidor)+'-'+str(cod_evento) not in lista_eventosMes:
             obj_feventos = Folhaevento(
