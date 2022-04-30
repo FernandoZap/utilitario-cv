@@ -42,7 +42,6 @@ wheels/
 .venv38
 .env
 *.db
-staticfiles
 db.sqlite3
 dados_folha.csv
 folha_novembro.csv
