@@ -14,5 +14,6 @@ urlpatterns = [
     path('consultarTabelas', v1.consultarTabelas, name='consultarTabelas'),
     path('folhasProcessadas', v1.folhasProcessadas, name='folhasProcessadas'),
     path('parateste', v1.parateste),
+    path('imprimirFolhaLayout', v1.imprimirFolhaLayout, name='imprimirFolhaLayout'),
 ]
 
