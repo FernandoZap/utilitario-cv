@@ -954,7 +954,6 @@ def imprimirFolhaLayout(request):
             dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
 
 
-            '''
 
             for kk in range(0,len(query1)):
                 somaEventos=0
@@ -975,7 +974,7 @@ def imprimirFolhaLayout(request):
                 #lista.append(query1[kk]['ref_eventos'])
 
                 soma=0
-                
+                '''
                 for qq in range(len(eventos)):
                     if eventos[qq] in listaEventosDoServidor:
                         valor=dicionario[eventos[qq]]
@@ -985,14 +984,15 @@ def imprimirFolhaLayout(request):
                     else:
                         valor_str='0'
                     lista.append(valor_str)
+
                 soma_str=str(soma)
                 soma_str = soma_str.replace('.',',')
                 lista.append(soma_str)
-            '''
+                '''
 
 
-                #writer.writerow(lista)
-                #lista=[]
+                writer.writerow(lista)
+                lista=[]
             cursor.close()
             del cursor
 
