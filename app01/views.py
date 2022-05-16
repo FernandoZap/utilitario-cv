@@ -936,11 +936,12 @@ def imprimirFolhaLayout(request):
             #eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
 
 
-            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao \
+            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
             inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
             inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor \
             inner join funcoes fn on fn.id_funcao=fl.id_funcao\
+            inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
             order by fl.cod_servidor",[anomes,id_municipio])
 
@@ -970,7 +971,7 @@ def imprimirFolhaLayout(request):
                 lista.append(query1[kk]['cod_servidor'])
                 lista.append(query1[kk]['nome'])
                 lista.append(query1[kk]['funcao'])
-                #lista.append(query1[kk]['vinculo'])
+                lista.append(query1[kk]['vinculo'])
                 lista.append(query1[kk]['data_admissao'])
                 #lista.append(query1[kk]['carga_horaria'])
                 #lista.append(query1[kk]['ref_eventos'])
