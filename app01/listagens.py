@@ -5,7 +5,7 @@ def listagemSecretarias(id_municipio):
 	lista=[]
 	secretarias = Secretaria.objects.filter(id_municipio=id_municipio)
 	for secretaria in secretarias:
-		lista.append(secretaria.secretaria)
+		lista.append(secretaria.secretaria.upper())
 	return lista
 
 
@@ -14,14 +14,14 @@ def listagemSetores(id_municipio):
 	lista=[]
 	setores = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=id_municipio)
 	for setor in setores:
-		lista.append(setor.secretaria.secretaria+setor.setor)
+		lista.append(setor.secretaria.secretaria.upper()+setor.setor.upper())
 	return lista
 
 def listagemSetores2(id_municipio):
 	lista=[]
 	setores = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=id_municipio)
 	for setor in setores:
-		lista.append(str(setor.secretaria.id_secretaria)+setor.setor)
+		lista.append(str(setor.secretaria.id_secretaria)+setor.setor.upper())
 	return lista
 
 
@@ -29,7 +29,7 @@ def listagemVinculos(id_municipio):
 	lista=[]
 	vinculos = Vinculo.objects.filter(id_municipio=id_municipio)
 	for vinculo in vinculos:
-		lista.append(vinculo.vinculo)
+		lista.append(vinculo.vinculo.upper())
 	return lista
 
 
@@ -57,7 +57,7 @@ def criarDictSecretarias(id_municipio):
 	secs = Secretaria.objects.filter(id_municipio=id_municipio).order_by('id_secretaria')
 	for sec in secs:
 		lista1.append(
-			sec.secretaria
+			sec.secretaria.upper()
 			)
 		lista2.append(
 			sec.id_secretaria
@@ -72,7 +72,7 @@ def criarDictSetores(id_municipio):
 	secs = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=id_municipio).order_by('id_setor')
 	for sec in secs:
 		lista1.append(
-			sec.secretaria.secretaria+sec.setor
+			sec.secretaria.secretaria.upper()+sec.setor.upper()
 			)
 		lista2.append(
 			sec.id_setor
@@ -87,7 +87,7 @@ def criarDictVinculos(id_municipio):
 	secs = Vinculo.objects.filter(id_municipio=id_municipio).order_by('id_vinculo')
 	for sec in secs:
 		lista1.append(
-			sec.vinculo
+			sec.vinculo.upper()
 			)
 		lista2.append(
 			sec.id_vinculo
@@ -101,7 +101,7 @@ def listagemEventos(id_municipio):
 	lista=[]
 	eventos = Evento.objects.filter(id_municipio=id_municipio)
 	for evento in eventos:
-		lista.append(evento.evento)
+		lista.append(evento.evento.upper())
 	return lista
 
 
@@ -111,7 +111,7 @@ def criarDictEventos(id_municipio):
 	secs = Evento.objects.filter(id_municipio=id_municipio).order_by('id_evento')
 	for sec in secs:
 		lista1.append(
-			sec.evento
+			sec.evento.upper()
 			)
 		if sec.id_evento_cv==0:
 			id_object=sec.id_evento
@@ -128,7 +128,7 @@ def listagemFuncoes(id_municipio):
 	lista=[]
 	funcoes = Funcao.objects.filter(id_municipio=id_municipio)
 	for funcao in funcoes:
-		lista.append(funcao.funcao)
+		lista.append(funcao.funcao.upper())
 	return lista
 
 
@@ -139,7 +139,7 @@ def criarDictFuncoes(id_municipio):
 	secs = Funcao.objects.filter(id_municipio=id_municipio).order_by('id_funcao')
 	for sec in secs:
 		lista1.append(
-			sec.funcao
+			sec.funcao.upper()
 			)
 		if sec.id_funcao_cv==0:
 			id_object=sec.id_funcao

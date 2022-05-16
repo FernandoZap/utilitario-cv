@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import (ListView)
 from django.http import HttpResponse,HttpResponseRedirect
-from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01
+from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01,processamentoFolha
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento
@@ -77,7 +77,7 @@ def formatMilhar(valor):
     return vd
 
 
-def importacaoFolhaExcel(request):
+def importacaoFolhaExcel_old(request):
 
 
     #lista = listagens.listagemSetores2(86)
@@ -203,11 +203,9 @@ def importacaoFolhaExcel(request):
             }
           )
 
+
 def planilhaErrada(request):
     return render(request, 'app01/planilhaErrada.html')
-
-
-
 
 def listFolhaResumo(request):
 
@@ -898,9 +896,127 @@ def imprimirCSVFolha(request):
     )
 
 
+def importacaoFolhaExcel(request):
 
 
+    #lista = listagens.listagemSetores2(86)
+    #print (lista)
+
+    #------------------------------------------------------------------------------
+    # esta rotina para ler o arquivo .zip da folha de pagamento de cada municipio
+    # e gravar no banco os departamentos/setores/funcionarios/cargos/vinculos,
+    #  proventos e descontos.
+    #-----------------------------------------------------------------------------
+    titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
+
+    '''
+    objs=Eventos_cv.objects.all()
+    for obj in objs:
+        evento=obj.evento
+        evento=funcoes_gerais.remove_combining_fluent(evento)
+        obj.evento=evento
+    Eventos_cv.objects.bulk_update(objs,['evento'])
+
+    ls1=[e.id_evento_cv for e in Eventos_cv.objects.all()]
+    ls2=[e.id_evento_cv for e in Evento.objects.all()]
+    ls3=set(ls2)
+
+    for k in range(len(ls1)):
+        if ls1[k] not in ls3:
+            #print (ls1[k])
+            Eventos_cv.objects.get(pk=ls1[k]).delete()
+
+    ls1=[e.id_funcao_cv for e in Funcoes_cv.objects.all()]
+    ls2=[e.id_funcao_cv for e in Funcao.objects.all()]
+    ls3=set(ls2)
+
+    for k in range(len(ls1)):
+        if ls1[k] not in ls3:
+            #print (ls1[k])
+            Funcoes_cv.objects.get(pk=ls1[k]).delete()
+    '''            
+
+    mensagem=''
+    municipios=Municipio.objects.all().order_by('municipio')
+    if (request.method == "POST"):
+
+        current_user = 0  #request.user.iduser
+        id_municipio=int(request.POST['municipio'])
+        ano=request.POST['ano']
+        mes=request.POST['mes']
+        tabela=request.POST['tabela']
+        anomes=int(ano+mes)
 
 
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+        else:
+            empresa = ''
+            logerro=LogErro(
+            id_municipio = id_municipio,
+            anomes = anomes,
+            observacao = 'Empresa do municipio nao identificada')
+            logerro.save()
 
 
+        obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
+        if obj is not None:
+            return render(request, 'app01/planilhaErrada.html',
+                    {
+                        'titulo': 'Processamento da Folha',
+                        'municipio':municipio,
+                        'anomes':str(mes)+'/'+str(ano),
+                        'mensagem':'A Folha selecionada já foi processada!'
+
+                    }
+                )
+        mes_ref = funcoes_gerais.mesReferencia(mes)
+        if tabela=='Secretaria':
+            retorno = processamentoFolha.importarSecretaria(id_municipio,anomes,empresa)
+        elif tabela=='Funcao':
+            retorno = processamentoFolha.importarFuncao(id_municipio,anomes,empresa)
+        elif tabela=='Evento':
+            retorno = processamentoFolha.importarEventos(id_municipio,anomes,empresa)
+        elif tabela=='Setor':    
+            retorno = processamentoFolha.importarSetores(id_municipio,anomes,empresa)
+        elif tabela=='Vinculos':
+            retorno = processamentoFolha.importarVinculos(id_municipio,anomes,empresa)
+        elif tabela=='Servidor':            
+            retorno = processamentoFolha.importarServidores(id_municipio,anomes,empresa)
+        elif tabela=='Folha':
+            retorno = processamentoFolha.importarFolhaPasso1(id_municipio,anomes,empresa)
+            retorno = processamentoFolha.importarFolhaPasso2(id_municipio,anomes,empresa)
+        elif tabela == 'Geral':
+            retorno = processamentoFolha.importarSecretaria(id_municipio,anomes,empresa)
+            if retorno==1:
+                retorno = processamentoFolha.importarSetores(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarFuncao(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarEventos(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarVinculos(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarServidores(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarFolhaPasso1(id_municipio,anomes,empresa)
+                retorno = processamentoFolha.importarFolhaPasso2(id_municipio,anomes,empresa)
+
+            else:                
+                return render(request, 'app01/planilhaErrada.html',
+                        {
+                            'titulo': 'Processamento da Folha',
+                            'municipio':municipio,
+                            'anomes':str(mes)+'/'+str(ano),
+                            'mensagem':'Nao existe nenhum registro desse municipio e desse mes para ser processado!'
+
+                        }
+                    )
+
+        return HttpResponseRedirect(reverse('app01:importacaoFolhaExcel'))
+
+
+    return render(request, 'app01/importacaoFolhaExcel.html',
+            {
+                'titulo': titulo_html,
+                'mensagem':mensagem,
+                'municipios':municipios
+            }
+          )

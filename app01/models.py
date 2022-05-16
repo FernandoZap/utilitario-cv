@@ -167,7 +167,7 @@ class Secretaria(models.Model):
     secretaria = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.Secretaria
+        return self.secretaria
 
     class Meta:
         db_table = "secretarias"  
@@ -389,3 +389,79 @@ class Folha(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
+
+
+class Funcionario(models.Model):
+    id_funcionario = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField(null=True)
+    anomes = models.IntegerField(null=True)
+    codigo = models.IntegerField(null=True)
+    nome_servidor = models.CharField(max_length=100, null=True)
+    carga_horaria = models.IntegerField(null=True)
+    secretaria = models.CharField(max_length=100,null=True)
+    setor = models.CharField(max_length=100,null=True)
+    tipo_admissao = models.CharField(max_length=100,null=True)
+    data_admissao = models.CharField(max_length=10,null=True)
+    previdencia = models.CharField(max_length=100, null=True)
+    funcao = models.CharField(max_length=100,null=True)
+
+    def __str__(self):
+        return self.nome_servidor
+
+    class Meta:
+        db_table = 'funcionarios'
+        indexes = [
+            models.Index(fields=['id_municipio','anomes','codigo'])
+        ]
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))                 
+
+class Provento(models.Model):
+    id_provento = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField(null=True)
+    anomes = models.IntegerField(null=True)
+    codigo = models.IntegerField(null=True)
+    previdencia = models.CharField(max_length=100, null=True,default='')
+    tipo = models.IntegerField(null=True)
+    evento = models.CharField(max_length=100,null=True)
+    valor_evento = models.DecimalField(max_digits=9, decimal_places=2,null=True)
+    classificacao = models.CharField(max_length=15, null=True)
+
+    def __str__(self):
+        return self.codigo
+
+    class Meta:
+        db_table = 'proventos'
+        indexes = [
+            models.Index(fields=['id_municipio','anomes','codigo'])
+        ]
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))                             
+
+
+class Complemento(models.Model):
+    id_complemento = models.AutoField(primary_key=True)
+    id_municipio = models.IntegerField(null=True)
+    anomes = models.IntegerField(null=True)
+    codigo = models.IntegerField(null=True)
+    ref_evento = models.CharField(max_length=20,null=True,default='')
+
+    def __str__(self):
+        return self.codigo
+
+    class Meta:
+        db_table = 'complementos'
+        indexes = [
+            models.Index(fields=['id_municipio','anomes','codigo'])
+        ]
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))                             
