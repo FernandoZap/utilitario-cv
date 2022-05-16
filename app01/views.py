@@ -963,9 +963,9 @@ def imprimirFolhaLayout(request):
             for kk in range(0,len(query1)):
                 somaEventos=0
                 cod_servidor = query1[kk]['cod_servidor']
-                #eventosDoServidor=dictEventos[cod_servidor]
-                #dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                #listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+                eventosDoServidor=dictEventos[cod_servidor]
+                dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
+                listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
 
 
                 lista.append(query1[kk]['secretaria'])
