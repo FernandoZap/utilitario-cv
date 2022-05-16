@@ -979,7 +979,7 @@ def imprimirFolhaLayout(request):
                 lista.append(query1[kk]['ref_eventos'])
 
                 soma=0
-                '''
+                
                 for qq in range(len(eventos)):
                     if eventos[qq] in listaEventosDoServidor:
                         valor=dicionario[eventos[qq]]
@@ -993,7 +993,7 @@ def imprimirFolhaLayout(request):
                 soma_str=str(soma)
                 soma_str = soma_str.replace('.',',')
                 lista.append(soma_str)
-                '''
+                
 
 
                 writer.writerow(lista)
