@@ -945,14 +945,14 @@ def imprimirFolhaLayout(request):
             query1 = dictfetchall(cursor)
 
 
-            '''
-            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
+            #cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
             writer = csv.writer(response, delimiter=';')
             response.write(u'\ufeff'.encode('utf8'))
-            writer.writerow(cabecalho)
+            #writer.writerow(cabecalho)
             contador=0
 
             dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
+
 
             '''
 
@@ -975,7 +975,7 @@ def imprimirFolhaLayout(request):
                 #lista.append(query1[kk]['ref_eventos'])
 
                 soma=0
-                '''
+                
                 for qq in range(len(eventos)):
                     if eventos[qq] in listaEventosDoServidor:
                         valor=dicionario[eventos[qq]]
@@ -988,11 +988,11 @@ def imprimirFolhaLayout(request):
                 soma_str=str(soma)
                 soma_str = soma_str.replace('.',',')
                 lista.append(soma_str)
-                '''
+            '''
 
 
-                writer.writerow(lista)
-                lista=[]
+                #writer.writerow(lista)
+                #lista=[]
             cursor.close()
             del cursor
 
