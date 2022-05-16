@@ -950,10 +950,10 @@ def imprimirFolhaLayout(request):
             query1 = dictfetchall(cursor)
 
 
-            #cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
+            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
             writer = csv.writer(response, delimiter=';')
             response.write(u'\ufeff'.encode('utf8'))
-            #writer.writerow(cabecalho)
+            writer.writerow(cabecalho)
             contador=0
 
             dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
