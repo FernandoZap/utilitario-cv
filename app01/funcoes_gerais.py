@@ -104,7 +104,7 @@ def eventosMes(id_municipio,anomes):
     cursor.execute("select fm.cod_servidor,ev.id_evento, ev.evento,coalesce(fm.valor,0) as valor \
     from eventos ev inner join folhaeventos fm on fm.id_evento=ev.id_evento and \
     fm.anomes=%s and fm.id_municipio=%s \
-    where ev.tipo='V'order by cod_servidor",[anomes,id_municipio])
+    where ev.tipo='V' order by cod_servidor",[anomes,id_municipio])
 
     query = dictfetchall(cursor)
     for kk in range(0,len(query)):
