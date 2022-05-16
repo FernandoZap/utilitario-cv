@@ -904,7 +904,7 @@ def imprimirFolhaLayout(request):
         cursor = connection.cursor()
         lista=[]
 
-
+        '''
         ls_municipio = funcoes_gerais.entidade(id_municipio)
         if len(ls_municipio)>0:
             municipio=ls_municipio[0]
@@ -912,6 +912,7 @@ def imprimirFolhaLayout(request):
         else:
             municipio=''
             empresa = ''
+        '''
         
 
         obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
