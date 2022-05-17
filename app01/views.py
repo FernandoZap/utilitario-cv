@@ -979,10 +979,12 @@ def imprimirFolhaLayout(request):
                 soma=0
 
                 if query1[kk]['qtde_eventos']>0:
-                    #eventosDoServidor=dictEventos[cod_servidor]
-                    #dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                    #listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
-                    listaEventosDoServidor=[]
+                    eventosDoServidor=dictEventos[cod_servidor]
+                    if len(eventosDoServidor)>0:
+                        dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
+                        listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+                    else:                        
+                        listaEventosDoServidor=[]
                     for qq in range(len(eventos)):
                         if eventos[qq] in listaEventosDoServidor:
                             valor=dicionario[eventos[qq]]
