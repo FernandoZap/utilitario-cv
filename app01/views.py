@@ -937,7 +937,7 @@ def imprimirFolhaLayout(request):
 
 
             cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo, \
-            fl.carga_horaria,rf.ref_eventos \
+            fl.carga_horaria,rf.ref_eventos,f002_quantidadeEventos(fl.cod_servidor,fl.anomes,fl.id_municipio) as qtde_eventos \
             from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
             inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
             inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor \
@@ -977,11 +977,11 @@ def imprimirFolhaLayout(request):
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['ref_eventos'])
                 soma=0
-                eventosDoServidor=dictEventos[cod_servidor]
-                dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
-                if len(listaEventosDoServidor)>0:
-                
+
+                if query1[kk]['qtde_eventos']>0:
+                    eventosDoServidor=dictEventos[cod_servidor]
+                    dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
+                    listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
                     for qq in range(len(eventos)):
                         if eventos[qq] in listaEventosDoServidor:
                             valor=dicionario[eventos[qq]]
