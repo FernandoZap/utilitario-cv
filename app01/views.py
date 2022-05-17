@@ -978,9 +978,9 @@ def imprimirFolhaLayout(request):
                 lista.append(query1[kk]['ref_eventos'])
                 soma=0
                 eventosDoServidor=dictEventos[cod_servidor]
-                if eventosDoServidor is not None:
-                    dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                    listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+                dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
+                listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+                if len(listaEventosDoServidor)>0:
                 
                     for qq in range(len(eventos)):
                         if eventos[qq] in listaEventosDoServidor:
