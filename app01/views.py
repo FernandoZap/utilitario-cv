@@ -982,7 +982,7 @@ def imprimirFolhaLayout(request):
                 
                 for qq in range(len(eventos)):
                     if eventos[qq] in listaEventosDoServidor:
-                        valor=0 #dicionario[eventos[qq]]
+                        valor=dicionario[eventos[qq]]
                         #soma+=valor
                         valor_str=str(valor)
                         valor_str = valor_str.replace('.',',')
