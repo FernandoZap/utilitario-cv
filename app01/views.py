@@ -963,6 +963,8 @@ def imprimirFolhaLayout(request):
             for kk in range(0,len(query1)):
                 somaEventos=0
                 cod_servidor = query1[kk]['cod_servidor']
+                if cod_servidor==91:
+                    continue
                 eventosDoServidor=dictEventos[cod_servidor]
                 dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
                 listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
