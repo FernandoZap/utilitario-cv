@@ -945,7 +945,7 @@ def imprimirFolhaLayout(request):
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
             where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
-            order by fl.cod_servidor LIMIT 20",[anomes,id_municipio])
+            order by fl.cod_servidor LIMIT 18",[anomes,id_municipio])
 
             query1 = dictfetchall(cursor)
 
