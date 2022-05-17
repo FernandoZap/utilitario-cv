@@ -958,15 +958,7 @@ def imprimirFolhaLayout(request):
 
             dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
 
-
-
             for kk in range(0,len(query1)):
-                somaEventos=0
-                cod_servidor = query1[kk]['cod_servidor']
-                #if cod_servidor==91:
-                    #continue
-
-
                 lista.append(query1[kk]['secretaria'])
                 lista.append(query1[kk]['setor'])
                 lista.append(query1[kk]['cod_servidor'])
@@ -976,38 +968,33 @@ def imprimirFolhaLayout(request):
                 lista.append(query1[kk]['data_admissao'])
                 lista.append(query1[kk]['carga_horaria'])
                 lista.append(query1[kk]['ref_eventos'])
-                soma=0
 
+                soma = 0
                 if query1[kk]['qtde_eventos']>0:
-                    listaEventosDoServidor=[]
+                    cod_servidor = query1[kk]['cod_servidor']
                     eventosDoServidor=dictEventos[cod_servidor]
-                    '''
-                    if len(eventosDoServidor)>0:
-                        #dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                        #listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
-                    else:                        
-                        listaEventosDoServidor=[]
-                    '''
+                    dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
+                    print(dicionario)
+
+                    listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
                     for qq in range(len(eventos)):
                         if eventos[qq] in listaEventosDoServidor:
-                            valor=0 #dicionario[eventos[qq]]
-                            #soma+=valor
+                            valor=dicionario[eventos[qq]]
+                            soma+=valor
                             valor_str=str(valor)
                             valor_str = valor_str.replace('.',',')
                         else:
                             valor_str='0'
                         lista.append(valor_str)
+                    soma_str=str(soma)
+                    soma_str = soma_str.replace('.',',')
+                    lista.append(soma_str)
                 else:
                     for qq in range(len(eventos)):
                         valor_str='0'
                         lista.append(valor_str)
-
-
-                soma_str=str(soma)
-                soma_str = soma_str.replace('.',',')
-                lista.append(soma_str)
-                
-
+                    soma_str=str(soma)
+                    lista.append(soma_str)
 
                 writer.writerow(lista)
                 lista=[]
