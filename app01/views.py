@@ -227,7 +227,7 @@ def listFolhaResumo(request):
     total_r=0
     qT=0
 
-    municipios = Municipio.objects.all().order_by('municipio')
+    municipios = Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
     if (request.method == "POST"):
         cursor = connection.cursor()
         id_municipio=request.POST['municipio']
@@ -349,7 +349,8 @@ def listSomaEventos(request):
     total_r=0
     qT=0
 
-    municipios = Municipio.objects.all().order_by('municipio')
+    municipios = Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
     if (request.method == "POST"):
         cursor = connection.cursor()
         id_municipio=request.POST['municipio']
@@ -580,7 +581,9 @@ def consultarTabelas(request):
 def folhasProcessadas(request):
 
     titulo='Folhas Processadas'
-    municipios=Municipio.objects.all().order_by('municipio')
+    municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+
     municipio=''
     lista_folha=None
     if request.method=='POST':
@@ -758,7 +761,8 @@ def imprimirCSVFolha(request):
 
     else:
         titulo = 'Impressao do Excel'
-        municipios=Municipio.objects.all().order_by('municipio')
+        municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
     return render(request, 'app01/gravarCSVFolha.html',
         {
             'titulo': titulo,
@@ -810,7 +814,9 @@ def importacaoFolhaExcel(request):
     '''            
 
     mensagem=''
-    municipios=Municipio.objects.all().order_by('municipio')
+    municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+
     if (request.method == "POST"):
 
         current_user = 0  #request.user.iduser
@@ -945,7 +951,7 @@ def imprimirFolhaLayout(request):
             inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
             left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
             where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
-            order by fl.cod_servidor limit 500",[anomes,id_municipio])
+            order by fl.cod_servidor",[anomes,id_municipio])
 
             query1 = dictfetchall(cursor)
 
@@ -1008,7 +1014,9 @@ def imprimirFolhaLayout(request):
 
     else:
         titulo = 'Impressao do Excel'
-        municipios=Municipio.objects.all().order_by('municipio')
+        municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+
     return render(request, 'app01/gravarFolhaLayout.html',
         {
             'titulo': titulo,
