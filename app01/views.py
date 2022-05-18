@@ -31,7 +31,7 @@ import unicodedata
 
 
 
-# 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
+# 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
 
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
