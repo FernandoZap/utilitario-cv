@@ -979,10 +979,11 @@ def imprimirFolhaLayout(request):
                 if query1[kk]['qtde_eventos']>0:
                     cod_servidor = query1[kk]['cod_servidor']
                     eventosDoServidor=dictEventos[cod_servidor]
+                    #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
                     dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                    print(dicionario)
-
+                    #{'ADC PTEMPSERV': Decimal('381.28'), 'SALARIO BASE': Decimal('3177.33')}
                     listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+                    #['ADC PTEMPSERV', 'SALARIO BASE', 'SALARIO FAMILIA']
                     for qq in range(len(eventos)):
                         if eventos[qq] in listaEventosDoServidor:
                             valor=dicionario[eventos[qq]]
