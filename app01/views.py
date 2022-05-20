@@ -255,7 +255,7 @@ def listFolhaResumo(request):
         where v.id_secretaria=s.id_secretaria\
         and v.id_municipio=%s\
         and v.anomes=%s\
-        group by s.secretaria ORDER BY s.secretaria",[id_municipio,anomes])
+        group by s.id_secretaria,s.secretaria ORDER BY s.secretaria",[id_municipio,anomes])
 
         query0 = dictfetchall(cursor)
 
@@ -284,7 +284,7 @@ def listFolhaResumo(request):
         and st.id_setor=v.id_setor\
         and v.id_municipio=%s\
         and v.anomes=%s\
-        group by s.secretaria,st.setor order by s.secretaria,st.setor",[id_municipio,anomes])
+        group by s.id_secretaria,s.secretaria,st.setor order by s.secretaria,st.setor",[id_municipio,anomes])
 
         query1 = dictfetchall(cursor)
 
