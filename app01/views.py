@@ -215,9 +215,9 @@ def listFolhaResumo(request):
     titulo='Listar soma por Secretarias/Setores'
     
     id_municipio=86
-    anomes='202111'
-    municipio='Caridade'
-    referencia='202111'
+    anomes=''
+    municipio=''
+    referencia=''
     rs=0
     lista1=[]
     lista2=[]
@@ -336,7 +336,7 @@ def listSomaEventos(request):
     query1=None
     query2=None
     titulo='Listar Soma por Eventos'
-    id_municipio=86
+    id_municipio=0
     anomes=''
     municipio=''
     referencia=''
