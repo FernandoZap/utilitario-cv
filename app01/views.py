@@ -70,11 +70,17 @@ def dictfetchall(cursor):
     ]
 
 def formatMilhar(valor):
+    if valor<0:
+        valor=valor*(-1)
+        sinal='-'
+    else:
+        sinal=''        
+
     vd = f"{valor:,.2f}"
     vd = vd.replace('.','-')
     vd = vd.replace(',','.')
     vd = vd.replace('-',',')
-    return vd
+    return sinal+vd
 
 
 def importacaoFolhaExcel_old(request):
@@ -259,14 +265,13 @@ def listFolhaResumo(request):
             total_d+=q['descontos']
             total_r+=resultado
 
-
             lista1.append(
                 {
                     'id_secretaria':q['id_secretaria'],
                     'secretaria':q['secretaria'],
                     'vantagens':formatMilhar(q['vantagens']),
                     'descontos':formatMilhar(q['descontos']),
-                    'resultado':formatMilhar(resultado),
+                    'resultado':formatMilhar(resultado,negativo),
                 }
                 )
 
@@ -300,7 +305,7 @@ def listFolhaResumo(request):
                     'setor':q['setor'],
                     'vantagens':formatMilhar(q['vantagens']),
                     'descontos':formatMilhar(q['descontos']),
-                    'resultado':formatMilhar(resultado),
+                    'resultado':formatMilhar(resultado,negativo),
                     'v_dep':v_dep,
                     'd_dep':d_dep,
                     'r_dep':r_dep
