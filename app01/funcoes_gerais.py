@@ -39,7 +39,7 @@ def cabecalhoFolha(id_municipio):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    lista_eventos = [ob.evento for ob in Evento.objects.filter(id_municipio=id_municipio,cancelado='N',tipo='V',exibe_excel=1)]
+    lista_eventos = [ob.evento for ob in Evento.objects.filter(id_municipio=id_municipio,cancelado='N',tipo='V',exibe_excel=1).order_by('evento')]
 
 
     for kk in range(len(lista_eventos)):
