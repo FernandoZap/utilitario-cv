@@ -1050,7 +1050,7 @@ def imprimirFolhaLayout(request):
         ano=request.POST['ano']
         mes=request.POST['mes']
         anomes=int(ano+mes)
-        cursor = connection.cursor()
+        #cursor = connection.cursor()
         lista=[]
 
         eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
