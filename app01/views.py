@@ -1058,7 +1058,7 @@ def imprimirFolhaLayout(request):
         ultima_coluna=colunas_eventos[qtde_evento-1]
 
 
-        query=Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
+        query=Folhames.objects.filter(id_municipio=9999,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
         dicNomeDoServidor=listagens.criarDictNomeServidor(id_municipio)
         dicNomeDaSecretaria=listagens.criarDictIdSecretarias(id_municipio)
         dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
