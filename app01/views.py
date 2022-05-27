@@ -1100,6 +1100,7 @@ def imprimirFolhaLayout(request):
             
             eventosDoServidor=dictEventos.get(cod_servidor)
             if eventosDoServidor is None:
+                lista=[]
                 continue
 
             #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
@@ -1107,7 +1108,6 @@ def imprimirFolhaLayout(request):
             #{'ADC PTEMPSERV': Decimal('381.28'), 'SALARIO BASE': Decimal('3177.33')}
             listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
             #['ADC PTEMPSERV', 'SALARIO BASE', 'SALARIO FAMILIA']
-            '''
             for qq in range(len(eventos)):
                 if eventos[qq] in listaEventosDoServidor:
                     valor=dicionario[eventos[qq]]
@@ -1117,7 +1117,6 @@ def imprimirFolhaLayout(request):
                 else:
                     valor_str='0'
                 lista.append(valor_str)
-            '''
             soma_str=str(soma)
             soma_str = soma_str.replace('.',',')
             lista.append(soma_str)
