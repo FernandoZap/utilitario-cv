@@ -1098,7 +1098,10 @@ def imprimirFolhaLayout(request):
 
             soma = 0
             
-            eventosDoServidor=dictEventos[cod_servidor]
+            eventosDoServidor=dictEventos.get(cod_servidor)
+            if eventosDoServidor is None:
+                continue
+
             #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
             dicionario=funcoes_gerais.montarDicionarioEventoDoServidor(eventosDoServidor)
             #{'ADC PTEMPSERV': Decimal('381.28'), 'SALARIO BASE': Decimal('3177.33')}
