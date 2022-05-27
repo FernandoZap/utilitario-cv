@@ -36,6 +36,9 @@ import unicodedata
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
 
+colunas_eventos=['BV','BW','BX']
+
+
 def get(self, request, *args, **kwargs):
     self.request.session['funcao'] = self.request.user.funcao
     self.request.session['username'] = self.request.user.username
@@ -905,7 +908,7 @@ def importacaoFolhaExcel(request):
             }
           )
 
-def imprimirFolhaLayout(request):
+def imprimirFolhaLayout_bak(request):
 
     if request.method=='POST':
         id_municipio = request.POST['municipio']
@@ -967,7 +970,10 @@ def imprimirFolhaLayout(request):
             writer.writerow(cabecalho)
             contador=0
 
-            dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
+            #dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
+            
+            dictEventos=funcoes_gerais.eventosMesDoServidor(id_municipio,anomes)
+
 
             for kk in range(0,len(query1)):
                 lista.append(query1[kk]['secretaria'])
@@ -1022,6 +1028,100 @@ def imprimirFolhaLayout(request):
         titulo = 'Impressao do Excel'
         municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
 
+
+    return render(request, 'app01/gravarFolhaLayout.html',
+        {
+            'titulo': titulo,
+            'municipios':municipios,
+            'mensagem':''
+
+        }
+    )
+
+
+
+def imprimirFolhaLayout(request):
+    titulo = 'Impressao do Excel'
+    municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+
+    if request.method=='POST':
+        id_municipio = request.POST['municipio']
+        ano=request.POST['ano']
+        mes=request.POST['mes']
+        anomes=int(ano+mes)
+        cursor = connection.cursor()
+        lista=[]
+
+        eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
+        qtde_evento=3
+        ultima_coluna=colunas_eventos[qtde_evento-1]
+
+
+        query=Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
+        dicNomeDoServidor=listagens.criarDictNomeServidor(id_municipio)
+        dicNomeDaSecretaria=listagens.criarDictIdSecretarias(id_municipio)
+        dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
+        dicNomeDaFuncao=listagens.criarDictIdFuncoes(id_municipio)
+        dicNomeDoVinculo=listagens.criarDictIdVinculos(id_municipio)
+        dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
+
+        contador=2    
+
+        dictEventos=funcoes_gerais.eventosMesDoServidor(id_municipio,anomes)
+        lista=[]
+
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
+
+        cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
+        writer = csv.writer(response, delimiter=';')
+        response.write(u'\ufeff'.encode('utf8'))
+        writer.writerow(cabecalho)
+
+        for qy in query:
+            cod_servidor=qy['cod_servidor']
+
+            lista.append(dicNomeDaSecretaria[qy['id_secretaria']])
+            lista.append(dicNomeDoSetor[qy['id_setor']])
+            lista.append(cod_servidor)
+            lista.append(dicNomeDoServidor[cod_servidor]['nome'])
+            lista.append(dicNomeDaFuncao[qy['id_funcao']])
+            lista.append(dicNomeDoVinculo[qy['id_vinculo']])
+            lista.append(dicNomeDoServidor[cod_servidor]['data'])
+            lista.append(qy['carga_horaria'])
+            lista.append(dicRefEventos[qy['cod_servidor']])
+
+            soma = 0
+            eventosDoServidor=dictEventos[cod_servidor]
+            #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
+            dicionario=funcoes_gerais.montarDicionarioEventoDoServidor(eventosDoServidor)
+            #{'ADC PTEMPSERV': Decimal('381.28'), 'SALARIO BASE': Decimal('3177.33')}
+            listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
+            #['ADC PTEMPSERV', 'SALARIO BASE', 'SALARIO FAMILIA']
+            for qq in range(len(eventos)):
+                if eventos[qq] in listaEventosDoServidor:
+                    valor=dicionario[eventos[qq]]
+                    soma+=valor
+                    valor_str=str(valor)
+                    valor_str = valor_str.replace('.',',')
+                else:
+                    valor_str='0'
+                lista.append(valor_str)
+            soma_str=str(soma)
+            soma_str = soma_str.replace('.',',')
+            lista.append(soma_str)
+            ci="J"+str(contador)
+            cf=ultima_coluna++str(contador)
+            formula="=soma("+ci+":"+cf+")"
+
+            contador+=1
+            lista.append(formula)
+
+            writer.writerow(lista)
+            lista=[]
+        return response
 
     return render(request, 'app01/gravarFolhaLayout.html',
         {

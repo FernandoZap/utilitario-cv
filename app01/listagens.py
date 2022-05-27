@@ -1,4 +1,4 @@
-from .models import Vinculo,Secretaria,Setor,Servidor,Folhames,Funcao,Evento
+from .models import Vinculo,Secretaria,Setor,Servidor,Folhames,Funcao,Evento,Refeventos
 
 
 def listagemSecretarias(id_municipio):
@@ -166,3 +166,94 @@ def criarDictTiposDeEventos(id_municipio):
 			)
 
 	return dict(zip(lista1,lista2))
+
+
+def criarDictRefEventos(id_municipio,anomes):
+	lista1=[]
+	lista2=[]
+	refE=Refeventos.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','ref_eventos')
+	for ref in refE:
+		lista1.append(
+			ref.cod_servidor
+			)
+		lista2.append(
+			ref.ref_eventos
+			)
+
+	return dict(zip(lista1,lista2))
+
+
+def criarDictNomeServidor(id_municipio):
+        lista1=[]
+        lista2=[]
+        objs = Servidor.objects.filter(id_municipio=id_municipio).values('cod_servidor','nome','data_admissao')
+        for obj in objs:
+                lista1.append(
+                        obj['cod_servidor']
+                        )
+                lista2.append(
+                        {'nome':obj['nome'],'data':obj['data_admissao']}
+                        )
+
+        return dict(zip(lista1,lista2))
+
+
+def criarDictIdSecretarias(id_municipio):
+        lista1=[]
+        lista2=[]
+        secs = Secretaria.objects.filter(id_municipio=id_municipio).values('id_secretaria','secretaria')
+        for sec in secs:
+                lista1.append(
+                        sec['id_secretaria']
+                        )
+                lista2.append(
+                        sec['secretaria']
+                        )
+
+        return dict(zip(lista1,lista2))
+
+
+
+def criarDictIdSetores(id_municipio):
+        lista1=[]
+        lista2=[]
+        secs = Setor.objects.select_related('secretaria').filter(secretaria__id_municipio=id_municipio).order_by('id_setor')
+        for sec in secs:
+                lista1.append(
+                        sec.id_setor
+                        )
+                lista2.append(
+                        sec.setor
+                        )
+
+        return dict(zip(lista1,lista2))
+
+
+def criarDictIdFuncoes(id_municipio):
+        lista1=[]
+        lista2=[]
+        secs = Funcao.objects.filter(id_municipio=id_municipio).values('id_funcao','funcao')
+        for sec in secs:
+                lista1.append(
+                        sec['id_funcao']
+                        )
+                lista2.append(
+                        sec['funcao']
+                        )
+
+        return dict(zip(lista1,lista2))
+
+
+def criarDictIdVinculos(id_municipio):
+        lista1=[]
+        lista2=[]
+        secs = Vinculo.objects.filter(id_municipio=id_municipio).values('id_vinculo','vinculo')
+        for sec in secs:
+                lista1.append(
+                        sec['id_vinculo']
+                        )
+                lista2.append(
+                        sec['vinculo']
+                        )
+
+        return dict(zip(lista1,lista2))

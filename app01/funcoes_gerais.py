@@ -2,7 +2,8 @@
 import os
 import sys
 import re
-from .models import LogErro,Municipio,Funcao,Evento
+from .models import LogErro,Municipio,Funcao,Evento,Folhaevento
+from . import listagens
 import zipfile
 import re
 from django.db import connection
@@ -190,3 +191,30 @@ def montaListaEventoDoServidor(eventosDoServidor):
 
 
 
+def eventosMesDoServidor(id_municipio,anomes):
+    lista1=[]
+    lista2=[]
+    lista3=[]
+    dicionarioIdEvento=listagens.criarDictIdEventosVantagens(id_municipio)
+    query=Folhaevento.objects.filter(id_municipio=id_municipio,anomes=anomes,tipo='V').values('cod_servidor','id_evento','valor').order_by('cod_servidor')
+    for q in query:
+        if q['cod_servidor'] not in lista1:
+            lista1.append(q['cod_servidor'])
+            if len(lista3)>0:
+                lista2.append(lista3)
+                lista3=[]
+            lista3.append(
+                {
+                'evento':dicionarioIdEvento[q['id_evento']],
+                'valor':q['valor']
+                }
+                )
+        else:
+            lista3.append(
+                {
+                'evento':dicionarioIdEvento[q['id_evento']],
+                'valor':q['valor']
+                }
+                )
+    lista2.append(lista3)
+    return dict(zip(lista1,lista2))
