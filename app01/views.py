@@ -36,7 +36,6 @@ import unicodedata
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
 
-colunas_eventos=['BV','BW','AS']
 
 
 def get(self, request, *args, **kwargs):
@@ -1054,8 +1053,10 @@ def imprimirFolhaLayout(request):
         lista=[]
 
         eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
-        qtde_evento=3
-        ultima_coluna=colunas_eventos[qtde_evento-1]
+
+        colunasValores = listagens.colunasValores()
+        ultima_coluna=colunasValores[len(eventos)-1]
+
 
 
         query=Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
@@ -1111,16 +1112,14 @@ def imprimirFolhaLayout(request):
             for qq in range(len(eventos)):
                 if eventos[qq] in listaEventosDoServidor:
                     valor=dicionario[eventos[qq]]
-                    soma+=valor
                     valor_str=str(valor)
                     valor_str = valor_str.replace('.',',')
                 else:
                     valor_str='0'
                 lista.append(valor_str)
-            soma_str=str(soma)
-            soma_str = soma_str.replace('.',',')
-            lista.append(soma_str)
-            ci="J"+str(contador)
+
+
+            ci="J2"
             cf=ultima_coluna+str(contador)
             formula="=soma("+ci+":"+cf+")"
 
