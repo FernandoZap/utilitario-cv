@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01,processamentoFolha
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento
+from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento,Folhaevento
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -586,7 +586,7 @@ def consultarTabelas(request):
     )
 
 
-def folhasProcessadas(request):
+def folhasProcessadas_bak(request):
 
     titulo='Folhas Processadas'
     municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
@@ -1129,5 +1129,83 @@ def imprimirFolhaLayout(request):
             'municipios':municipios,
             'mensagem':''
 
+        }
+    )
+
+
+
+def folhasProcessadas(request):
+
+    titulo='Folhas Processadas'
+    municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+
+    municipio=''
+    contador=0
+    lista_folha=None
+    if request.method=='POST':
+        id_municipio = int(request.POST['municipio'])
+        cursor = connection.cursor()
+        lista=[]
+
+
+        if id_municipio==0:
+            municipio='Todos os municípios'
+        else:            
+            ls_municipio = funcoes_gerais.entidade(id_municipio)
+            if len(ls_municipio)>0:
+                municipio=ls_municipio[0]
+                empresa = ls_municipio[1]
+            else:
+                municipio=''
+                empresa = ''
+        if 1==1:
+            dictMunicipios=listagens.criarDictMunicipios()
+            if id_municipio>0:
+                query=Folhames.objects.filter(id_municipio=id_municipio).values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
+            else:                
+                query=Folhames.objects.values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
+
+            lista1=[]
+            lista2=[]
+            for kk in range(len(query)):
+                lista1.append(str(query[kk]['id_municipio'])+':'+str(query[kk]['anomes']))
+                lista2.append(query[kk]['qtde'])
+            dicionario=dict(zip(lista1,lista2))
+
+            if id_municipio>0:
+                resumo=Folhaevento.objects.filter(tipo='V',id_municipio=id_municipio).values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
+            else:
+                resumo=Folhaevento.objects.filter(tipo='V').values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
+            #resumo
+            #<QuerySet [{'id_municipio': 76, 'anomes': 202201, 'total': Decimal('2119447.46')}, {'id_municipio': 76, 'anomes': 202202, 'total': Decimal('2168637.07')}]>
+
+            for res in resumo:
+                contador+=1
+                id_municipio=res['id_municipio']
+                anomes=res['anomes']
+                valor=res['valor_total']
+                quantidade=dicionario[str(res['id_municipio'])+':'+str(res['anomes'])]
+                lista.append(
+                        {
+                        'item':contador,
+                        'municipio':dictMunicipios[id_municipio],
+                        'mesref':str(anomes)[-2:]+'/'+str(anomes)[0:4],
+                        'quantidade':quantidade,
+                        'valor':formatMilhar(valor)
+                        }
+                    )
+            lista_folha=lista                
+
+
+
+        
+    return render(request, 'app01/folhasProcessadas.html',
+        {
+            'titulo': titulo,
+            'municipios':municipios,
+            'mensagem':'',
+            'municipio':municipio,
+            'lista_folha':lista_folha
         }
     )

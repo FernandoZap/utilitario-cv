@@ -1,4 +1,4 @@
-from .models import Vinculo,Secretaria,Setor,Servidor,Folhames,Funcao,Evento,Refeventos
+from .models import Vinculo,Secretaria,Setor,Servidor,Folhames,Funcao,Evento,Refeventos,Municipio
 
 
 def listagemSecretarias(id_municipio):
@@ -256,4 +256,24 @@ def criarDictIdVinculos(id_municipio):
                         sec['vinculo']
                         )
 
+        return dict(zip(lista1,lista2))
+
+
+def criarDictIdEventosVantagens(id_municipio):
+        lista1=[]
+        lista2=[]
+        secs = Evento.objects.filter(id_municipio=id_municipio,tipo='V').order_by('evento')
+        for sec in secs:
+                lista1.append(sec.id_evento)
+                lista2.append(sec.evento)
+        return dict(zip(lista1,lista2))
+
+
+def criarDictMunicipios():
+        lista1=[]
+        lista2=[]
+        nums = Municipio.objects.filter(empresa__in=['SS','Layout','Aspec'])
+        for obj in nums:
+                lista1.append(obj.id_municipio)
+                lista2.append(obj.municipio)
         return dict(zip(lista1,lista2))
