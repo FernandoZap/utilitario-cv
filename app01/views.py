@@ -1113,7 +1113,7 @@ def imprimirFolhaLayout(request):
             soma_str = soma_str.replace('.',',')
             lista.append(soma_str)
             ci="J"+str(contador)
-            cf=ultima_coluna++str(contador)
+            cf=ultima_coluna+str(contador)
             formula="=soma("+ci+":"+cf+")"
 
             contador+=1
