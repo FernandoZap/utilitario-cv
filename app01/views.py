@@ -1083,6 +1083,8 @@ def imprimirFolhaLayout(request):
         for qy in query:
             cod_servidor=qy['cod_servidor']
 
+
+            '''
             lista.append(dicNomeDaSecretaria[qy['id_secretaria']])
             lista.append(dicNomeDoSetor[qy['id_setor']])
             lista.append(cod_servidor)
@@ -1092,6 +1094,8 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
             lista.append(qy['carga_horaria'])
             lista.append(dicRefEventos[qy['cod_servidor']])
+            '''
+            lista.append(cod_servidor)
 
             soma = 0
             eventosDoServidor=dictEventos[cod_servidor]

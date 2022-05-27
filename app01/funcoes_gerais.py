@@ -218,3 +218,13 @@ def eventosMesDoServidor(id_municipio,anomes):
                 )
     lista2.append(lista3)
     return dict(zip(lista1,lista2))
+
+
+def montarDicionarioEventoDoServidor(eventosDoServidor):
+    lista1=[]
+    lista2=[]
+    for kk in range(len(eventosDoServidor)):
+        lista1.append(eventosDoServidor[kk]['evento'])
+        lista2.append(eventosDoServidor[kk]['valor'])
+    return dict(zip(lista1,lista2))
+    
