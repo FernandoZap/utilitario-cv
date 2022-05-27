@@ -36,7 +36,7 @@ import unicodedata
 #curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
 
 
-colunas_eventos=['BV','BW','BX']
+colunas_eventos=['BV','BW','AS']
 
 
 def get(self, request, *args, **kwargs):
