@@ -1065,7 +1065,7 @@ def imprimirFolhaLayout(request):
         dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
         dicNomeDaFuncao=listagens.criarDictIdFuncoes(id_municipio)
         dicNomeDoVinculo=listagens.criarDictIdVinculos(id_municipio)
-        dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
+        #dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
 
 
         contador=2    
@@ -1094,7 +1094,7 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDoVinculo[qy['id_vinculo']])
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
             lista.append(qy['carga_horaria'])
-            lista.append(dicRefEventos[qy['cod_servidor']])
+            #lista.append(dicRefEventos[qy['cod_servidor']])
 
             soma = 0
             eventosDoServidor=dictEventos[cod_servidor]
