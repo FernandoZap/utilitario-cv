@@ -171,7 +171,7 @@ def criarDictTiposDeEventos(id_municipio):
 def criarDictRefEventos(id_municipio,anomes):
 	lista1=[]
 	lista2=[]
-	refE=Refeventos.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','ref_eventos')
+	refE=Refeventos.objects.filter(id_municipio=id_municipio,anomes=anomes)
 	for ref in refE:
 		lista1.append(
 			ref.cod_servidor

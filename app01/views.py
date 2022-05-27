@@ -1058,7 +1058,7 @@ def imprimirFolhaLayout(request):
         ultima_coluna=colunas_eventos[qtde_evento-1]
 
 
-        query=Folhames.objects.filter(id_municipio=9999,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
+        query=Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
 
         dicNomeDoServidor=listagens.criarDictNomeServidor(id_municipio)
         dicNomeDaSecretaria=listagens.criarDictIdSecretarias(id_municipio)
@@ -1086,7 +1086,6 @@ def imprimirFolhaLayout(request):
             cod_servidor=qy['cod_servidor']
 
 
-            '''
             lista.append(dicNomeDaSecretaria[qy['id_secretaria']])
             lista.append(dicNomeDoSetor[qy['id_setor']])
             lista.append(cod_servidor)
@@ -1096,8 +1095,6 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
             lista.append(qy['carga_horaria'])
             lista.append(dicRefEventos[qy['cod_servidor']])
-            '''
-            lista.append(cod_servidor)
 
             soma = 0
             eventosDoServidor=dictEventos[cod_servidor]
