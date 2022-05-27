@@ -1062,7 +1062,7 @@ def imprimirFolhaLayout(request):
 
         dicNomeDoServidor=listagens.criarDictNomeServidor(id_municipio)
         dicNomeDaSecretaria=listagens.criarDictIdSecretarias(id_municipio)
-        #dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
+        dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
         #dicNomeDaFuncao=listagens.criarDictIdFuncoes(id_municipio)
         #dicNomeDoVinculo=listagens.criarDictIdVinculos(id_municipio)
         #dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
