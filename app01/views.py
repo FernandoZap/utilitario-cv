@@ -1065,7 +1065,7 @@ def imprimirFolhaLayout(request):
         dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
         dicNomeDaFuncao=listagens.criarDictIdFuncoes(id_municipio)
         dicNomeDoVinculo=listagens.criarDictIdVinculos(id_municipio)
-        #dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
+        dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
 
 
         contador=2    
