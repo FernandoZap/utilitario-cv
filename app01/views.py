@@ -1065,7 +1065,7 @@ def imprimirFolhaLayout(request):
         dicNomeDoSetor=listagens.criarDictIdSetores(id_municipio)
         dicNomeDaFuncao=listagens.criarDictIdFuncoes(id_municipio)
         dicNomeDoVinculo=listagens.criarDictIdVinculos(id_municipio)
-        #dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
+        dicRefEventos=listagens.criarDictRefEventos(id_municipio,anomes)
 
 
         contador=2    
@@ -1094,9 +1094,10 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDoVinculo[qy['id_vinculo']])
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
             lista.append(qy['carga_horaria'])
-            #lista.append(dicRefEventos[qy['cod_servidor']])
+            lista.append(dicRefEventos[qy['cod_servidor']])
 
             soma = 0
+            '''
             eventosDoServidor=dictEventos[cod_servidor]
             #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
             dicionario=funcoes_gerais.montarDicionarioEventoDoServidor(eventosDoServidor)
@@ -1112,15 +1113,16 @@ def imprimirFolhaLayout(request):
                 else:
                     valor_str='0'
                 lista.append(valor_str)
+            '''
             soma_str=str(soma)
             soma_str = soma_str.replace('.',',')
             lista.append(soma_str)
-            ci="J"+str(contador)
-            cf=ultima_coluna+str(contador)
-            formula="=soma("+ci+":"+cf+")"
+            #ci="J"+str(contador)
+            #cf=ultima_coluna+str(contador)
+            #formula="=soma("+ci+":"+cf+")"
 
             contador+=1
-            lista.append(formula)
+            #lista.append(formula)
 
             writer.writerow(lista)
             lista=[]
