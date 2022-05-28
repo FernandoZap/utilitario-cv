@@ -1119,7 +1119,7 @@ def imprimirFolhaLayout(request):
                 lista.append(valor_str)
 
 
-            ci="J2"
+            ci="J"+str(contador)
             cf=ultima_coluna+str(contador)
             formula="=soma("+ci+":"+cf+")"
 
