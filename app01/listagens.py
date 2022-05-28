@@ -277,3 +277,33 @@ def criarDictMunicipios():
                 lista1.append(obj.id_municipio)
                 lista2.append(obj.municipio)
         return dict(zip(lista1,lista2))
+
+
+def colunasValores()
+	lista1=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+	lista2=[]
+	for k in range(9,26):
+		lista2.append(lista1[k])
+	lista3=[]
+	for k in range(0,4):
+		c1=lista1[k]
+		for l in range(len(lista1)):
+			lista3.append(c1+lista1[l])
+	return lista2+lista3			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
