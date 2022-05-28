@@ -279,7 +279,7 @@ def criarDictMunicipios():
         return dict(zip(lista1,lista2))
 
 
-def colunasValores()
+def colunasValores():
 	lista1=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 	lista2=[]
 	for k in range(9,26):
