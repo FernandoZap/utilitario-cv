@@ -45,7 +45,7 @@ def cabecalhoFolha(id_municipio):
 
     for kk in range(len(lista_eventos)):
         lista.append(lista_eventos[kk])
-    lista.append('soma')        
+    lista.append('Soma')        
 
     return lista
 

@@ -128,7 +128,7 @@ def importarSetores(id_municipio,anomes,empresa):
 
                 ls_setores_verificados.append(str(id_secretaria)+setor)
 
-        
+    '''        
     if len(lista_setores)>0:
         for k in range(len(lista_setores)):
             print (lista_setores[k])
@@ -138,9 +138,9 @@ def importarSetores(id_municipio,anomes,empresa):
             print (lista[k])
 
     '''
+    
     if len(lista)>0:    
         Setor.objects.bulk_create(carga_setor)
-    '''
 
     return 1
 
