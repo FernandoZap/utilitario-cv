@@ -3,7 +3,7 @@ import openpyxl, pprint
 import os
 import sys
 from datetime import datetime
-from django.db.models import Count
+from django.db.models import Count,Sum
 from openpyxl.styles import NamedStyle
 from .models import Secretaria,Vinculo,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Folha,Funcionario,Provento,Complemento
 
@@ -29,7 +29,6 @@ def importarServidores(id_municipio,anomes,empresa):
 
     lista_incluidos=[]
     lista_cpf=[]
-    codigo_folha=int(str(anomes)[4:6])
 
 
     queryP = Funcionario.objects.values(
@@ -608,8 +607,6 @@ def importarFolhaPasso2(id_municipio,anomes,empresa):
 
     carga_erro_evento=[]
 
-    codigo_folha=int(str(anomes)[4:6])
-
     queryP = Provento.objects.values(
         'codigo',
         'previdencia',
@@ -617,8 +614,7 @@ def importarFolhaPasso2(id_municipio,anomes,empresa):
         'evento',
         'tipo',
         'valor_evento'
-        ).filter(id_municipio=id_municipio,anomes=anomes)
-    
+        ).filter(id_municipio=id_municipio,anomes=anomes,grupamento='N')
 
 
     for qp in range(len(queryP)):
@@ -679,4 +675,80 @@ def importarFolhaPasso2(id_municipio,anomes,empresa):
 
     if len(carga_folhaeventos)>0:
         Folhaevento.objects.bulk_create(carga_folhaeventos)
+
+
+
+    lista_erro_evento=[]
+
+    lista_incluidos=[]
+
+    carga_erro=[]
+    carga_folhaeventos=[]
+    carga_folhames=[]
+
+    carga_erro_evento=[]
+
+
+    queryS = Provento.objects.filter(id_municipio=id_municipio,anomes=anomes,grupamento__in=['S','s']).values('codigo','evento','previdencia','classificacao','tipo').annotate(valor_evento=Sum('valor_evento')).order_by('codigo')            
+
+
+    for qp in range(len(queryS)):
+
+
+        cod_servidor = queryS[qp]['codigo']
+        previdencia = queryS[qp]['previdencia']
+        cl_orcamentaria = queryS[qp]['classificacao']
+        evento = queryS[qp]['evento']
+        tipo = queryS[qp]['tipo']
+        valor = queryS[qp]['valor_evento']
+        
+        evento=evento.strip()
+        evento=evento.upper()
+
+        evento=funcoes_gerais.remove_combining_fluent(evento)
+    
+        if evento in lista_eventos:
+            id_evento = dict_eventos[evento]
+            tipo = dict_tipos_eventos[id_evento]
+        else:
+            id_evento=0
+            tipo=''
+
+        if id_evento==0:
+            if evento is not None:
+                if evento not in lista_erro_evento:
+                    lista_erro_evento.append(evento)
+
+
+        obj_feventos = Folhaevento(
+                id_municipio = id_municipio,
+                anomes = anomes,
+                cod_servidor = cod_servidor,
+                previdencia = previdencia,
+                cl_orcamentaria = cl_orcamentaria,
+                id_evento = id_evento,
+                tipo = tipo,
+                valor = valor
+            )
+
+        carga_folhaeventos.append(obj_feventos)
+        
+    if len(lista_erro_evento)>0:
+        for kk in range(len(lista_erro_evento)):
+            obj=LogErro(
+                id_municipio=id_municipio,
+                anomes=anomes,
+                numero_linha=0,
+                codigo='evento',
+                observacao=lista_erro_evento[kk]
+                )
+            carga_erro_evento.append(obj)
+
+
+    if len(lista_erro_evento)>0:                
+        LogErro.objects.bulk_create(carga_erro_evento)
+
+    if len(carga_folhaeventos)>0:
+        Folhaevento.objects.bulk_create(carga_folhaeventos)
+
     return 1

@@ -113,12 +113,8 @@ def criarDictEventos(id_municipio):
 		lista1.append(
 			sec.evento.upper()
 			)
-		if sec.id_evento_cv==0:
-			id_object=sec.id_evento
-		else:
-			id_object=sec.id_evento_cv
 		lista2.append(
-			id_object
+			sec.id_evento
 			)
 
 	return dict(zip(lista1,lista2))

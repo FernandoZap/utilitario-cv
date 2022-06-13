@@ -11,7 +11,7 @@ import csv
 import datetime
 import os
 import json
-import mysql.connector
+#import mysql.connector
 import openpyxl
 import re
 from django.core.files import File
@@ -381,7 +381,7 @@ def listSomaEventos(request):
         query0 = dictfetchall(cursor)
 
         for q in query0:
-            if q['tipo']=='V':
+            if q['tipo'] in ('V','v'):
                 total_v+=q['valor']
                 total_r+=q['valor']
             else:
@@ -1056,6 +1056,10 @@ def imprimirFolhaLayout(request):
 
         colunasValores = listagens.colunasValores()
         ultima_coluna=colunasValores[len(eventos)-1]
+        print (colunasValores)
+        print ('-------------')
+        print ('qtde eventos: ',len(eventos))
+        print ('ultima_coluna: ',ultima_coluna)
 
 
 
