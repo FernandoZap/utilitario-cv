@@ -1098,7 +1098,7 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDaFuncao[qy['id_funcao']])
             lista.append(dicNomeDoVinculo[qy['id_vinculo']])
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
-            lista.append(qy['carga_horaria'])
+            lista.append('CH '+str(qy['carga_horaria'])
             lista.append(dicRefEventos[qy['cod_servidor']])
 
             soma = 0
