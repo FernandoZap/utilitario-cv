@@ -1052,14 +1052,14 @@ def imprimirFolhaLayout(request):
         #cursor = connection.cursor()
         lista=[]
 
-        eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
+        eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1,cancelado='N').order_by('evento')]
 
         colunasValores = listagens.colunasValores()
         ultima_coluna=colunasValores[len(eventos)-1]
-        print (colunasValores)
-        print ('-------------')
-        print ('qtde eventos: ',len(eventos))
-        print ('ultima_coluna: ',ultima_coluna)
+        #print (colunasValores)
+        #print ('-------------')
+        #print ('qtde eventos: ',len(eventos))
+        #print ('ultima_coluna: ',ultima_coluna)
 
 
 
