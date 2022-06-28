@@ -291,7 +291,7 @@ class Folhaevento(models.Model):
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
 
-
+'''
 class Planilha(models.Model):
     id_planilha = models.AutoField(primary_key=True)
     codigo = models.IntegerField(null=True)
@@ -329,7 +329,7 @@ class Planilha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 class Refeventos(models.Model):  
     id_ref = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)
@@ -354,7 +354,7 @@ class Refeventos(models.Model):
 
 
 
-
+'''
 class Folha(models.Model):
     id_folha = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)
@@ -390,7 +390,7 @@ class Folha(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {}'.format(cls._meta.db_table))        
 
-
+'''
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
     id_municipio = models.IntegerField(null=True)

@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 from django.db.models import Count,Sum
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Setor,Planilha,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Folha,Funcionario,Provento,Complemento
+from .models import Secretaria,Vinculo,Setor,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Funcionario,Provento,Complemento
 
 from . import listagens,funcoes_gerais,funcoes_banco
 from django.db import connection

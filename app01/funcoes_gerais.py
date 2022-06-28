@@ -79,6 +79,7 @@ def entidade(id_municipio):
     if munic is not None:
         lista.append(munic.municipio)
         lista.append(munic.empresa)
+        lista.append(munic.entidade)
     return lista        
 
 

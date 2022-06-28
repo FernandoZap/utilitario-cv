@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect
 from django.views.generic import (ListView)
 from django.http import HttpResponse,HttpResponseRedirect
-from . import choices,importarPlanilha,listagens,funcoes_gerais,cadastro_01,processamentoFolha
+from . import choices,listagens,funcoes_gerais,cadastro_01,processamentoFolha
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import Municipio,Planilha,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento,Folhaevento
+from .models import Municipio,Folhames,Secretaria,Setor,Vinculo,Funcao,Evento,Folhaevento
 from accounts.models import User
 from django.db.models import Count,Sum
 import csv
@@ -84,7 +84,7 @@ def formatMilhar(valor):
     vd = vd.replace('-',',')
     return sinal+vd
 
-
+'''
 def importacaoFolhaExcel_old(request):
 
 
@@ -98,32 +98,6 @@ def importacaoFolhaExcel_old(request):
     #-----------------------------------------------------------------------------
     titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
 
-    '''
-    objs=Eventos_cv.objects.all()
-    for obj in objs:
-        evento=obj.evento
-        evento=funcoes_gerais.remove_combining_fluent(evento)
-        obj.evento=evento
-    Eventos_cv.objects.bulk_update(objs,['evento'])
-
-    ls1=[e.id_evento_cv for e in Eventos_cv.objects.all()]
-    ls2=[e.id_evento_cv for e in Evento.objects.all()]
-    ls3=set(ls2)
-
-    for k in range(len(ls1)):
-        if ls1[k] not in ls3:
-            #print (ls1[k])
-            Eventos_cv.objects.get(pk=ls1[k]).delete()
-
-    ls1=[e.id_funcao_cv for e in Funcoes_cv.objects.all()]
-    ls2=[e.id_funcao_cv for e in Funcao.objects.all()]
-    ls3=set(ls2)
-
-    for k in range(len(ls1)):
-        if ls1[k] not in ls3:
-            #print (ls1[k])
-            Funcoes_cv.objects.get(pk=ls1[k]).delete()
-    '''            
 
     mensagem=''
     municipios=Municipio.objects.all().order_by('municipio')
@@ -210,6 +184,8 @@ def importacaoFolhaExcel_old(request):
                 'municipios':municipios
             }
           )
+
+'''
 
 
 def planilhaErrada(request):
@@ -423,50 +399,6 @@ def listSomaEventos(request):
             }
           )
 
-def parateste(request):
-
-    lista_grupo_eventos=listagens.listagemGrupoEventos(86)
-    dict_grupo_eventos=listagens.criarDictGrupoEventos(86)
-
-
-    queryP = Planilha.objects.values(
-        'codigo',
-        'cpf',
-        'secretaria',
-        'setor',
-        'funcao',
-        'tipo_admissao',
-        'previdencia',
-        'carga_horaria',
-        'ref_evento',
-        'classificacao',
-        'evento',
-        'cod_evento',
-        'tipo',
-        'valor_evento'
-        ).all()
-
-    for qp in range(len(queryP)):
-
-        cod_servidor = queryP[qp]['codigo']
-        evento1 = queryP[qp]['evento']
-
-        evento1=evento1.strip()
-
-
-        if evento1 in lista_grupo_eventos:
-            evento = dict_grupo_eventos[evento1]
-        else:
-            evento = evento1            
-
-
-        print (str(cod_servidor) + ' - ' + evento1 + ' - '+ evento)
-
-
-        
-    return render(request, 'app01/planilhaErrada.html')
-
-
 def eliminarAcentos(tabela):
 
 
@@ -583,83 +515,6 @@ def consultarTabelas(request):
 
         }
     )
-
-
-def folhasProcessadas_bak(request):
-
-    titulo='Folhas Processadas'
-    municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
-
-
-    municipio=''
-    lista_folha=None
-    if request.method=='POST':
-        id_municipio = int(request.POST['municipio'])
-        cursor = connection.cursor()
-        lista=[]
-
-
-        if id_municipio==0:
-            municipio='Todos os municípios'
-        else:            
-            ls_municipio = funcoes_gerais.entidade(id_municipio)
-            if len(ls_municipio)>0:
-                municipio=ls_municipio[0]
-                empresa = ls_municipio[1]
-            else:
-                municipio=''
-                empresa = ''
-
-        if (1==1):
-
-            if id_municipio>0:
-                cursor.execute("select v3.municipio,concat(right(concat('',v3.anomes),2),'/',left(concat('',v3.anomes),4)) as mesref,\
-                    v3.quantidade,v4.valor,v3.anomes \
-                from v003_qtdeServidores v3,v004_valortotalFolha v4 where\
-                 v3.id_municipio=v4.id_municipio and v3.anomes=v4.anomes\
-                 and v3.id_municipio=%s order by v3.municipio,v3.anomes",[id_municipio])
-            else:
-                cursor.execute("select v3.municipio,concat(right(concat('',v3.anomes),2),'/',left(concat('',v3.anomes),4)) as mesref,\
-                    v3.quantidade,v4.valor,v3.anomes \
-                from v003_qtdeServidores v3,v004_valortotalFolha v4 where\
-                 v3.id_municipio=v4.id_municipio and v3.anomes=v4.anomes\
-                 order by v3.municipio,v3.anomes")
-
-            query1 = dictfetchall(cursor)
-
-            contador=0
-
-            for kk in range(0,len(query1)):
-                contador+=1
-
-                valor=formatMilhar(query1[kk]['valor'])
-
-                lista.append(
-                        {
-                            'item':contador,
-                            'municipio':query1[kk]['municipio'],
-                            'mesref':query1[kk]['mesref'],
-                            'quantidade':query1[kk]['quantidade'],
-                            'valor':valor
-
-                        }
-                    )
-
-            cursor.close()
-            del cursor
-            lista_folha=lista
-        
-    return render(request, 'app01/folhasProcessadas.html',
-        {
-            'titulo': titulo,
-            'municipios':municipios,
-            'mensagem':'',
-            'municipio':municipio,
-            'lista_folha':lista_folha
-
-        }
-    )
-
 
 def imprimirCSVFolha(request):
 
@@ -907,137 +762,6 @@ def importacaoFolhaExcel(request):
             }
           )
 
-def imprimirFolhaLayout_bak(request):
-
-    if request.method=='POST':
-        id_municipio = request.POST['municipio']
-        ano=request.POST['ano']
-        mes=request.POST['mes']
-        anomes=int(ano+mes)
-        cursor = connection.cursor()
-        lista=[]
-
-        '''
-        ls_municipio = funcoes_gerais.entidade(id_municipio)
-        if len(ls_municipio)>0:
-            municipio=ls_municipio[0]
-            empresa = ls_municipio[1]
-        else:
-            municipio=''
-            empresa = ''
-        '''
-        
-
-        obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
-        if obj is None:
-            municipio = funcoes_gerais.strings_pesquisa(id_municipio)
-            return render(request, 'app01/planilhaErrada.html',
-                    {
-                        'titulo': 'Impressao do Excel',
-                        'municipio':municipio,
-                        'anomes': str(mes)+'/'+str(ano),
-                        'mensagem':'Não existe nenhum registro para essa Folha.'
-
-                    }
-                )
-
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
-        if (1==1):
-
-
-            eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
-
-
-            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo, \
-            fl.carga_horaria,rf.ref_eventos,f002_quantidadeEventos(fl.cod_servidor,fl.anomes,fl.id_municipio) as qtde_eventos \
-            from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
-            inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
-            inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor \
-            inner join funcoes fn on fn.id_funcao=fl.id_funcao\
-            inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
-            left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
-            where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
-            order by fl.cod_servidor",[anomes,id_municipio])
-
-            query1 = dictfetchall(cursor)
-
-
-            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
-            writer = csv.writer(response, delimiter=';')
-            response.write(u'\ufeff'.encode('utf8'))
-            writer.writerow(cabecalho)
-            contador=0
-
-            #dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
-            
-            dictEventos=funcoes_gerais.eventosMesDoServidor(id_municipio,anomes)
-
-
-            for kk in range(0,len(query1)):
-                lista.append(query1[kk]['secretaria'])
-                lista.append(query1[kk]['setor'])
-                lista.append(query1[kk]['cod_servidor'])
-                lista.append(query1[kk]['nome'])
-                lista.append(query1[kk]['funcao'])
-                lista.append(query1[kk]['vinculo'])
-                lista.append(query1[kk]['data_admissao'])
-                lista.append(query1[kk]['carga_horaria'])
-                lista.append(query1[kk]['ref_eventos'])
-
-                soma = 0
-                if query1[kk]['qtde_eventos']>0:
-                    cod_servidor = query1[kk]['cod_servidor']
-                    eventosDoServidor=dictEventos[cod_servidor]
-                    #[{'evento': 'ADC PTEMPSERV', 'valor': Decimal('381.28')}, {'evento': 'SALARIO BASE', 'valor': Decimal('3177.33')}]
-                    dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                    #{'ADC PTEMPSERV': Decimal('381.28'), 'SALARIO BASE': Decimal('3177.33')}
-                    listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
-                    #['ADC PTEMPSERV', 'SALARIO BASE', 'SALARIO FAMILIA']
-                    for qq in range(len(eventos)):
-                        if eventos[qq] in listaEventosDoServidor:
-                            valor=dicionario[eventos[qq]]
-                            soma+=valor
-                            valor_str=str(valor)
-                            valor_str = valor_str.replace('.',',')
-                        else:
-                            valor_str='0'
-                        lista.append(valor_str)
-                    soma_str=str(soma)
-                    soma_str = soma_str.replace('.',',')
-                    lista.append(soma_str)
-                else:
-                    for qq in range(len(eventos)):
-                        valor_str='0'
-                        lista.append(valor_str)
-                    soma_str=str(soma)
-                    lista.append(soma_str)
-
-                writer.writerow(lista)
-                lista=[]
-            cursor.close()
-            del cursor
-
-        return response
-        #titulo = 'Impressao do Excel *****'
-        #municipios=Municipio.objects.all().order_by('municipio')
-
-
-    else:
-        titulo = 'Impressao do Excel'
-        municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
-
-
-    return render(request, 'app01/gravarFolhaLayout.html',
-        {
-            'titulo': titulo,
-            'municipios':municipios,
-            'mensagem':''
-
-        }
-    )
-
-
 
 def imprimirFolhaLayout(request):
     titulo = 'Impressao do Excel'
@@ -1053,6 +777,13 @@ def imprimirFolhaLayout(request):
         lista=[]
 
         eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1,cancelado='N').order_by('evento')]
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+            entidade = ls_municipio[2]
+        label_arquivo=entidade+'_'+funcoes_gerais.mesPorExtenso(mes,1)+'_'+str(ano)+'.csv'
+
 
         colunasValores = listagens.colunasValores()
         ultima_coluna=colunasValores[len(eventos)-1]
@@ -1080,7 +811,7 @@ def imprimirFolhaLayout(request):
 
 
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
+        response['Content-Disposition'] = 'attachment; filename='+label_arquivo
 
         cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
         writer = csv.writer(response, delimiter=';')
@@ -1099,7 +830,7 @@ def imprimirFolhaLayout(request):
             lista.append(dicNomeDoVinculo[qy['id_vinculo']])
             lista.append(dicNomeDoServidor[cod_servidor]['data'])
             lista.append('CH '+str(qy['carga_horaria']))
-            lista.append(dicRefEventos[qy['cod_servidor']])
+            lista.append(dicRefEventos.get(qy['cod_servidor'],''))
 
             soma = 0
             
@@ -1149,13 +880,16 @@ def folhasProcessadas(request):
 
     titulo='Folhas Processadas'
     municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+    sel_empresa=''
 
 
     municipio=''
     contador=0
+    nome_da_empresa=''
     lista_folha=None
     if request.method=='POST':
         id_municipio = int(request.POST['municipio'])
+        sel_empresa = request.POST['empresa']
         cursor = connection.cursor()
         lista=[]
 
@@ -1165,17 +899,29 @@ def folhasProcessadas(request):
         else:            
             ls_municipio = funcoes_gerais.entidade(id_municipio)
             if len(ls_municipio)>0:
-                municipio=ls_municipio[0]
-                empresa = ls_municipio[1]
+                municipio='Municipio(s): '+ls_municipio[0]
+                nome_da_empresa = ls_municipio[1]
             else:
                 municipio=''
-                empresa = ''
+                nome_da_empresa = ''
+
+        if sel_empresa=='Aspec':
+            lista_municipios=[85,34,42,182,109]
+        elif sel_empresa=='Layout':
+            lista_municipios=[125,52,76,162,98,57,177,119,174,107]
+        elif sel_empresa=='SS':
+            lista_municipios=[15,86,92,163,44,124,38,16]
+
         if 1==1:
             dictMunicipios=listagens.criarDictMunicipios()
             if id_municipio>0:
                 query=Folhames.objects.filter(id_municipio=id_municipio).values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
-            else:                
+            elif sel_empresa!='Todas':
+                query=Folhames.objects.filter(id_municipio__in=lista_municipios).values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')                
+            else:
                 query=Folhames.objects.values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
+
+
 
             lista1=[]
             lista2=[]
@@ -1186,8 +932,12 @@ def folhasProcessadas(request):
 
             if id_municipio>0:
                 resumo=Folhaevento.objects.filter(tipo='V',id_municipio=id_municipio).values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
+            elif sel_empresa!='Todas':
+                resumo=Folhaevento.objects.filter(tipo='V',id_municipio__in=lista_municipios).values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
             else:
                 resumo=Folhaevento.objects.filter(tipo='V').values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
+
+
             #resumo
             #<QuerySet [{'id_municipio': 76, 'anomes': 202201, 'total': Decimal('2119447.46')}, {'id_municipio': 76, 'anomes': 202202, 'total': Decimal('2168637.07')}]>
 
@@ -1206,8 +956,9 @@ def folhasProcessadas(request):
                         'valor':formatMilhar(valor)
                         }
                     )
-            lista_folha=lista                
-
+            lista_folha=lista  
+            if nome_da_empresa!='':
+                sel_empresa=nome_da_empresa
 
 
         
@@ -1217,6 +968,7 @@ def folhasProcessadas(request):
             'municipios':municipios,
             'mensagem':'',
             'municipio':municipio,
-            'lista_folha':lista_folha
+            'lista_folha':lista_folha,
+            'sel_empresa':'Empresa(s): '+sel_empresa
         }
     )

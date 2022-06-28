@@ -36,6 +36,18 @@
     </select>   
     </div>
 
+    <div class="col">
+    <label for="id_empresa" class="col-form-label">Empresa</label>
+    <select name="empresa"  id="id_empresa" class="form-control" required>
+      <option value="Todas">Todas</option>
+        <option value="Aspec">Aspec</option>
+        <option value="Layout">Layout</option>
+        <option value="SS">SS</option>
+    </select>   
+    </div>
+
+
+
     <input type='hidden' name="operacao" value='atualizar'>
 
     <br>
@@ -103,6 +115,10 @@ function fnSubmit(){
 
 
    {% if lista_folha %}
+   <p>
+    {{ municipio }}<br>
+    {{ empresa }}
+   </p>
    
    <table><tr class="descricao"><th>Item</th><th>Município</th><th>Mês Base</th><th>N.Servidores</th><th>Valor Total</th></tr>
    {% for folha in lista_folha %}
