@@ -430,6 +430,8 @@ class Provento(models.Model):
     valor_evento = models.DecimalField(max_digits=9, decimal_places=2,null=True)
     classificacao = models.CharField(max_length=15, null=True)
     grupamento = models.CharField(max_length=1, null=True,default='N')
+    lixo = models.IntegerField(null=True,default=0)
+
 
     def __str__(self):
         return self.codigo
