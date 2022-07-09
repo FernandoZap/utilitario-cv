@@ -285,21 +285,16 @@ def colunasValores():
 		c1=lista1[k]
 		for l in range(len(lista1)):
 			lista3.append(c1+lista1[l])
-	return lista2+lista3			
+	return lista2+lista3	
 
 
+def cols(num_eventos):
+	ls1=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+	ls2=['AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ']
+	ls3=['BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN','BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ']
+	ls4=['CA','CB','CC','CD','CE','CF','CG','CH','CI','CJ','CK','CL','CM','CN','CO','CP','CQ','CR','CS','CT','CU','CV','CW','CX','CY','CZ']
+	lista=ls1+ls2+ls3+ls4
+	k=9+(num_eventos-1)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return lista[k]
 

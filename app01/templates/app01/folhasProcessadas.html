@@ -101,8 +101,20 @@ function fnSubmit(){
 
 .mensagem {
   color: red;
-
 }
+
+.alignRigth {
+  text-align: right;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
 
 </style>
 
@@ -120,15 +132,16 @@ function fnSubmit(){
     {{ sel_empresa }}
    </p>
    
-   <table><tr class="descricao"><th>Item</th><th>Município</th><th>Mês Base</th><th>N.Servidores</th><th>Valor Total</th></tr>
+   <table ><tr class="alignCenter"><th>Item</th><th>Município</th><th>Mês Base</th><th>N.Servidores</th><th>Total das Vantagens</th><th>Data do Processamento</th></tr>
    {% for folha in lista_folha %}
 
   <tr>
-    <td class="alignRigth" >{{ folha.item  }}</td>
-    <td class="alignRigth" >{{ folha.municipio  }}</td>
-    <td class="alignRigth" >{{ folha.mesref  }}</td>
+    <td class="alignCenter" >{{ folha.item  }}</td>
+    <td class="alignLeft" >{{ folha.municipio  }}</td>
+    <td class="alignCenter" >{{ folha.mesref  }}</td>
     <td class="alignRigth" >{{ folha.quantidade  }}</td>
     <td class="alignRigth" >{{ folha.valor  }}</td>
+    <td class="alignCenter" >{{ folha.data_criacao  }}</td>
 
 
   </tr>

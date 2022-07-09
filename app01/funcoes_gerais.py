@@ -27,7 +27,7 @@ def mesReferencia(mes):
     return lista_mes[int(mes)]
 
 
-def cabecalhoFolha(id_municipio):
+def cabecalhoFolha(id_municipio,eventos):
     lista=[]
 
     lista.append('Secretaria')
@@ -40,12 +40,13 @@ def cabecalhoFolha(id_municipio):
     lista.append('CargaHoraria')
     lista.append('Dias')
 
-    lista_eventos = [ob.evento for ob in Evento.objects.filter(id_municipio=id_municipio,cancelado='N',tipo='V',exibe_excel=1).order_by('evento')]
+    #lista_eventos = [ob.evento for ob in Evento.objects.filter(id_municipio=id_municipio,cancelado='N',tipo='V',exibe_excel=1).order_by('evento')]
+    lista_eventos = eventos
 
 
     for kk in range(len(lista_eventos)):
         lista.append(lista_eventos[kk])
-    lista.append('Soma')        
+    lista.append('Soma')
 
     return lista
 

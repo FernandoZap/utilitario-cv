@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 from django.db.models import Count,Sum
 from openpyxl.styles import NamedStyle
-from .models import Secretaria,Vinculo,Setor,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Funcionario,Provento,Complemento
+from .models import Secretaria,Vinculo,Setor,Servidor,Folhames,Folhaevento,Refeventos,LogErro,Funcao,Evento,Funcionario,Provento,Complemento,Temp_evento
 
 from . import listagens,funcoes_gerais,funcoes_banco
 from django.db import connection
@@ -262,43 +262,24 @@ def importarFuncao(id_municipio,anomes,empresa):
     return 1
 
 
-
-
-
 def importarEventos(id_municipio,anomes,empresa):
-
-
     carga_evento=[]
-
     ls_evento_verificado=[]
-
-
     ls_evento=[]
     ls_eventos_campos=[]
-
     codigo_folha=int(str(anomes)[4:6])
-
-
     lista_eventos=listagens.listagemEventos(id_municipio)
-
-
     arquivo_ok=0
 
-    queryP=Provento.objects.values(
-        'evento','tipo').annotate(Count('evento')).filter(id_municipio=id_municipio,anomes=anomes).order_by('evento')
-
+    queryP=Temp_evento.objects.values(
+        'evento','tipo').annotate(Count('evento')).filter(id_municipio=id_municipio).order_by('evento')
 
     for qp in range(len(queryP)):
         arquivo_ok=1
 
-        if queryP[qp]['tipo']==4:
-            tipo_evento='D'
-        elif queryP[qp]['tipo'] in [1,2,3]:
-            tipo_evento='V'
-        else:
-            tipo_evento='V'
-
         evento=queryP[qp]['evento']
+        tipo_evento=queryP[qp]['tipo']
+        
         evento=evento.upper()
         #classificacao=queryP[qp]['classificacao']
 
@@ -329,6 +310,8 @@ def importarEventos(id_municipio,anomes,empresa):
         Evento.objects.bulk_create(carga_evento)        
 
     return 1
+
+
 
 
 
@@ -377,6 +360,7 @@ def importarFolhaPasso1(id_municipio,anomes,empresa):
     lista_erro_setor=[]
     lista_erro_secretaria=[]
     lista_erro_funcao=[]
+    data_criacao=datetime.today()
 
 
     dict_secretarias=listagens.criarDictSecretarias(id_municipio)
@@ -514,7 +498,8 @@ def importarFolhaPasso1(id_municipio,anomes,empresa):
                     id_vinculo=id_vinculo,
                     previdencia=previdencia,
                     dias = ref_evento,
-                    carga_horaria=carga_horaria
+                    carga_horaria=carga_horaria,
+                    data_criacao=data_criacao
                     )
 
                 carga_folhames.append(objeto_folhames)

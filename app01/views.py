@@ -84,109 +84,6 @@ def formatMilhar(valor):
     vd = vd.replace('-',',')
     return sinal+vd
 
-'''
-def importacaoFolhaExcel_old(request):
-
-
-    #lista = listagens.listagemSetores2(86)
-    #print (lista)
-
-    #------------------------------------------------------------------------------
-    # esta rotina para ler o arquivo .zip da folha de pagamento de cada municipio
-    # e gravar no banco os departamentos/setores/funcionarios/cargos/vinculos,
-    #  proventos e descontos.
-    #-----------------------------------------------------------------------------
-    titulo_html = 'Importar Folha - Atenção: informe apenas arquivo .zip'
-
-
-    mensagem=''
-    municipios=Municipio.objects.all().order_by('municipio')
-    if (request.method == "POST"):
-
-        current_user = 0  #request.user.iduser
-        id_municipio=int(request.POST['municipio'])
-        ano=request.POST['ano']
-        mes=request.POST['mes']
-        tabela=request.POST['tabela']
-        anomes=int(ano+mes)
-
-
-        ls_municipio = funcoes_gerais.entidade(id_municipio)
-        if len(ls_municipio)>0:
-            municipio=ls_municipio[0]
-            empresa = ls_municipio[1]
-        else:
-            empresa = ''
-            logerro=LogErro(
-            id_municipio = id_municipio,
-            anomes = anomes,
-            observacao = 'Empresa do municipio nao identificada')
-            logerro.save()
-
-        entidade='PREFEITURA MUNICIPAL DE '+municipio.upper()
-        if id_municipio==38:
-            entidade='GOVERNO MUNICIPAL DE SAO GONCALO DO AMARANTE'
-
-
-        obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
-        if obj is not None:
-            return render(request, 'app01/planilhaErrada.html',
-                    {
-                        'titulo': 'Processamento da Folha',
-                        'municipio':municipio,
-                        'anomes':str(mes)+'/'+str(ano),
-                        'mensagem':'A Folha selecionada já foi processada!'
-
-                    }
-                )
-        mes_ref = funcoes_gerais.mesReferencia(mes)
-        if tabela=='Secretaria':
-            retorno = importarPlanilha.importarSecretaria(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Funcao':
-            retorno = importarPlanilha.importarFuncao(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Evento':
-            retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Setor':    
-            retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Vinculos':
-            retorno = importarPlanilha.importarVinculos(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Servidor':            
-            retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
-        elif tabela=='Folha':
-            retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
-        elif tabela == 'Geral':
-            retorno = importarPlanilha.importarSecretaria(id_municipio,anomes,entidade,empresa)
-            if retorno==1:
-                retorno = importarPlanilha.importarSetores(id_municipio,anomes,entidade,empresa)
-                retorno = importarPlanilha.importarFuncao(id_municipio,anomes,entidade,empresa)
-                retorno = importarPlanilha.importarEventos(id_municipio,anomes,entidade,empresa)
-                retorno = importarPlanilha.importarVinculos(id_municipio,anomes,entidade,empresa)
-                retorno = importarPlanilha.importarServidores(id_municipio,anomes,entidade,empresa)
-                retorno = importarPlanilha.importarFolha(id_municipio,anomes,entidade,empresa)
-            else:                
-                return render(request, 'app01/planilhaErrada.html',
-                        {
-                            'titulo': 'Processamento da Folha',
-                            'municipio':municipio,
-                            'anomes':str(mes)+'/'+str(ano),
-                            'mensagem':'Nao existe nenhum registro desse municipio e desse mes para ser processado!'
-
-                        }
-                    )
-
-        return HttpResponseRedirect(reverse('app01:importacaoFolhaExcel'))
-
-
-    return render(request, 'app01/importacaoFolhaExcel.html',
-            {
-                'titulo': titulo_html,
-                'mensagem':mensagem,
-                'municipios':municipios
-            }
-          )
-
-'''
-
 
 def planilhaErrada(request):
     return render(request, 'app01/planilhaErrada.html')
@@ -515,7 +412,7 @@ def consultarTabelas(request):
 
         }
     )
-
+'''
 def imprimirCSVFolha(request):
 
     if request.method=='POST':
@@ -633,6 +530,8 @@ def imprimirCSVFolha(request):
 
         }
     )
+
+'''
 
 
 def importacaoFolhaExcel(request):
@@ -776,7 +675,10 @@ def imprimirFolhaLayout(request):
         #cursor = connection.cursor()
         lista=[]
 
-        eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1,cancelado='N').order_by('evento')]
+        query=Folhaevento.objects.filter(id_municipio=id_municipio,anomes=anomes).values('id_evento').annotate(soma=Sum('valor'))
+        lista_id_evento = [e['id_evento'] for e in query]
+        eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1,id_evento__in=lista_id_evento).order_by('evento')]
+
         ls_municipio = funcoes_gerais.entidade(id_municipio)
         if len(ls_municipio)>0:
             municipio=ls_municipio[0]
@@ -785,12 +687,17 @@ def imprimirFolhaLayout(request):
         label_arquivo=entidade+'_'+funcoes_gerais.mesPorExtenso(mes,1)+'_'+str(ano)+'.csv'
 
 
-        colunasValores = listagens.colunasValores()
-        ultima_coluna=colunasValores[len(eventos)-1]
+        #colunas = listagens.colunasValores()
+        #ultima_coluna = colunas[len(eventos)+8]
+        ultima_coluna = listagens.cols(len(eventos))
+
         #print (colunasValores)
-        #print ('-------------')
-        #print ('qtde eventos: ',len(eventos))
-        #print ('ultima_coluna: ',ultima_coluna)
+        print ('\n\n')
+        for k in range(len(eventos)):
+            print (eventos[k])
+        print ('\n')            
+        print ('qtde eventos: ',len(eventos))
+        print ('ultima_coluna: ',ultima_coluna)
 
 
 
@@ -813,7 +720,7 @@ def imprimirFolhaLayout(request):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename='+label_arquivo
 
-        cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
+        cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio,eventos)
         writer = csv.writer(response, delimiter=';')
         response.write(u'\ufeff'.encode('utf8'))
         writer.writerow(cabecalho)
@@ -915,20 +822,25 @@ def folhasProcessadas(request):
         if 1==1:
             dictMunicipios=listagens.criarDictMunicipios()
             if id_municipio>0:
-                query=Folhames.objects.filter(id_municipio=id_municipio).values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
+                query=Folhames.objects.filter(id_municipio=id_municipio).values('id_municipio','anomes','data_criacao').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
             elif sel_empresa!='Todas':
-                query=Folhames.objects.filter(id_municipio__in=lista_municipios).values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')                
+                query=Folhames.objects.filter(id_municipio__in=lista_municipios).values('id_municipio','anomes','data_criacao').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')                
             else:
-                query=Folhames.objects.values('id_municipio','anomes').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
+                query=Folhames.objects.values('id_municipio','anomes','data_criacao').annotate(qtde=Count("id_folha")).order_by('id_municipio','anomes')
 
 
 
             lista1=[]
             lista2=[]
+            lista3=[]
             for kk in range(len(query)):
                 lista1.append(str(query[kk]['id_municipio'])+':'+str(query[kk]['anomes']))
                 lista2.append(query[kk]['qtde'])
+                lista3.append(query[kk]['data_criacao'])
+
             dicionario=dict(zip(lista1,lista2))
+            dicionario2=dict(zip(lista1,lista3))            
+
 
             if id_municipio>0:
                 resumo=Folhaevento.objects.filter(tipo='V',id_municipio=id_municipio).values('id_municipio','anomes').annotate(valor_total=Sum("valor")).order_by('id_municipio','anomes')
@@ -940,6 +852,8 @@ def folhasProcessadas(request):
 
             #resumo
             #<QuerySet [{'id_municipio': 76, 'anomes': 202201, 'total': Decimal('2119447.46')}, {'id_municipio': 76, 'anomes': 202202, 'total': Decimal('2168637.07')}]>
+            #data=Folhaevento.objects.filter(id_municipio=id_municipio,anomes=anomes).last()
+
 
             for res in resumo:
                 contador+=1
@@ -947,12 +861,19 @@ def folhasProcessadas(request):
                 anomes=res['anomes']
                 valor=res['valor_total']
                 quantidade=dicionario[str(res['id_municipio'])+':'+str(res['anomes'])]
+                data_criacao=dicionario2[str(res['id_municipio'])+':'+str(res['anomes'])]
+                if data_criacao is not None:
+                    data_criacao=data_criacao.strftime("%d/%m/%Y %H:%M:%S")
+                else:
+                    data_criacao=''                    
+
                 lista.append(
                         {
                         'item':contador,
                         'municipio':dictMunicipios[id_municipio],
                         'mesref':str(anomes)[-2:]+'/'+str(anomes)[0:4],
                         'quantidade':quantidade,
+                        'data_criacao':data_criacao,                        
                         'valor':formatMilhar(valor)
                         }
                     )
