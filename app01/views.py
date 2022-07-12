@@ -208,137 +208,6 @@ def listFolhaResumo(request):
             }
           )
 
-
-
-def listSomaEventos_bak(request):
-
-    opcao=''
-    query1=None
-    query2=None
-    titulo='Listar Soma por Eventos'
-    id_municipio=0
-    anomes=''
-    municipio=''
-    referencia=''
-    rs=0
-    lista_eventos=[]
-    lista2=[]
-
-    total_v=0
-    total_d=0
-    total_r=0
-    qT=0
-
-    municipios = Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
-
-    if (request.method == "POST"):
-        cursor = connection.cursor()
-        id_municipio=request.POST['municipio']
-        ano=request.POST['ano']
-        mes=request.POST['mes']
-        obj=Municipio.objects.get(id_municipio=id_municipio)
-        municipio=obj.municipio
-
-        anomes = int(ano+mes)
-        referencia = mes+"/"+ano
-
-
-        cursor.execute("SELECT f001_quantidadeServidoresMes (%s,%s)",[anomes,id_municipio])
-        qt = dictfetchall(cursor)
-        for e in qt[0].values():
-            qT=e
-
-        cursor.execute("Select evento,tipo,sum(valor) as valor from v005_folhaeventos where \
-            anomes=%s and id_municipio=%s group by evento,tipo order by tipo desc,evento",[anomes,id_municipio])
-
-        query0 = dictfetchall(cursor)
-
-        for q in query0:
-            if q['tipo'] in ('V','v'):
-                total_v+=q['valor']
-                total_r+=q['valor']
-            else:
-                total_d+=q['valor']
-                total_r-=q['valor']
-
-            lista_eventos.append(
-                {
-                    'evento':q['evento'],
-                    'tipo':'('+q['tipo']+')',
-                    'valor':formatMilhar(q['valor'])
-                }
-                )
-        total_v=formatMilhar(total_v)
-        total_d=formatMilhar(total_d)
-        total_r=formatMilhar(total_r)
-
-#'''''''''''''''''''''''''''''''''''''''
-        
-        cursor.close()
-        del cursor
-
-
-    return render(request, 'app01/listSomaPorEventos.html',
-            {
-                'titulo': titulo,
-                'eventos':lista_eventos,
-                'municipios':municipios,
-                'id_municipio':id_municipio,
-                'anomes':anomes,
-                'municipio':municipio,
-                'referencia':referencia,
-                'qtde_funcionario':qT,
-                'total_v':total_v,
-                'total_d':total_d,
-                'total_r':total_r,
-                'qT':qT
-
-            }
-          )
-
-def eliminarAcentos(tabela):
-
-
-    if tabela=='eventos':
-
-        obj_evs=Evento.objects.all()
-        for ev in obj_evs:
-            ev.evento=funcoes_gerais.to_ascii_string(ev.evento)
-
-        Evento.objects.bulk_update(obj_evs,['evento'])
-
-    elif tabela=='secretaria':
-
-        obj_evs=Secretaria.objects.all()
-        for ev in obj_evs:
-            ev.secretaria=funcoes_gerais.to_ascii_string(ev.secretaria)
-
-        Secretaria.objects.bulk_update(obj_evs,['secretaria'])
-
-    elif tabela=='setor':
-
-        obj_evs=Setor.objects.all()
-        for ev in obj_evs:
-            ev.setor=funcoes_gerais.to_ascii_string(ev.setor)
-
-        Setor.objects.bulk_update(obj_evs,['setor'])
-
-    elif tabela=='funcoes':
-
-        obj_evs=Funcao.objects.all()
-        for ev in obj_evs:
-            ev.funcao=funcoes_gerais.to_ascii_string(ev.funcao)
-
-        Funcao.objects.bulk_update(obj_evs,['funcao'])
-    else:
-        string=funcoes_gerais.to_ascii_string(tabela)
-        print (tabela)
-        print (string)
-        print (tabela.encode('UTF-8'))
-        print ('--------------')
-
-
-
 def remove_combining_fluent(string: str) -> str:
     normalized = unicodedata.normalize('NFD', string)
     return ''.join(
@@ -367,7 +236,7 @@ def consultarTabelas(request):
 
             if tabela=='Eventos':
                 query1 = Evento.objects.filter(id_municipio=id_municipio,cancelado='N').order_by('evento')
-                cabecalho = ['municipio','codigo','descricao do evento','tipo','exibe','principal']
+                cabecalho = ['municipio','codigo','descricao do evento','tipo']
             elif tabela=='Funcoes':
                 query1 = Funcao.objects.filter(id_municipio=id_municipio,cancelado='N').order_by('funcao')
                 cabecalho = ['municipio','codigo','descricao da funcao','principal']
@@ -385,8 +254,6 @@ def consultarTabelas(request):
                     lista.append(query1[kk].id_evento)
                     lista.append(query1[kk].evento)
                     lista.append(query1[kk].tipo)
-                    lista.append(query1[kk].exibe_excel)
-                    lista.append(query1[kk].id_evento_cv)
                     writer.writerow(lista)
                     lista=[]
             elif tabela=='Funcoes':
@@ -412,126 +279,6 @@ def consultarTabelas(request):
 
         }
     )
-'''
-def imprimirCSVFolha(request):
-
-    if request.method=='POST':
-        id_municipio = request.POST['municipio']
-        ano=request.POST['ano']
-        mes=request.POST['mes']
-        anomes=int(ano+mes)
-        cursor = connection.cursor()
-        lista=[]
-
-
-        ls_municipio = funcoes_gerais.entidade(id_municipio)
-        if len(ls_municipio)>0:
-            municipio=ls_municipio[0]
-            empresa = ls_municipio[1]
-        else:
-            municipio=''
-            empresa = ''
-        
-
-        obj = Folhames.objects.filter(anomes=anomes,id_municipio=id_municipio).first()
-        if obj is None:
-            municipio = funcoes_gerais.strings_pesquisa(id_municipio)
-            return render(request, 'app01/planilhaErrada.html',
-                    {
-                        'titulo': 'Impressao do Excel',
-                        'municipio':municipio,
-                        'anomes': str(mes)+'/'+str(ano),
-                        'mensagem':'Não existe nenhum registro para essa Folha.'
-
-                    }
-                )
-
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="folha_20210215.csv"'
-        if (1==1):
-
-
-            eventos = [ev.evento for ev in Evento.objects.filter(id_municipio=id_municipio,tipo='V',exibe_excel=1).order_by('evento')]
-
-
-            cursor.execute("SELECT sv.cod_servidor,sv.nome,sv.data_admissao,sec.secretaria,st.setor as setor,fn.funcao,vc.vinculo,\
-            fl.carga_horaria,fl.dias,rf.ref_eventos \
-            from servidores sv inner join folhames fl on fl.cod_servidor=sv.cod_servidor\
-            inner join secretarias sec on sec.id_secretaria=fl.id_secretaria \
-            inner join setores st on st.secretaria_id=sec.id_secretaria and st.id_setor=fl.id_setor \
-            inner join funcoes fn on fn.id_funcao=fl.id_funcao\
-            inner join vinculos vc on vc.id_vinculo=fl.id_vinculo\
-            left join refeventos rf on rf.id_municipio=fl.id_municipio and rf.cod_servidor=fl.cod_servidor and rf.anomes=fl.anomes \
-            where sv.id_municipio=fl.id_municipio and fl.anomes=%s and fl.id_municipio=%s\
-            order by fl.cod_servidor",[anomes,id_municipio])
-
-            query1 = dictfetchall(cursor)
-
-            cabecalho = funcoes_gerais.cabecalhoFolha(id_municipio)
-            writer = csv.writer(response, delimiter=';')
-            response.write(u'\ufeff'.encode('utf8'))
-            writer.writerow(cabecalho)
-            contador=0
-
-            dictEventos=funcoes_gerais.eventosMes(id_municipio,anomes)
-
-
-            for kk in range(0,len(query1)):
-                somaEventos=0
-                cod_servidor = query1[kk]['cod_servidor']
-                eventosDoServidor=dictEventos[cod_servidor]
-                dicionario=funcoes_gerais.montarDiciionarioEventoDoServidor(eventosDoServidor)
-                listaEventosDoServidor=funcoes_gerais.montaListaEventoDoServidor(eventosDoServidor)
-
-
-                lista.append(query1[kk]['secretaria'])
-                lista.append(query1[kk]['setor'])
-                lista.append(query1[kk]['cod_servidor'])
-                lista.append(query1[kk]['nome'])
-                lista.append(query1[kk]['funcao'])
-                lista.append(query1[kk]['vinculo'])
-                lista.append(query1[kk]['data_admissao'])
-                lista.append(query1[kk]['carga_horaria'])
-                lista.append(query1[kk]['ref_eventos'])
-
-                soma=0
-                for qq in range(len(eventos)):
-                    if eventos[qq] in listaEventosDoServidor:
-                        valor=dicionario[eventos[qq]]
-                        soma+=valor
-                        valor_str=str(valor)
-                        valor_str = valor_str.replace('.',',')
-                    else:
-                        valor_str='0'
-                    lista.append(valor_str)
-                soma_str=str(soma)
-                soma_str = soma_str.replace('.',',')
-                lista.append(soma_str)
-
-                writer.writerow(lista)
-                lista=[]
-            cursor.close()
-            del cursor
-
-        return response
-        #titulo = 'Impressao do Excel *****'
-        #municipios=Municipio.objects.all().order_by('municipio')
-
-
-    else:
-        titulo = 'Impressao do Excel'
-        municipios=Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
-
-    return render(request, 'app01/gravarCSVFolha.html',
-        {
-            'titulo': titulo,
-            'municipios':municipios,
-            'mensagem':''
-
-        }
-    )
-
-'''
 
 
 def importacaoFolhaExcel(request):
@@ -686,20 +433,7 @@ def imprimirFolhaLayout(request):
             entidade = ls_municipio[2]
         label_arquivo=entidade+'_'+funcoes_gerais.mesPorExtenso(mes,1)+'_'+str(ano)+'.csv'
 
-
-        #colunas = listagens.colunasValores()
-        #ultima_coluna = colunas[len(eventos)+8]
         ultima_coluna = listagens.cols(len(eventos))
-
-        #print (colunasValores)
-        print ('\n\n')
-        for k in range(len(eventos)):
-            print (eventos[k])
-        print ('\n')            
-        print ('qtde eventos: ',len(eventos))
-        print ('ultima_coluna: ',ultima_coluna)
-
-
 
         query=Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).values('cod_servidor','id_secretaria','id_setor','id_funcao','id_vinculo','previdencia','carga_horaria').order_by('cod_servidor')
 
