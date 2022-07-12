@@ -20,6 +20,9 @@ select count(*) from eventos_cv
 SELECT setval('eventos_cv_id_evento_cv_seq', 137);
 
 observacao: o valor 137 é o resultado do select  count(*).
+from app01.models import Folhames,Folhaevento,Refeventos,Evento
+Folhames.objects.filter(id_municipio=85).delete()
+
 '''
 
 

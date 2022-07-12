@@ -210,7 +210,7 @@ def listFolhaResumo(request):
 
 
 
-def listSomaEventos(request):
+def listSomaEventos_bak(request):
 
     opcao=''
     query1=None
@@ -893,3 +893,128 @@ def folhasProcessadas(request):
             'sel_empresa':'Empresa(s): '+sel_empresa
         }
     )
+
+
+def listSomaEventos(request):
+
+    opcao=''
+    query1=None
+    query2=None
+    titulo='Listar Soma por Eventos'
+    id_municipio=0
+    anomes=''
+    municipio=''
+    referencia=''
+    rs=0
+    lista_eventos=[]
+    lista2=[]
+    lista=[]
+
+    total=0
+    total_v=0
+    total_d=0
+    total_r=0
+    qT=0
+    municipios = Municipio.objects.filter(empresa__in=['SS','Layout','Aspec']).order_by('municipio')
+
+    if (request.method == "POST"):
+        id_municipio=request.POST['municipio']
+        ano=request.POST['ano']
+        mes=request.POST['mes']
+        modo_form=request.POST.getlist('modo')
+        obj=Municipio.objects.get(id_municipio=id_municipio)
+        municipio=obj.municipio
+
+        anomes = int(ano+mes)
+        referencia = mes+"/"+ano
+
+        query=Folhaevento.objects.filter(id_municipio=id_municipio,anomes=anomes).values('id_evento').annotate(soma=Sum('valor'))        
+        qtdeFuncionarios = Folhames.objects.filter(id_municipio=id_municipio,anomes=anomes).count()
+        dicionarioEventos = listagens.criarDictIdEventosVantagens(id_municipio)
+
+        lista1=[]
+        lista2=[]
+        for q in query:
+            lista1.append(q['id_evento'])
+            lista2.append(q['soma'])
+        dicionarioValores = dict(zip(lista1,lista2))
+
+        lista_eventos=[]
+        lista_valores=[]
+
+        for id_evento in dicionarioEventos:
+            total_v+=dicionarioValores.get(id_evento,0)
+            if dicionarioValores.get(id_evento,0)==0:
+                continue
+
+            total+=dicionarioValores[id_evento]
+
+            lista_eventos.append(
+                {
+                    'evento':dicionarioEventos[id_evento],
+                    'tipo':'(V)',
+                    'valor':formatMilhar(dicionarioValores[id_evento])
+                }
+                )
+
+        ls_municipio = funcoes_gerais.entidade(id_municipio)
+        if len(ls_municipio)>0:
+            municipio=ls_municipio[0]
+            empresa = ls_municipio[1]
+            entidade = ls_municipio[2]
+        label_arquivo='Resumo_'+entidade+'_'+funcoes_gerais.mesPorExtenso(mes,1)+'_'+str(ano)+'.csv'
+
+        lista=[]
+        row=1
+
+        if 'Excel' in modo_form:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename='+label_arquivo
+
+            cabecalho = ['Evento','Valor']
+            writer = csv.writer(response, delimiter=';')
+            response.write(u'\ufeff'.encode('utf8'))
+            writer.writerow(cabecalho)
+            row=1
+            for ki in range(len(lista_eventos)):
+                lista.append(lista_eventos[ki]['evento'])
+                lista.append(lista_eventos[ki]['valor'])
+                writer.writerow(lista)
+                lista=[]
+                row+=1
+
+
+            ci="B2"
+            cf='B'+str(row)
+            formula="=soma("+ci+":"+cf+")"
+
+
+            lista.append('T o t a l')
+            lista.append(formula)
+            writer.writerow(lista)
+
+            return response
+        else:
+            lista=lista_eventos
+            total_v=formatMilhar(total_v)
+            qT=qtdeFuncionarios
+    
+    return render(request, 'app01/listSomaPorEventos.html',
+            {
+                'titulo': titulo,
+                'eventos':lista,
+                'municipios':municipios,
+                'id_municipio':id_municipio,
+                'anomes':anomes,
+                'municipio':municipio,
+                'referencia':referencia,
+                'qtde_funcionario':qT,
+                'total_v':total_v,
+                'total_d':total_d,
+                'total_r':total_r,
+                'qT':qT
+
+            }
+          )
+
+

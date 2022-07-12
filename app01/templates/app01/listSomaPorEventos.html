@@ -34,17 +34,16 @@
         <option value="{{ municipio.id_municipio }}">{{ municipio.municipio }}</option>
       {% endfor %}
     </select>   
-    </div>
 
 
-    <div class="col">
     <label for="id_ano" class="col-form-label">Ano</label>
     <select name="ano"  id="id_ano" class="form-control">
       <option value=""></option>
       <option value="2021">2021</option>
-      <option value="2022">2022</option>
+      <option value="2022" selected >2022</option>
       <option value="2023">2023</option>
     </select>   
+
 
     <label for="id_mes" class="col-form-label">Mes</label>
     <select name="mes"  id="id_mes" class="form-control">
@@ -61,9 +60,16 @@
       <option value="10">Outubro</option>
       <option value="11">Novembro</option>
       <option value="12">Dezembro</option>
-    </select>   
+    </select> 
 
-    </div>
+
+<br>
+    <input class="form-check-input" type="checkbox" value="Excel" id="excel" name="modo">
+    <label class="form-check-label" for="excel">
+      No formato de Planilha Excel
+    </label>
+  </div>
+
     
 </div>    
 </div>  
@@ -150,16 +156,15 @@ function fnSubmit(){
 
    {% if eventos %}
 
-
    <p>
-    Resumo da Folha
+      Resumo da Folha:
    </p>
    <p>
     Município: {{ municipio }}
     <br>
-    Competência: {{ referencia }}
+    Competencia: {{ referencia}}
    </p>
-   
+
    
    <table><tr class="descricao"><th>Evento</th><th>Valor (R$)</th></tr>
    {% for evento in eventos %}
@@ -177,9 +182,8 @@ function fnSubmit(){
 
 
     <hr>
-    <p class="totais">Total Vantagens: {{ total_v }}</p>
-    <p class="totais">Total Descontos: {{ total_d }}</p>
-    <p class="totais">Valor Líquido: {{ total_r }} ========= Número de funcionários; {{ qT }} </p>
+    <p class="totais">Total das Vantagens: {{ total_v }}</p>
+    <p class="totais">Número de funcionários; {{ qT }} </p>
 
    <hr><hr><hr>
 
