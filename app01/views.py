@@ -25,17 +25,7 @@ import unicodedata
 #https://docs.djangoproject.com/en/4.0/topics/db/sql/
 
 
-
-
 # git remote set-url origin git@github.com:FernandoZap/utilitario-cv.git
-
-
-
-# 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
-
-#curl -H 'Authorization: token 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' https://api.github.com/FernandoZap/utilitario-cv
-
-
 
 
 def get(self, request, *args, **kwargs):
